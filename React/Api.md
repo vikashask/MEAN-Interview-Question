@@ -1,5 +1,5 @@
 ## API
-## BrowserRouter
+## <BrowserRouter>
 ```
     import { BrowserRouter } from 'react-router-dom'
 <BrowserRouter
@@ -14,7 +14,7 @@
 <BrowserRouter basename="/calendar"/>
 <Link to="/today"/> // renders <a href="/calendar/today">
 ```
-## HashRouter
+## <HashRouter>
     basename: string
     getUserConfirmation: func
     hashType: string
@@ -23,7 +23,7 @@
     <HashRouter basename="/calendar"/>
     <Link to="/today"/> // renders <a href="#/calendar/today">
     ```
-## Link
+## <Link>
     to: string
     to: object
     replace: bool
@@ -39,7 +39,7 @@
     state: { fromDashboard: true }
     }}/>
 ```
-## NavLink
+## <NavLink>
     activeClassName: string
     activeStyle: object
     exact: bool
@@ -57,8 +57,8 @@
     }}
     >FAQs</NavLink>
 ```
-# Prompt
-## MemoryRouter
+# <Prompt>
+## <MemoryRouter>
     initialEntries: array
     initialIndex: number
     getUserConfirmation: func
@@ -67,7 +67,7 @@
 
     A <Router> that keeps the history of your “URL” in memory (does not read or write to the address bar). Useful in tests and non-browser environments like React Native.
 
-## Redirect
+## <Redirect>
     to: string
     to: object
     push: bool
@@ -87,7 +87,7 @@
     )}/>
     ```
 
-## Route
+## <Route>
     Route render methods
     Route props
     component
@@ -110,7 +110,7 @@
     </Router>
     ```
 
-## Router
+## <Router>
     history: object
     children: node
     <StaticRouter>
@@ -127,14 +127,14 @@
 <NativeRouter>
 <StaticRouter>
 ```
-## StaticRouter
+## <StaticRouter>
 ```
 A <Router> that never changes location.
 <StaticRouter basename="/calendar">
   <Link to="/today"/> // renders <a href="/calendar/today">
 </StaticRouter>
 ```
-## Switch
+## <Switch>
     location: object
     children: node
 Renders the first child <Route> or <Redirect> that matches the location.
