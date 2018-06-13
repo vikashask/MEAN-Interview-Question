@@ -1,6 +1,6 @@
 
  
-Following is a list of some important features of Node.js that makes it the first choice of software architects.
+## Following is a list of some important features of Node.js that makes it the first choice of software architects.
 
 ### 1.Extremely fast: 
 Node.js is built on Google Chrome's V8 JavaScript Engine, so its library is very fast in code execution.
@@ -19,5 +19,6 @@ Node.js cuts down the overall processing time while uploading audio and video fi
 
 ### 6.Open source: 
 Node.js has an open source community which has produced many excellent modules to add additional capabilities to Node.js applications.
+
 ### 7.License: 
 Node.js is released under the MIT license.
