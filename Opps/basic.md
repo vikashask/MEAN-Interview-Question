@@ -62,3 +62,12 @@ In Overriding methods it will create two or more methods with same name and same
 
 while Overloading it will create more then one method with same name but different parameter in same class.
 
+### 14. What is super keyword?
+The super keyword is a reference variable that is used to refer immediate parent class object.
+
+Whenever you create the instance of subclass, an instance of parent class is created implicitly i.e. referred by super reference variable.
+
+### 15. What is an abstract class?
+An abstract class is a class that is declared abstract—it may or may not include abstract methods. Abstract classes cannot be instantiated, but they can be subclassed.
+
+
