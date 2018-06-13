@@ -43,3 +43,22 @@ When you are not creating a constructor in the class, then compiler will automat
   Static Constructor
   Private Constructor
 ```
+### 10. Define Destructor?
+A destructor is a method which is automatically invoked when the object is destroyed.
+
+Its main purpose is to free the resources (memory allocations, open files or sockets, database connections, resource locks, etc.)
+
+
+### 11. What is Inline function?
+In the C and C++ programming languages, an inline function is one qualified with the keyword inline; this serves two purposes.
+Firstly, it serves as a compiler directive, which suggests (but does not require) that the compiler substitute the body of the function inline by performing inline expansion,
+The second purpose of inline is to change linkage behavior; the details of this are complicated.
+
+### 12. What is operator overloading?
+In programming, operator overloading—less commonly known as operator ad hoc polymorphism—is a specific case of polymorphism, where different operators have different implementations depending on their arguments. Operator overloading is generally defined by the language, the programmer, or both.
+
+### 13. Different between method overriding and  method overloading?
+In Overriding methods it will create two or more methods with same name and same parameter in different classes.
+
+while Overloading it will create more then one method with same name but different parameter in same class.
+
