@@ -34,4 +34,11 @@ Constructors are mainly used to initialize private fields of the class while cre
 
 When you are not creating a constructor in the class, then compiler will automatically create a default constructor in the class that initializes all numeric fields in the class to zero and all string and object fields to null.
 
+### 9. Types of Constructors
+Basically constructors are 5 types those are
+Default Constructor
+Parameterized Constructor
+Copy Constructor
+Static Constructor
+Private Constructor
 
