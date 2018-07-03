@@ -30,12 +30,14 @@ The disadvantages of Magento are:
 
 ## What are the different versions of Magento?
 Magento categorizes their product across multiple offerings:
+```
 	Magento Commerce
 	Magento Order Management
 	Magento Business Intelligence
 	Magento Shipping
 	Magento Social
 	Magento Open Source
+```
 
 ## How to enable Maintenance mode in Magento?
 To enable Magento Maintenance mode, create  a file named maintenance.flag and upload to your Magento home directory. The file contains the following code:
@@ -53,32 +55,37 @@ The Web-server that supports Magento are:
 	Nginx 1.7.x
 
 ## What are some of the top features of Magento?
-•	Payment
-•	Reporting and Analytics
-•	Customer Accounts
-•	Product and Catalogue Browsing
-•	Site Management
-•	Search Engine Optimization
-•	Customer Accounts
-•	International Support
-•	Checkout
-•	Marketing Promotion and Tools
-•	Order Management
+```
+	Payment
+	Reporting and Analytics
+	Customer Accounts
+	Product and Catalogue Browsing
+	Site Management
+	Search Engine Optimization
+	Customer Accounts
+	International Support
+	Checkout
+	Marketing Promotion and Tools
+	Order Management
+```
 
 ## Name the product types that are available in magento?
 The product types available in Magento are:
-•	Simple Products
-•	Grouped Products
-•	Configurable Products
-•	Virtual Products
-•	Bundled Products
-•	Downloadable Products
+```
+	Simple Products
+	Grouped Products
+	Configurable Products
+	Virtual Products
+	Bundled Products
+	Downloadable Products
+```
 
 ## Are there any limitations to the Magento software?
 The Magento software is extremely useful and is one of the top ecommerce platforms available on the market. However, it does require a lot of space and memory. Furthermore, it requires object oriented programming in order to prevent turning into a very complex system. Finally, Magento can be slow in terms of performance, at times. However, these limitations are usually not a significant concern in most cases, and the benefits provided by the Magento Software usually far outweigh any potential issues.
 
 ## How do you create a custom module in Magento?
 Basically there are 4 steps to create Magento custom module:
+```
 Namespace : Mag
 Module Name : Magentoexplorer
 1. Create module directory Magentoexplorer in app/code/local/Mag
@@ -87,41 +94,46 @@ Module Name : Magentoexplorer
 4. Create xml file (app/etc/modules/Mag_ Magentoexplorer.xml) so that you can enable or disable module and tell magento system from which code pool that module will be taken.
 You can take a look at this tutorial to learn how to create a basic Magento custom module: https://magentoexplorer.com/how-to-create-basic-magento-hello-world-module-from-scratch-in-magento-1-8-and-1-9
 Or for Magento 2 Building a Magento module from scratch
+```
 
 ## How can you improve the performance of Magento?
 There are a number of things that you can do to enhance and improve Magento performance.
 Doing all of the following can improve Magento performance.
-•	Disabling any modules that are not being used
-•	Disabling the Magento log
-•	MySQL Query Caching
-•	Optimizing your image
-•	Enabling Gzip Compression
-•	Enabling Magento Caching
-•	Combining the external CSS/JS into a single file
+```
+	Disabling any modules that are not being used
+	Disabling the Magento log
+	MySQL Query Caching
+	Optimizing your image
+	Enabling Gzip Compression
+	Enabling Magento Caching
+	Combining the external CSS/JS into a single file
+```
 
 ## Which billing information can be managed through Magento?
 All of the following things can be managed from the client account.
-•	Adding a credit card
-•	Adding a PayPal account
-•	Updating a billing address
-•	Producing a print-ready receipt
-•	Viewing your billing history
+```
+	Adding a credit card
+	Adding a PayPal account
+	Updating a billing address
+	Producing a print-ready receipt
+	Viewing your billing history
+```
 
 ## How many design patterns does Magento Have?
 Magento has a total of 12 design patterns. These patterns include:
 ```
-•	Factory Pattern
-•	Singleton Pattern
-•	Model View Controller Pattern
-•	Front Controller Pattern
-•	Registry Pattern
-•	Prototype Pattern
-•	Iterator Pattern
-•	Object Pool Pattern
-•	Service Locator Pattern
-•	Lazy Loading Pattern
-•	Observer Pattern
-•	Module Pattern
+	Factory Pattern
+	Singleton Pattern
+	Model View Controller Pattern
+	Front Controller Pattern
+	Registry Pattern
+	Prototype Pattern
+	Iterator Pattern
+	Object Pool Pattern
+	Service Locator Pattern
+	Lazy Loading Pattern
+	Observer Pattern
+	Module Pattern
 ```
 ## How many tables will be created when you make a new EAV module?
 If you make a new EAV module, then 6 tables will be created. These tables include:
