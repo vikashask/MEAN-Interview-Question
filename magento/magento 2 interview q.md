@@ -11,3 +11,21 @@ e.g : app/code/Letsknowit/Hello_world.
 
 ## What is Magento?
 Magento is an ecommerce platform that enables companies to run and manage their ecommerce sites in an optimized way. Magento functions as an open source ecommerce management system. It was first published by a Varien Inc in 2008, before being sold to eBay and ultimately spun off into its own entity. The 2.0 version of Magento arrived in November of 2015 and has improved the platform across the board.
+
+## Which are the methods of PayPal Payment Gateways?
+The two methods of PayPal Payment Gateways are:
+	Payflow Pro (Includes Express Checkout)
+	Payflow Link (Includes Express Checkout)
+
+## Why is Magento valuable for businesses?
+Magento is valuable for businesses because it gives them a high level of control and flexibility when they are managing the look, functionality, and content of their ecommerce store. The Magento software is both extremely convenient, and extremely effective for running an ecommerce operation.
+Further, it has a number of features that make operating an ecommerce site easier compared to other options. Many of these features revolve around how financial transactions are made, and how content can be uploaded and optimized for search engine rankings.  
+
+## What are disadvantages of Magento?
+The disadvantages of Magento are:
+	Magento uses larger disk space and memory.
+	It takes much time to build the customized functionality.
+	It is very slow compared to other E-commerce sites.
+	It needs proper hosting environment, if the hosting environment is improper the user can face the problems.
+
+
