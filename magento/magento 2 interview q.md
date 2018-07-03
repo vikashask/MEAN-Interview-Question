@@ -109,19 +109,20 @@ All of the following things can be managed from the client account.
 
 ## How many design patterns does Magento Have?
 Magento has a total of 12 design patterns. These patterns include:
-	•	Factory Pattern
-	•	Singleton Pattern
-	•	Model View Controller Pattern
-	•	Front Controller Pattern
-	•	Registry Pattern
-	•	Prototype Pattern
-	•	Iterator Pattern
-	•	Object Pool Pattern
-	•	Service Locator Pattern
-	•	Lazy Loading Pattern
-	•	Observer Pattern
-	•	Module Pattern
-
+```
+•	Factory Pattern
+•	Singleton Pattern
+•	Model View Controller Pattern
+•	Front Controller Pattern
+•	Registry Pattern
+•	Prototype Pattern
+•	Iterator Pattern
+•	Object Pool Pattern
+•	Service Locator Pattern
+•	Lazy Loading Pattern
+•	Observer Pattern
+•	Module Pattern
+```
 ## How many tables will be created when you make a new EAV module?
 If you make a new EAV module, then 6 tables will be created. These tables include:
 module_datetime, module, module_decimal, module_int, module_text, and module_varchar.
