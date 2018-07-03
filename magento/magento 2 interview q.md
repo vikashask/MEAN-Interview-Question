@@ -28,4 +28,27 @@ The disadvantages of Magento are:
 	It is very slow compared to other E-commerce sites.
 	It needs proper hosting environment, if the hosting environment is improper the user can face the problems.
 
+## What are the different versions of Magento?
+Magento categorizes their product across multiple offerings:
+	Magento Commerce
+	Magento Order Management
+	Magento Business Intelligence
+	Magento Shipping
+	Magento Social
+	Magento Open Source
+
+## How to enable Maintenance mode in Magento?
+To enable Magento Maintenance mode, create  a file named maintenance.flag and upload to your Magento home directory. The file contains the following code:
+```
+$maintenanceFile = ‘maintenance.flag’;
+if (file_exists($maintenanceFile)) {
+include_once dirname(__FILE__) . ‘/errors/503.php’;
+exit;
+}
+```
+
+## Name the web-server that supports magento?
+The Web-server that supports Magento are:
+	Apache 2.x
+	Nginx 1.7.x
 
