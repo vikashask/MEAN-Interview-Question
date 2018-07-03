@@ -52,3 +52,24 @@ The Web-server that supports Magento are:
 	Apache 2.x
 	Nginx 1.7.x
 
+## What are some of the top features of Magento?
+•	Payment
+•	Reporting and Analytics
+•	Customer Accounts
+•	Product and Catalogue Browsing
+•	Site Management
+•	Search Engine Optimization
+•	Customer Accounts
+•	International Support
+•	Checkout
+•	Marketing Promotion and Tools
+•	Order Management
+
+## Name the product types that are available in magento?
+The product types available in Magento are:
+•	Simple Products
+•	Grouped Products
+•	Configurable Products
+•	Virtual Products
+•	Bundled Products
+•	Downloadable Products
