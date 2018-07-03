@@ -73,3 +73,28 @@ The product types available in Magento are:
 •	Virtual Products
 •	Bundled Products
 •	Downloadable Products
+
+## Are there any limitations to the Magento software?
+The Magento software is extremely useful and is one of the top ecommerce platforms available on the market. However, it does require a lot of space and memory. Furthermore, it requires object oriented programming in order to prevent turning into a very complex system. Finally, Magento can be slow in terms of performance, at times. However, these limitations are usually not a significant concern in most cases, and the benefits provided by the Magento Software usually far outweigh any potential issues.
+
+## How do you create a custom module in Magento?
+Basically there are 4 steps to create Magento custom module:
+Namespace : Mag
+Module Name : Magentoexplorer
+1. Create module directory Magentoexplorer in app/code/local/Mag
+2. Create controller, block and module files for your module.
+3. Create module configuration file (app/code/local/Mag/Magentoexplorer/etc/config.xml).
+4. Create xml file (app/etc/modules/Mag_ Magentoexplorer.xml) so that you can enable or disable module and tell magento system from which code pool that module will be taken.
+You can take a look at this tutorial to learn how to create a basic Magento custom module: https://magentoexplorer.com/how-to-create-basic-magento-hello-world-module-from-scratch-in-magento-1-8-and-1-9
+Or for Magento 2 Building a Magento module from scratch
+
+## How can you improve the performance of Magento?
+There are a number of things that you can do to enhance and improve Magento performance.
+Doing all of the following can improve Magento performance.
+•	Disabling any modules that are not being used
+•	Disabling the Magento log
+•	MySQL Query Caching
+•	Optimizing your image
+•	Enabling Gzip Compression
+•	Enabling Magento Caching
+•	Combining the external CSS/JS into a single file
