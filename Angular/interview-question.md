@@ -92,7 +92,8 @@ So TypeScript provides the following advantages over JavaScript-
 
 ### 6.What Is Ecmascript ?
 
-    ECMAScript is a subset of JavaScript. JavaScript is basically ECMAScript at its core but builds upon it. Languages such as ActionScript, JavaScript, JScript all use ECMAScript as its core. As a comparison,
+    ECMAScript is a subset of JavaScript. JavaScript is basically ECMAScript at its core but builds upon
+    it. Languages such as ActionScript, JavaScript, JScript all use ECMAScript as its core. As a comparison,
     AS/JS/JScript are 3 different cars, but they all use the same engine... each of their exteriors is
     different though, and there have been several modifications done to each to make it unique. Angular2
     supports ES6 and higher versions.
@@ -174,37 +175,42 @@ So TypeScript provides the following advantages over JavaScript-
     view,
     A component also has metadata, which provides additional information about the component to Angular.
 
-### 14.What Is The Languages That You Can Use To Build Angular2 Application?
+### 16.What Is The Languages That You Can Use To Build Angular2 Application?
 
     ECMAScript, or ES.
         ES 5 is the version currently supported by most modern browsers.
         The ES 6 specification was recently approved and renamed ES 2015(Most browsers don't yet support ES 2015).
 
-### 15.    What Is Npm?
+### 15. What Is Npm?
 
-    Npm, or node package manager: is a command line utility that interacts with a repository of open source projects, 
-    Become the package manager for JavaScript. Using npm we can install libraries, packages, and applications, along with 
-    their dependencies.
+    Npm, or node package manager: is a command line utility that interacts with a repository of open source
+    projects,Become the package manager for JavaScript. Using npm we can install libraries, packages, and
+    applications, along with their dependencies.
 
 ### 16.How Can We Setting Up Angular 2 Application?
 
-        Create an application folder.
-        Create the tsconfig file(To configure the TypeScript compiler).
-        Create the package.json file(To define the libraries and scripts we need).
-        Create the typings.json file(That specifies a missing TypeScript type definition file).
-        Install the libraries and typing files.
-        Create the host Web page.(Normally index.html).
-        Create the main.ts file(To bootstrap the Angular application with the root component).
+    Create an application folder.
+    Create the tsconfig file(To configure the TypeScript compiler).
+    Create the package.json file(To define the libraries and scripts we need).
+    Create the typings.json file(That specifies a missing TypeScript type definition file).
+    Install the libraries and typing files.
+    Create the host Web page.(Normally index.html).
+    Create the main.ts file(To bootstrap the Angular application with the root component).
 
 ### 17.What Are The Security Threats Should We Be Aware Of In Angular 2 Application?
 
-    Just like any other client side or web application, angular 2 application should also follow some of the basic guidelines
-    to mitigate the security risks. Some of them are:
-        Avoid using/injecting dynamic Html content to your component.
-        If using external Html, that is coming from database or somewhere outside the application, sanitize it.
-        Try not to put external urls in the application unless it is trusted. Avoid url re-direction unless it is trusted.
-        Consider using AOT compilation or offline compilation.
-        Try to prevent XSRF attack by restricting the api and use of the app for known or secure environment/browsers.
+    Just like any other client side or web application, angular 2 application should also follow some of
+    the basic guidelines to mitigate the security risks. Some of them are:
+>Avoid using/injecting dynamic Html content to your component.
+
+>If using external Html, that is coming from database or somewhere outside the application, sanitize it.
+
+>Try not to put external urls in the application unless it is trusted. Avoid url re-direction unless it is 
+trusted.
+
+>Consider using AOT compilation or offline compilation.
+
+>Try to prevent XSRF attack by restricting the api and use of the app for known or secure environment/browsers.
 
 ### 18.What Are The Advantages Of Using Angular 2 Over Angular 1?
 
