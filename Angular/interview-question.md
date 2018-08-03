@@ -26,119 +26,152 @@
 
 ### 2.What Is The Need Of Angular2?
 
-    Angular 2 is not just a typical upgrade but a totally new development. The whole framework is rewritten from the ground. Angular 2 got rid of many things like $scope, controllers, DDO, jqLite, angular.module etc.
+    Angular 2 is not just a typical upgrade but a totally new development. The whole framework is rewritten
+    from the ground. Angular 2 got rid of many things like $scope, controllers, DDO, jqLite, 
+    angular.module etc.
 
-    It uses components for almost everything. Imagine that even the whole app is now a component. Also it takes advantage of ES6 / TypeScript syntax. Developing Angular 2 apps in TypeScript has made it even more powerful.
+    It uses components for almost everything. Imagine that even the whole app is now a component. Also it
+    takes advantage of ES6 / TypeScript syntax. Developing Angular 2 apps in TypeScript has made it even 
+    more powerful.
 
     Apart from that, many things have evolved and re-designed like the template engine and many more.
 
 ### 3.What Is Typescript ?
 
-    TypeScript is a typed super set of JavaScript which has been built and maintained by Microsoft and chosen by the AngularJS
+    TypeScript is a typed super set of JavaScript which has been built and maintained by Microsoft and 
+    chosen by the AngularJS
     team for development.
 
 ### 4.What Is The Need For Typescript In Angular2?
 
     Understanding the need for TypeScript file in Angular2 applications :  JavaScript rules in Web development. 
-    Its the most popular language for developing web application UI. For may application developers having exposure in 
-    languages like Java and C#, creating the front end of a Web application in JavaScript is a very cumbersome process.
-    For example if the user wants to create a class Employee in JavaScript. There is no class keyword in JavaScript so the code will be as follows-
+    Its the most popular language for developing web application UI. For may application developers having 
+    exposure in languages like Java and C#, creating the front end of a Web application in JavaScript is a 
+    very cumbersome process.
+    For example if the user wants to create a class Employee in JavaScript. There is no class keyword in 
+    JavaScript so the code will be as follows-
 
-    <html>
-    <head>
-    </head>
-    <body>
-    <script>
-    function Employee()
-    {
-    this.name="";
-    this.id="";
-    this.Validate=function()
-    {
-    alert("Validate");
-    }
-    }
-    </script>
-    </body>
-    </html>
+        <html>
+        <head>
+        </head>
+            <body>
+                <script>
+                    function Employee()
+                    {
+                        this.name="";
+                        this.id="";
+                        this.Validate=function()
+                        {
+                            alert("Validate");
+                        }
+                    }
+                </script>
+            </body>
+        </html>
     Same can be written using TypeScript as follows-
 
-    class Employee
-    {
-    public name : string = "";
-    public id : string = "";
-    Validate()
-    {
-    alert("validate");
-    }
-    }
+        class Employee
+        {
+            public name : string = "";
+            public id : string = "";
+            Validate()
+            {
+                alert("validate");
+            }
+        }
 
 ### 5.This Customer.ts will compile to the above JavaScript code.
 
-    So TypeScript provides the following advantages over JavaScript-
-        Structure the code- There were many different coding styles for JavaScript. This leads to unstructured code. With TypeScript we create structured code.
-        Use object-oriented programming paradigms and techniques-  There is lack of object-oriented design paradigms and techniques in JavaScript. This is not the case in TypeScript. It makes use of Objected Oriented features like Polymorphism, Inheritance etc.
-        Standard Coding guidelines- There is no Type checking in JavaScript. The code style needs to be defined. Hard to enforce style guide. TypeScript overcomes this issue with features like Code Analysis and Navigation, Documentation, Intellisense etc.
+So TypeScript provides the following advantages over JavaScript-
+>Structure the code- There were many different coding styles for JavaScript. This leads to unstructured
+ code. With TypeScript we create structured code.
+
+>Use object-oriented programming paradigms and techniques-  There is lack of object-oriented design paradigms and techniques in JavaScript. This is not the case in TypeScript. It makes use of Objected Oriented features like Polymorphism, Inheritance etc.
+
+>Standard Coding guidelines- There is no Type checking in JavaScript. The code style needs to be defined. Hard to enforce style guide. TypeScript overcomes this issue with features like Code Analysis and Navigation, Documentation, Intellisense etc.
 
 ### 6.What Is Ecmascript ?
 
-    ECMAScript is a subset of JavaScript. JavaScript is basically ECMAScript at its core but builds upon it. Languages such as ActionScript, JavaScript, JScript all use ECMAScript as its core. As a comparison, AS/JS/JScript are 3 different cars, but they all use the same engine... each of their exteriors is different though, and there have been several modifications done to each to make it unique. Angular2 supports ES6 and higher versions.
+    ECMAScript is a subset of JavaScript. JavaScript is basically ECMAScript at its core but builds upon it. Languages such as ActionScript, JavaScript, JScript all use ECMAScript as its core. As a comparison,
+    AS/JS/JScript are 3 different cars, but they all use the same engine... each of their exteriors is
+    different though, and there have been several modifications done to each to make it unique. Angular2
+    supports ES6 and higher versions.
 
 ### 7.What Is @ngmodule?
 
-    @NgModule is a decorator function. A decorator function allows users to mark something as Angular 2 thing (could be a module or component or something else) and it enables you to provide additional data that determines how this Angular 2 thing will be processed, instantiated and used at the runtime. So, whenever user writes @NgModule, it tells the Angular 2 module, what’s going to be included and used in and using this module.
+    @NgModule is a decorator function. A decorator function allows users to mark something as Angular 2
+    thing (could be a module or component or something else) and it enables you to provide additional data
+    that determines how this Angular 2 thing will be processed, instantiated and used at the runtime. So, 
+    whenever user writes @NgModule, it tells the Angular 2 module, what’s going to be included and used in
+    and using this module.
 
 ### 8.What Is Traceur Compiler ?
 
-    Traceur is a JavaScript.next-to-JavaScript-of-today compiler that allows you to use features from the future today. Traceur supports ES6 as well as some experimental ES.next features. Traceur's goal is to inform the design of new JavaScript features which are only valuable if they allow you to write better code.
+    Traceur is a JavaScript.next-to-JavaScript-of-today compiler that allows you to use features from the
+    future today. Traceur supports ES6 as well as some experimental ES.next features. Traceur's goal is to
+    inform the design of new JavaScript features which are only valuable if they allow you to write better
+    code.
 
 ### 9.What Is Component In Angularjs 2 ?
 
-    In Angular, a Component is a special kind of directive that uses a simpler configuration which is suitable for a component-based application structure.
+    In Angular, a Component is a special kind of directive that uses a simpler configuration which is
+    suitable for a component-based application structure.
 
 ### 10.What Is @inputs In Angular 2?
 
-    @Input allows you to pass data into your controller and templates through html and defining custom properties. This allows you to easily reuse components and have them display different values for each instance of the renderer.
+    @Input allows you to pass data into your controller and templates through html and defining custom
+    properties. This allows you to easily reuse components and have them display different values for each
+    instance of the renderer.
 
 ### 11.What Is @outputs In Angular?
 
-    Components push out events using a combination of an @Output and an EventEmitter. This allows a clean separation between reusable Components and application logic.
+    Components push out events using a combination of an @Output and an EventEmitter. This allows a clean
+    separation between reusable Components and application logic.
 
 ### 12.What Is Primeng? How Can It Be Used With Angular2?
 
-    PrimeNG is a collection of rich UI components for Angular 2. PrimeNG is a sibling of the popular JavaServer Faces Component Suite, PrimeFaces. All widgets are open source and free to use under Apache License 2.0, a commercial friendly license. PrimeNG is developed by PrimeTek Informatics, a company with years of expertise in developing open source UI components. AngularJS makes it possible to use predefined components for development like tables etc. This helps developers save time and efforts. Using PrimeNG developers can create awesome applications in no time
+    PrimeNG is a collection of rich UI components for Angular 2. PrimeNG is a sibling of the popular 
+    JavaServer Faces Component Suite, PrimeFaces. All widgets are open source and free to use under Apache
+    License 2.0, a commercial friendly license. PrimeNG is developed by PrimeTek Informatics, a company 
+    with years of expertise in developing open source UI components. AngularJS makes it possible to use
+    predefined components for development like tables etc. This helps developers save time and efforts.
+    Using PrimeNG developers can create awesome applications in no time
 
 ### 13.What Are Differences Between Components And Directives?
 
-    Components : 
-        For register component we use @Component meta-data annotation.
-        Component is a directive which use shadow DOM to create encapsulate visual behavior called components.Components are typically used to create UI widgets.
-        Component is used to break up the application into smaller components.
-        Only one component can be present per DOM element.
-        @View decorator or templateurl template are mandatory in the component.
+>Components : 
+    For register component we use @Component meta-data annotation.
+    Component is a directive which use shadow DOM to create encapsulate visual behavior called 
+    components.Components are typically used to create UI widgets.
+    Component is used to break up the application into smaller components.Only one component can be
+    present per DOM element.
+    @View decorator or templateurl template are mandatory in the component.
 
-    Directives : 
-        For register directives we use @Directive meta-data annotation.
-        Directives is used to add behavior to an existing DOM element.
-        Directive is use to design re-usable components.
-        Many directive can be used in a per DOM element.
-        Directive don’t have View.
+>Directives : 
+    For register directives we use @Directive meta-data annotation.
+    Directives is used to add behavior to an existing DOM element.
+    Directive is use to design re-usable components.
+    Many directive can be used in a per DOM element.
+    Directive don’t have View.
 
 ### 14.We Already Use Angular 1, Why Do We Need An Angular 2?
 
-    Angular 2 is built for speed : 
-        It has faster initial loads.
-        faster change detection.
-        improved rendering times.
-        It takes advantage of features provided in the latest JavaScript standards and beyond(Such as classes, modules, and decorators)
-        building reusable user interface widgets.
-        It supports both Greenfield and Legacy browsers, Edge, Chrome, Firefox and Internet Explorer back to IE9.
-        It has fewer built-in directives to learn simpler binding.
+>Angular 2 is built for speed : 
+    It has faster initial loads.
+    faster change detection.
+    improved rendering times.
+    It takes advantage of features provided in the latest JavaScript standards and beyond(Such as classes, 
+    modules, and decorators)
+    building reusable user interface widgets.
+    It supports both Greenfield and Legacy browsers, Edge, Chrome, Firefox and Internet Explorer back to IE9.
+    It has fewer built-in directives to learn simpler binding.
 
 ### 15.What Is An Angular 2 Component?
 
-    Each component is comprised of a template, which is the HTML for the user interface. Add to that a class for the code 
-    associated with a view. The class contains the properties and methods, which perform actions for the view,
+    Each component is comprised of a template, which is the HTML for the user interface. Add to that a 
+    class for the code 
+    associated with a view. The class contains the properties and methods, which perform actions for the 
+    view,
     A component also has metadata, which provides additional information about the component to Angular.
 
 ### 14.What Is The Languages That You Can Use To Build Angular2 Application?
