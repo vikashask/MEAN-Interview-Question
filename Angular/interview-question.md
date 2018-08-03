@@ -1,19 +1,30 @@
 
 ### 1.What Are The New Features Of Angular2?
 
-Answer :
-`       Angular 2 is written entirely in Typescript and meets the ECMAScript 6 specification :
-        Component-Based- Angular 2 is entirely component based. Controllers and $scope are no longer used. They have been replaced by components and directives.
-        Directives- The specification for directives is considerably simplified, although they are still subject to change. With the @Directive annotation, a directive can be declared.
-        Dependency Injection- Because of the improved dependency injection model in Angular2 there are more opportunities for component / object-based work.
-        Use of TypeScript-TypeScript is a typed super set of JavaScript which has been built and maintained by Microsoft and chosen by the AngularJS team for development. The presence of types makes the code written in TypeScript less prone to run-time errors. In recent times, the support for ES6 has been greatly improved and a few features from ES7 have been added as well.
-        Generics- TypeScript has generics which can be used in the frontend.
-        Lambdas with TypeScript- In TypeScript, lambdas are available.
-        Forms and Validations- Forms and validations are an important aspect of frontend development. Within Angular 2 the Form Builder and Control Group are defined.
+    Angular 2 is written entirely in Typescript and meets the ECMAScript 6 specification :
+
+>Component-Based- 
+    Angular 2 is entirely component based. Controllers and $scope are no longer used. They have been replaced by components and directives.
+    
+>Directives- 
+    The specification for directives is considerably simplified, although they are still subject to change. With the @Directive annotation, a directive can be declared.
+        
+>Dependency Injection- 
+    Because of the improved dependency injection model in Angular2 there are more opportunities for component / object-based work.
+    
+>Use of TypeScript-
+    TypeScript is a typed super set of JavaScript which has been built and maintained by Microsoft and chosen by the AngularJS team for development. The presence of types makes the code written in TypeScript less prone to run-time errors. In recent times, the support for ES6 has been greatly improved and a few features from ES7 have been added as well.
+        
+>Generics- 
+    TypeScript has generics which can be used in the frontend.
+
+>Lambdas with TypeScript- 
+    In TypeScript, lambdas are available.
+    
+>Forms and Validations- 
+    Forms and validations are an important aspect of frontend development. Within Angular 2 the Form Builder and Control Group are defined.
 
 ### 2.What Is The Need Of Angular2?
-
-Answer :
 
     Angular 2 is not just a typical upgrade but a totally new development. The whole framework is rewritten from the ground. Angular 2 got rid of many things like $scope, controllers, DDO, jqLite, angular.module etc.
 
@@ -23,14 +34,10 @@ Answer :
 
 ### 3.What Is Typescript ?
 
-Answer :
-
     TypeScript is a typed super set of JavaScript which has been built and maintained by Microsoft and chosen by the AngularJS
     team for development.
 
 ### 4.What Is The Need For Typescript In Angular2?
-
-    Answer :
 
     Understanding the need for TypeScript file in Angular2 applications :  JavaScript rules in Web development. 
     Its the most popular language for developing web application UI. For may application developers having exposure in 
@@ -75,49 +82,33 @@ Answer :
 
 ### 6.What Is Ecmascript ?
 
-    Answer :
-
     ECMAScript is a subset of JavaScript. JavaScript is basically ECMAScript at its core but builds upon it. Languages such as ActionScript, JavaScript, JScript all use ECMAScript as its core. As a comparison, AS/JS/JScript are 3 different cars, but they all use the same engine... each of their exteriors is different though, and there have been several modifications done to each to make it unique. Angular2 supports ES6 and higher versions.
 
 ### 7.What Is @ngmodule?
-
-    Answer :
 
     @NgModule is a decorator function. A decorator function allows users to mark something as Angular 2 thing (could be a module or component or something else) and it enables you to provide additional data that determines how this Angular 2 thing will be processed, instantiated and used at the runtime. So, whenever user writes @NgModule, it tells the Angular 2 module, what’s going to be included and used in and using this module.
 
 ### 8.What Is Traceur Compiler ?
 
-    Answer :
-
     Traceur is a JavaScript.next-to-JavaScript-of-today compiler that allows you to use features from the future today. Traceur supports ES6 as well as some experimental ES.next features. Traceur's goal is to inform the design of new JavaScript features which are only valuable if they allow you to write better code.
 
 ### 9.What Is Component In Angularjs 2 ?
-
-    Answer :
 
     In Angular, a Component is a special kind of directive that uses a simpler configuration which is suitable for a component-based application structure.
 
 ### 10.What Is @inputs In Angular 2?
 
-    Answer :
-
     @Input allows you to pass data into your controller and templates through html and defining custom properties. This allows you to easily reuse components and have them display different values for each instance of the renderer.
 
 ### 11.What Is @outputs In Angular?
-
-    Answer :
 
     Components push out events using a combination of an @Output and an EventEmitter. This allows a clean separation between reusable Components and application logic.
 
 ### 12.What Is Primeng? How Can It Be Used With Angular2?
 
-    Answer :
-
     PrimeNG is a collection of rich UI components for Angular 2. PrimeNG is a sibling of the popular JavaServer Faces Component Suite, PrimeFaces. All widgets are open source and free to use under Apache License 2.0, a commercial friendly license. PrimeNG is developed by PrimeTek Informatics, a company with years of expertise in developing open source UI components. AngularJS makes it possible to use predefined components for development like tables etc. This helps developers save time and efforts. Using PrimeNG developers can create awesome applications in no time
 
 ### 13.What Are Differences Between Components And Directives?
-
-    Answer :
 
     Components : 
         For register component we use @Component meta-data annotation.
@@ -135,8 +126,6 @@ Answer :
 
 ### 14.We Already Use Angular 1, Why Do We Need An Angular 2?
 
-    Answer :
-
     Angular 2 is built for speed : 
         It has faster initial loads.
         faster change detection.
@@ -148,15 +137,11 @@ Answer :
 
 ### 15.What Is An Angular 2 Component?
 
-    Answer :
-
     Each component is comprised of a template, which is the HTML for the user interface. Add to that a class for the code 
     associated with a view. The class contains the properties and methods, which perform actions for the view,
     A component also has metadata, which provides additional information about the component to Angular.
 
 ### 14.What Is The Languages That You Can Use To Build Angular2 Application?
-
-    Answer :
 
     ECMAScript, or ES.
         ES 5 is the version currently supported by most modern browsers.
@@ -164,15 +149,12 @@ Answer :
 
 ### 15.    What Is Npm?
 
-    Answer :
-
     Npm, or node package manager: is a command line utility that interacts with a repository of open source projects, 
     Become the package manager for JavaScript. Using npm we can install libraries, packages, and applications, along with 
     their dependencies.
 
 ### 16.How Can We Setting Up Angular 2 Application?
 
-    Answer :
         Create an application folder.
         Create the tsconfig file(To configure the TypeScript compiler).
         Create the package.json file(To define the libraries and scripts we need).
@@ -183,7 +165,6 @@ Answer :
 
 ### 17.What Are The Security Threats Should We Be Aware Of In Angular 2 Application?
 
-    Answer :
     Just like any other client side or web application, angular 2 application should also follow some of the basic guidelines
     to mitigate the security risks. Some of them are:
         Avoid using/injecting dynamic Html content to your component.
@@ -194,8 +175,6 @@ Answer :
 
 ### 18.What Are The Advantages Of Using Angular 2 Over Angular 1?
 
-    Answer :
-
     Angular 2 is a platform not only a language:
         Better Speed and Performance: No $Scope in Angular 2, AOT
         Simpler Dependency Injection
@@ -205,13 +184,11 @@ Answer :
         Easier to Learn
 
 ### 19.How Routing Works In Angular 2.?
-    Answer :
 
     Routing is a mechanism which enables user to navigate between views/components. Angular 2 simplifies the routing and provide flexibility to configure and define at module level (Lazy loading). 
 
     The angular application has single instance of the Router service and whenever URL changes, corresponding Route is matched from the routing configuration array. On successful match, it applies redirects and the router builds a tree of ActivatedRoute objects and contains the current state of the router. Before redirection, the router will check whether new state is permitted by running guards (CanActivate). Route Guards is simply an interface method that router runs to check the route authorization. After guard runs, it will resolve the route data and activate the router state by instantiation the required components into <router-outlet> </router-outlet>. 
 ### 20.What Are Event Emitters And How It Works In Angular 2?
-    Answer :
 
     Angular 2 doesn’t have bi-directional digest cycle, unlike angular 1. In angular 2, any change occurred in the component always gets propagated from the current component to all its children in hierarchy. If the change from one component needs to be reflected to any of its parent component in hierarchy, we can emit the event by using Event Emitter api.
 
@@ -242,7 +219,6 @@ Answer :
     To run from cli: ng lint. 
     To run from npm: npm run lint
 ### 21.How Would You Optimize The Angular 2 Application For Better Performance?
-    Answer :
 
     optimization depends on the type and size of application and many other factors. But in general, 
     I would consider the following points while optimizing the angular 2 app:
@@ -253,7 +229,6 @@ Answer :
         Have all dependencies and dev-dependencies are clearly separated.
         I would consider lazy loading instead of fully bundled app if the app size is more.
 ### 22.How Would You Define Custom Typings To Avoid Editor Warnings?
-    Answer :
 
     If we need to extend the type definition for external library, as a good practice, we should not touch the node_modules or existing typings folder. We can create a new folder, say “custom-typings” and keep all customized type definition in that.
 
@@ -261,19 +236,16 @@ Answer :
 
     For those cases, we can define or extend the types by creating our own “.d.ts” file.
 ### 23.What Is Shadow Dom? How Is It Helping Angular 2 To Perform Better?
-    Answer :
 
     Shadow DOM is a part of the HTML spec which allows developers to encapsulate their HTML markup, CSS styles and JavaScript. Shadow DOM, along with a few other technologies, gives developers the ability to build their own 1st class tags, web components and APIs just like the <audio> tag. Collectively, these new tags and APIs are referred to as Web Components. Shadow DOM provides better separation of concern along with lesser conflict of styles and scripts with other HTML DOM elements.
 
     Since shadow DOM are static in nature, it’s a good candidate to be cached as it is not accessible to developer. The cached DOM would be rendered faster in the browser providing better performance. Moreover, shadow DOM can be managed comparatively well while detecting the change in angular 2 application and re-paint of view can be managed efficiently.
 ### 24.What Is Aot Compilation?
-    Answer :
 
     AOT compilation stands for Ahead Of Time compilation, in which the angular compiler compiles the angular components
     and templates to native JavaScript and HTML during the build time. The compiled Html and JavaScript is deployed to the 
     web server so that the compilation and render time can be saved by the browser.
 ### 25.What Are The Advantages And Disadvantages Of Aot Compilation?
-    Answer :
 
     Advantages : 
         Faster download: Since the app is already compiled, many of the angular compiler related libraries are not required to be bundled, the app bundle size get reduced. So, the app can be downloaded faster.
@@ -287,7 +259,6 @@ Answer :
         Need to maintain AOT version of bootstrap file (might not be required while using tools like cli).
         Needs cleanup step before compiling.
 ### 26.What Are The Core Differences Between Observables And Promises?
-    Answer :
 
     Promises vs Observables :
 
@@ -303,7 +274,6 @@ Answer :
         use Reactive Extensions (RxJS).
         an array whose items arrive asynchronously over time.
 ### 27.Difference Between Constructor And Ngoninit?
-    Answer :
 
     Differences - Constructor Vs. ngOnInit
 
