@@ -2,7 +2,7 @@
 
 Angular js Tutorial and interview Question
 
-[Interview-question](../advance-angular-js/interview-queston/interview-question.md)
+[Interview-question](https://github.com/vikashraj144/advance-angular-js)
 
 [Angular 2 vs 4](interview-queston/Angular-2-Vs-4.md)
 
