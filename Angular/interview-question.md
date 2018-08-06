@@ -313,17 +313,27 @@ trusted.
 
 ### What Is Aot Compilation?
 
-    AOT compilation stands for Ahead Of Time compilation, in which the angular compiler compiles the angular components
-    and templates to native JavaScript and HTML during the build time. The compiled Html and JavaScript is deployed to the 
-    web server so that the compilation and render time can be saved by the browser.
-    
-### 25.What Are The Advantages And Disadvantages Of Aot Compilation?
+    AOT compilation stands for Ahead Of Time compilation, in which the angular compiler compiles the
+    angular components and templates to native JavaScript and HTML during the build time. 
+    The compiled Html and JavaScript is deployed to the web server so that the compilation and render 
+    time can be saved by the browser.
+
+### What Are The Advantages And Disadvantages Of Aot Compilation?
 
     Advantages : 
-        Faster download: Since the app is already compiled, many of the angular compiler related libraries are not required to be bundled, the app bundle size get reduced. So, the app can be downloaded faster.
-        Lesser No. of Http Requests: If the app is not bundled to support lazy loading (or whatever reasons), for each associated html and css, there is a separate request goes to the server. The pre-compiled application in-lines all templates and styles with components, so the number of Http requests to the server would be lesser.
-        Faster Rendering: If the app is not AOT compiled, the compilation process happens in the browser once the application is fully loaded. This has a wait time for all necessary component to be downloaded, and then the time taken by the compiler to compile the app. With AOT compilation, this is optimized.
-        Detect error at build time: Since compilation happens beforehand, many compile time error can be detected, providing a better degree of stability of application.
+> Faster download:
+        Since the app is already compiled, many of the angular compiler related libraries are not required 
+        to be bundled, the app bundle size get reduced. So, the app can be downloaded faster.
+        
+>Lesser No. of Http Requests: 
+        If the app is not bundled to support lazy loading (or whatever reasons),for each associated html and css, there is a separate request goes to the server. The pre-compiled application in-lines all templates and styles with components, so the number of Http requests to the server would be lesser.
+
+>Faster Rendering: 
+        If the app is not AOT compiled, the compilation process happens in the browser once the application 
+        is fully loaded. This has a wait time for all necessary component to be downloaded, and then the 
+        time taken by the compiler to compile the app. With AOT compilation, this is optimized.
+        Detect error at build time: Since compilation happens beforehand, many compile time error can be 
+        detected, providing a better degree of stability of application.
 
     Disadvantages
         Works only with HTML and CSS, other file types need a previous build step.
@@ -334,27 +344,31 @@ trusted.
 
     Promises vs Observables :
 
-    Promises:
+>Promises:
         returns a single value.
         not cancellable.
 
-    Observables:
+>Observables:
         works with multiple values over time.
         cancellable.
         supports map, filter, reduce and similar operators.
         proposed feature for ES 2016.
         use Reactive Extensions (RxJS).
         an array whose items arrive asynchronously over time.
-### 27.Difference Between Constructor And Ngoninit?
+
+### Difference Between Constructor And Ngoninit?
 
     Differences - Constructor Vs. ngOnInit
 
     Angular 2 Constructors:-
         The constructor is a default method runs when component is being constructed.
-        The constructor is a typescript feature and it is used only for a class instantiations and nothing to do with Angular 2.
+        The constructor is a typescript feature and it is used only for a class instantiations and 
+        nothing to do with Angular 2.
         The constructor called first time before the ngOnInit().
 
     Angular 2 ngOnInit:-
-        The ngOnInit event is an Angular 2 life-cycle event method that is called after the first ngOnChanges and the ngOnInit method is use to parameters defined with @Input otherwise the constructor is OK.
+        The ngOnInit event is an Angular 2 life-cycle event method that is called after the first 
+        ngOnChanges and the ngOnInit method is use to parameters defined with @Input otherwise the 
+        constructor is OK.
         The ngOnInit is called after the constructor and ngOnInit is called after the first ngOnChanges.
         The ngOnChanges is called when an input or output binding value changes.
