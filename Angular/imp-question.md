@@ -16,6 +16,16 @@
 
 >Unit testing is another challenge
 
+
+add the FormsModule to the array of imports for the application module before you can use forms
+in app.module.ts
+    import { FormsModule }   from '@angular/forms';
+
+in html 
+    <form (ngSubmit)="onSubmit()" #heroForm="ngForm">
+    <input type="text" class="form-control" id="name" [(ngModel)]="model.name" name="name"      #name="ngModel">
+    </form>
+
 ### Reactive Forms Features
 
 >More flexible, but needs a lot of practice
@@ -36,4 +46,7 @@
 
 >Easier unit testing
 
+https://angular.io/guide/reactive-forms
+Example
+import { ReactiveFormsModule } from '@angular/forms';
 
