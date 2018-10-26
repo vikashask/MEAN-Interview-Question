@@ -9,11 +9,11 @@
 7.     Angular2 provides to nested level components.
 8.     Ahead of Time compilation (AOT) improves rendering speed
 9.     Angular2 execute run more than two programs at the same time.
-10.  Angular1 is controllers and $scope based but Angular2 is component based.
-11.  The Angular2 structural directives syntax is changed like ng-repeat is replaced with *ngFor etc.
-12.  In Angular2, local variables are defined using prefix (#) hash. You can see the below *ngFor loop Example.
-13.  TypeScript can be used for developing Angular 2 applications
-14.  Better syntax and application structure
+10.    Angular1 is controllers and $scope based but Angular2 is component based.
+11.    The Angular2 structural directives syntax is changed like ng-repeat is replaced with *ngFor etc.
+12.    In Angular2, local variables are defined using prefix (#) hash. You can see the below *ngFor loop Example.
+13.    TypeScript can be used for developing Angular 2 applications
+14.    Better syntax and application structure
 
 There are more advantages over performance, template system, application debugging, testing, components and
 nested level components.
