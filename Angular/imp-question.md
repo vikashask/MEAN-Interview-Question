@@ -22,10 +22,11 @@ in app.module.ts
     import { FormsModule }   from '@angular/forms';
 
 in html 
+```
     <form (ngSubmit)="onSubmit()" #heroForm="ngForm">
-    <input type="text" class="form-control" id="name" [(ngModel)]="model.name" name="name"      #name="ngModel">
+        <input type="text" class="form-control" id="name" [(ngModel)]="model.name" name="name"      #name="ngModel">
     </form>
-
+```
 ### Reactive Forms Features
 
 >More flexible, but needs a lot of practice
@@ -46,7 +47,7 @@ in html
 
 >Easier unit testing
 
-https://angular.io/guide/reactive-forms
-Example
-import { ReactiveFormsModule } from '@angular/forms';
+    https://angular.io/guide/reactive-forms
+    Example
+    import { ReactiveFormsModule } from '@angular/forms';
 

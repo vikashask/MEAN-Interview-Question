@@ -1,13 +1,13 @@
 ## Angular Lifecycle Methods
 
-    OnInit
-    OnDestroy
-    DoCheck
-    OnChanges
-    AfterContentInit
-    AfterContentChecked
-    AfterViewInit
-    AfterViewChecked
+    ngOnChanges
+    ngOnInit
+    ngDoCheck
+    ngAfterContentInit
+    ngAfterContentChecked
+    ngAfterViewInit
+    ngAfterViewChecked
+    ngOnDestroy
 
 ### description in sort
 
