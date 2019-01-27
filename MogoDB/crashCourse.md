@@ -27,15 +27,15 @@ db.tutorialspoint.insert({"name" : "tutorialspoint"})
 
 db.post.insert([
    {
-      title: 'MongoDB Overview', 
-      description: 'MongoDB is no sql database',
-      by: 'tutorials point',
-      url: 'http://www.tutorialspoint.com',
-      tags: ['mongodb', 'database', 'NoSQL'],
+      title: 'MongoDB Overview 2', 
+      description: 'MongoDB 2 is no sql database',
+      by: 'vikask',
+      url: 'http://www.vikask.com',
+      tags: ['react', 'NoSQL'],
       likes: 100
    },
    {
-      title: 'NoSQL Database', 
+      title: 'React', 
       description: "NoSQL database doesn't have tables",
       by: 'tutorials point',
       url: 'http://www.tutorialspoint.com',
@@ -107,9 +107,16 @@ db.COLLECTION_NAME.find().limit(NUMBER)
 db.post.find({},{"title":1,_id:0}).limit(2)
 
 ## Skip number of documents
->db.COLLECTION_NAME.find().limit(NUMBER).skip(NUMBER)
+db.COLLECTION_NAME.find().limit(NUMBER).skip(NUMBER)
 
 ## The sort() Method
->db.COLLECTION_NAME.find().sort({KEY:1})
+db.COLLECTION_NAME.find().sort({KEY:1})
+
+## MongoDB - Indexing
+db.COLLECTION_NAME.ensureIndex({KEY:1})
+    db.post.ensureIndex({"title":1})
+
+## With multiple field
+    db.mycol.ensureIndex({"title":1,"description":-1})
 
 
