@@ -57,26 +57,26 @@ db.COLLECTION_NAME.drop()
 
 db.COLLECTION_NAME.find()
 
-db.mycol.find().pretty()
+db.post.find().pretty()
 
 =====================
 ## Equality
-db.mycol.find({"by":"tutorials point"}).pretty()
+db.post.find({"by":"tutorials point"}).pretty()
 
 ## Less Than
- db.mycol.find({"likes":{$lt:50}}).pretty()
+ db.post.find({"likes":{$lt:50}}).pretty()
 
 ## Greater Than
-db.mycol.find({"likes":{$gt:50}}).pretty()
+db.post.find({"likes":{$gt:50}}).pretty()
 
 ## Greater Than Equals
-db.mycol.find({"likes":{$gte:50}}).pretty()
+db.post.find({"likes":{$gte:50}}).pretty()
 
 ## Not Equals 
-db.mycol.find({"likes":{$ne:50}}).pretty()
+db.post.find({"likes":{$ne:50}}).pretty()
 
 ## AND in MongoDB
-db.mycol.find(
+db.post.find(
    {
       $and: [
          {key1: value1}, {key2:value2}
@@ -85,14 +85,14 @@ db.mycol.find(
 ).pretty()
 
 ## Find
-db.mycol.find({$and:[{"by":"tutorials point"},{"title": "MongoDB Overview"}]}).pretty() {
+db.post.find({$and:[{"by":"tutorials point"},{"title": "MongoDB Overview"}]}).pretty() {
 
 db.COLLECTION_NAME.remove(DELLETION_CRITTERIA)
 
 ## remove only one
 >db.COLLECTION_NAME.remove(DELETION_CRITERIA,1)
 ## remove all documents
->db.mycol.remove()
+>db.post.remove()
 
 ## MongoDB - Projection
 
@@ -100,7 +100,16 @@ db.COLLECTION_NAME.remove(DELLETION_CRITTERIA)
 
 db.COLLECTION_NAME.find({},{KEY:1})
 
-db.mycol.find({},{"title":1,_id:0})
+db.post.find({},{"title":1,_id:0})
 
+## Limit
+db.COLLECTION_NAME.find().limit(NUMBER)
+db.post.find({},{"title":1,_id:0}).limit(2)
+
+## Skip number of documents
+>db.COLLECTION_NAME.find().limit(NUMBER).skip(NUMBER)
+
+## The sort() Method
+>db.COLLECTION_NAME.find().sort({KEY:1})
 
 
