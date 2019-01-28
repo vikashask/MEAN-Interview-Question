@@ -117,6 +117,7 @@ db.COLLECTION_NAME.ensureIndex({KEY:1})
     db.post.ensureIndex({"title":1})
 
 ## With multiple field
-    db.mycol.ensureIndex({"title":1,"description":-1})
+    db.post.ensureIndex({"title":1,"description":-1})
 
-
+db.post.getIndexes();
+db.post.dropIndex( { "title": 1 } );
