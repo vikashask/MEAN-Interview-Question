@@ -1,29 +1,24 @@
 
-##
-use DATABASE_NAME
-
+## select database
+    use DATABASE_NAME
 ## selected database, use the command db
-
-db
-
-show dbs
+    db
+    show dbs
+    show databases
 
 ## drop database
-db.dropDatabase()
+    db.dropDatabase()
 
 ## create collection
-db.createCollection(name, options)
-db.createCollection(‘tutorialspoint’)
+    db.createCollection(name, options)
+    db.createCollection(‘tutorialspoint’)
 
 ## collection
-show collections
+    show collections
 
 ## Insert
-db.movie.insert({"name":"tutorials point"})
-
-db.tutorialspoint.insert({"name" : "tutorialspoint"})
->db.COLLECTION_NAME.insert(document)
-
+    db.COLLECTION_NAME.insert(document)
+    db.movie.insert({"name":"monog tutorials"})
 
 db.post.insert([
    {
@@ -38,7 +33,7 @@ db.post.insert([
       title: 'React', 
       description: "NoSQL database doesn't have tables",
       by: 'tutorials point',
-      url: 'http://www.tutorialspoint.com',
+      url: 'http://www.mongotutorialstest.com',
       tags: ['mongodb', 'database', 'NoSQL'],
       likes: 20, 
       comments: [	
@@ -53,67 +48,67 @@ db.post.insert([
 ])
 
 ## drop collection
-db.COLLECTION_NAME.drop()
+    db.COLLECTION_NAME.drop()
 
-db.COLLECTION_NAME.find()
+    db.COLLECTION_NAME.find()
 
-db.post.find().pretty()
+    db.post.find().pretty()
 
 =====================
 ## Equality
-db.post.find({"by":"tutorials point"}).pretty()
+    db.post.find({"by":"tutorials point"}).pretty()
 
 ## Less Than
- db.post.find({"likes":{$lt:50}}).pretty()
+    db.post.find({"likes":{$lt:50}}).pretty()
 
 ## Greater Than
-db.post.find({"likes":{$gt:50}}).pretty()
+    db.post.find({"likes":{$gt:50}}).pretty()
 
 ## Greater Than Equals
-db.post.find({"likes":{$gte:50}}).pretty()
+    db.post.find({"likes":{$gte:50}}).pretty()
 
 ## Not Equals 
-db.post.find({"likes":{$ne:50}}).pretty()
+    db.post.find({"likes":{$ne:50}}).pretty()
 
 ## AND in MongoDB
-db.post.find(
-   {
-      $and: [
-         {key1: value1}, {key2:value2}
-      ]
-   }
-).pretty()
+    db.post.find(
+    {
+        $and: [
+            {key1: value1}, {key2:value2}
+        ]
+    }
+    ).pretty()
 
 ## Find
-db.post.find({$and:[{"by":"tutorials point"},{"title": "MongoDB Overview"}]}).pretty() {
+    db.post.find({$and:[{"by":"tutorials point"},{"title": "MongoDB Overview"}]}).pretty() {
 
-db.COLLECTION_NAME.remove(DELLETION_CRITTERIA)
+    db.COLLECTION_NAME.remove(DELLETION_CRITTERIA)
 
 ## remove only one
->db.COLLECTION_NAME.remove(DELETION_CRITERIA,1)
+    db.COLLECTION_NAME.remove(DELETION_CRITERIA,1)
 ## remove all documents
->db.post.remove()
+    db.post.remove()
 
 ## MongoDB - Projection
 
 ## The find() Method
 
-db.COLLECTION_NAME.find({},{KEY:1})
+    db.COLLECTION_NAME.find({},{KEY:1})
 
-db.post.find({},{"title":1,_id:0})
+    db.post.find({},{"title":1,_id:0})
 
 ## Limit
-db.COLLECTION_NAME.find().limit(NUMBER)
-db.post.find({},{"title":1,_id:0}).limit(2)
+    db.COLLECTION_NAME.find().limit(NUMBER)
+    db.post.find({},{"title":1,_id:0}).limit(2)
 
 ## Skip number of documents
-db.COLLECTION_NAME.find().limit(NUMBER).skip(NUMBER)
+    db.COLLECTION_NAME.find().limit(NUMBER).skip(NUMBER)
 
 ## The sort() Method
-db.COLLECTION_NAME.find().sort({KEY:1})
+    db.COLLECTION_NAME.find().sort({KEY:1})
 
 ## MongoDB - Indexing
-db.COLLECTION_NAME.ensureIndex({KEY:1})
+    db.COLLECTION_NAME.ensureIndex({KEY:1})
     db.post.ensureIndex({"title":1})
 
 ## With multiple field
