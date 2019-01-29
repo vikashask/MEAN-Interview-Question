@@ -131,3 +131,5 @@ db.post.aggregate([{$group : {_id : "$by", max_tutorial : {$max : "$likes"}}}])
 db.post.aggregate([{$group : {_id : "$by", url : {$push: "$url"}}}])
 ## AddToSet but does not create duplicates.
 db.post.aggregate([{$group : {_id : "$by", url : {$addToSet : "$url"}}}])
+## First Gets the first document from the source documents according to the grouping.
+db.post.aggregate([{$group : {_id : "$by", first_tutorial : {$first : "$likes"}}}])
