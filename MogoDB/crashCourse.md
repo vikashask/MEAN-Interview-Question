@@ -125,3 +125,5 @@ db.post.aggregate([{$group : {_id : "$by", sum_of_tutorial : {$sum : 1}}}])
 db.post.aggregate([{$group : {_id : "$by", avg_tutorial : {$avg : "$likes"}}}])
 ## Min
 db.post.aggregate([{$group : {_id : "$by", min_tutorial : {$min : "$likes"}}}])
+## Max
+db.post.aggregate([{$group : {_id : "$by", avg_tutorial : {$max : "$likes"}}}])
