@@ -123,3 +123,5 @@ db.COLLECTION_NAME.aggregate(AGGREGATE_OPERATION)
 db.post.aggregate([{$group : {_id : "$by", sum_of_tutorial : {$sum : 1}}}])
 ## Avg
 db.post.aggregate([{$group : {_id : "$by", avg_tutorial : {$avg : "$likes"}}}])
+## Min
+db.post.aggregate([{$group : {_id : "$by", min_tutorial : {$min : "$likes"}}}])
