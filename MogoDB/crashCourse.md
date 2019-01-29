@@ -128,3 +128,6 @@ db.post.aggregate([{$group : {_id : "$by", min_tutorial : {$min : "$likes"}}}])
 ## Max
 db.post.aggregate([{$group : {_id : "$by", max_tutorial : {$max : "$likes"}}}])
 ## Push Inserts the value to an array in the resulting document.
+db.post.aggregate([{$group : {_id : "$by", url : {$push: "$url"}}}])
+## AddToSet but does not create duplicates.
+db.post.aggregate([{$group : {_id : "$by", url : {$addToSet : "$url"}}}])
