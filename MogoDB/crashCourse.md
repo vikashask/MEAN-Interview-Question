@@ -120,4 +120,6 @@ db.post.dropIndex( { "title": 1 } );
 # Aggregation
 db.COLLECTION_NAME.aggregate(AGGREGATE_OPERATION)
 ## Sum
-db.post.aggregate([{$group : {by_user : "$by_user", num_tutorial : {$sum : 1}}}])
+db.post.aggregate([{$group : {_id : "$by", sum_of_tutorial : {$sum : 1}}}])
+## Avg
+db.post.aggregate([{$group : {_id : "$by", avg_tutorial : {$avg : "$likes"}}}])
