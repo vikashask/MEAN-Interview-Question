@@ -133,3 +133,5 @@ db.post.aggregate([{$group : {_id : "$by", url : {$push: "$url"}}}])
 db.post.aggregate([{$group : {_id : "$by", url : {$addToSet : "$url"}}}])
 ## First Gets the first document from the source documents according to the grouping.
 db.post.aggregate([{$group : {_id : "$by", first_tutorial : {$first : "$likes"}}}])
+## Last Gets the first document from the source documents according to the grouping.
+db.post.aggregate([{$group : {_id : "$by", first_tutorial : {$last : "$likes"}}}])
