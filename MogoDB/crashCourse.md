@@ -126,4 +126,5 @@ db.post.aggregate([{$group : {_id : "$by", avg_tutorial : {$avg : "$likes"}}}])
 ## Min
 db.post.aggregate([{$group : {_id : "$by", min_tutorial : {$min : "$likes"}}}])
 ## Max
-db.post.aggregate([{$group : {_id : "$by", avg_tutorial : {$max : "$likes"}}}])
+db.post.aggregate([{$group : {_id : "$by", max_tutorial : {$max : "$likes"}}}])
+## Push Inserts the value to an array in the resulting document.
