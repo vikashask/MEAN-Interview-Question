@@ -116,3 +116,8 @@ db.post.insert([
 
 db.post.getIndexes();
 db.post.dropIndex( { "title": 1 } );
+
+# Aggregation
+db.COLLECTION_NAME.aggregate(AGGREGATE_OPERATION)
+## Sum
+db.post.aggregate([{$group : {by_user : "$by_user", num_tutorial : {$sum : 1}}}])
