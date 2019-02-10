@@ -17,7 +17,10 @@ PostgreSQL
 
     \conninfo connection information
 
+    CREATE ROLE me WITH LOGIN PASSWORD 'password';
+    
     CREATE DATABASE api;
+    
     \list
     
     switch to new database
@@ -30,5 +33,5 @@ PostgreSQL
     );
 
     INSERT INTO users (name, email) VALUES ('vik', 'vik@gmail.com'), ('jay', 'jay@gmail.com');
-    
+
     SELECT * FROM users;
