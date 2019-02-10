@@ -2,7 +2,6 @@
 ### What Are The New Features Of Angular2?
 
     Angular 2 is written entirely in Typescript and meets the ECMAScript 6 specification :
-
 >Component-Based- 
     Angular 2 is entirely component based. Controllers and $scope are no longer used. They have been replaced by components and directives.
     
@@ -175,12 +174,6 @@ So TypeScript provides the following advantages over JavaScript-
     view,
     A component also has metadata, which provides additional information about the component to Angular.
 
-### What Is The Languages That You Can Use To Build Angular2 Application?
-
-    ECMAScript, or ES.
-        ES 5 is the version currently supported by most modern browsers.
-        The ES 6 specification was recently approved and renamed ES 2015(Most browsers don't yet support ES 2015).
-
 ### What Is Npm?
 
     Npm, or node package manager: is a command line utility that interacts with a repository of open source
@@ -200,8 +193,7 @@ So TypeScript provides the following advantages over JavaScript-
 
 ### What Are The Security Threats Should We Be Aware Of In Angular 2 Application?
 
-    Just like any other client side or web application, angular 2 application should also follow some of
-    the basic guidelines to mitigate the security risks. Some of them are:
+    These are the basic guidelines to mitigate the security risks.
 >Avoid using/injecting dynamic Html content to your component.
 
 >If using external Html, that is coming from database or somewhere outside the application, sanitize it.
