@@ -29,4 +29,6 @@ PostgreSQL
     email VARCHAR(30)
     );
 
+    INSERT INTO users (name, email) VALUES ('vik', 'vik@gmail.com'), ('jay', 'jay@gmail.com');
+    
     SELECT * FROM users;
