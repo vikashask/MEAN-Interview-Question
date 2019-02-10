@@ -14,3 +14,10 @@ PostgreSQL
     \dt | List all tables
     \du | List all roles
     \list | List databases
+
+    \conninfo connection information
+
+>CREATE DATABASE api;
+>\list
+>\c api switch to new database
+
