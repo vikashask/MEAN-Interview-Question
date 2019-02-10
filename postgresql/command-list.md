@@ -17,7 +17,16 @@ PostgreSQL
 
     \conninfo connection information
 
->CREATE DATABASE api;
->\list
->\c api switch to new database
+    CREATE DATABASE api;
+    \list
+    
+    switch to new database
+    \c api 
 
+    CREATE TABLE users (
+    ID SERIAL PRIMARY KEY,
+    name VARCHAR(30),
+    email VARCHAR(30)
+    );
+
+    SELECT * FROM users;
