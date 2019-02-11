@@ -43,3 +43,5 @@
     <source>	Defines multiple media resources for media elements (<video> and <audio>)
     <track>	Defines text tracks for media elements (<video> and <audio>)
     <video>	Defines video or movie
+
+>Examples of non-semantic elements: <div> and <span> - Tells nothing about its content.
