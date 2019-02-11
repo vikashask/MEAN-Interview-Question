@@ -35,3 +35,11 @@
     Tag	Description
     <canvas> Draw graphics, on the fly, via scripting (usually JavaScript)
     <svg>	Draw scalable vector graphics
+
+## New Media Elements
+    Tag	Description
+    <audio>	Defines sound content
+    <embed>	Defines a container for an external (non-HTML) application
+    <source>	Defines multiple media resources for media elements (<video> and <audio>)
+    <track>	Defines text tracks for media elements (<video> and <audio>)
+    <video>	Defines video or movie
