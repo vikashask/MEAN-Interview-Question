@@ -9,3 +9,15 @@
 >New multimedia elements: <audio> and <video>.
 
 
+## New HTML5 API's
+>HTML Geolocation
+
+>HTML Drag and Drop
+
+>HTML Local Storage
+
+>HTML Application Cache
+
+>HTML Web Workers
+
+>HTML SSE
