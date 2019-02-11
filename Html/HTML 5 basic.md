@@ -21,3 +21,5 @@
 >HTML Web Workers
 
 >HTML SSE
+
+>HTML Local storage is a powerful replacement for cookies.
