@@ -1,6 +1,6 @@
 ## New HTML5 Elements
 
->New semantic elements like <header>, <footer>, <article>, and <section>.
+>New semantic elements like <header> <footer> <article> and <section>.
   
 >New attributes of form elements like number, date, time, calendar, and range.
 
