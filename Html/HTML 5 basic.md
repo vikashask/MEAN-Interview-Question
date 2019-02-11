@@ -30,3 +30,8 @@
     Unquoted	<input type="text" value=John>
     Double-quoted	<input type="text" value="John Doe">
     Single-quoted	<input type="text" value='John Doe'>
+
+## HTML5 Graphics
+    Tag	Description
+    <canvas>	Draw graphics, on the fly, via scripting (usually JavaScript)
+    <svg>	Draw scalable vector graphics
