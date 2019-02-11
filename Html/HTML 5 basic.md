@@ -45,3 +45,7 @@
     <video>	Defines video or movie
 
 >Examples of non-semantic elements: <div> and <span> - Tells nothing about its content.
+  
+>Examples of semantic elements: <form>, <table>, and <article> - Clearly defines its content.
+<article><aside><details><figcaption><figure><footer><header><main><mark><nav><section><summary><time>
+
