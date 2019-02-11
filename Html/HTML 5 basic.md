@@ -33,5 +33,5 @@
 
 ## HTML5 Graphics
     Tag	Description
-    <canvas>	Draw graphics, on the fly, via scripting (usually JavaScript)
+    <canvas> Draw graphics, on the fly, via scripting (usually JavaScript)
     <svg>	Draw scalable vector graphics
