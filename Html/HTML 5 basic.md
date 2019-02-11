@@ -23,3 +23,10 @@
 >HTML SSE
 
 >HTML Local storage is a powerful replacement for cookies.
+
+## HTML5 - New Attribute Syntax
+    Type	Example
+    Empty	<input type="text" value="John" disabled>
+    Unquoted	<input type="text" value=John>
+    Double-quoted	<input type="text" value="John Doe">
+    Single-quoted	<input type="text" value='John Doe'>
