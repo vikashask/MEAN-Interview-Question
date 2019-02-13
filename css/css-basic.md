@@ -49,4 +49,12 @@ CSS Positioning Properties
     overflow: hidden - The overflow is clipped, and the rest of the content will be invisible
     overflow: scroll - The overflow is clipped, and a scrollbar is added to see the rest of the content
     overflow: auto - Similar to scroll, but it adds scrollbars only when necessary
+## CSS Layout - display
+    display: inline; /* the default for span */
+    display: block;
+    display: inline-block
+
+    display: inline-block allows to set a width and height on the element.
+    display: inline-block, the top and bottom margins/paddings are respected, but with display: inline they are not.
+    display: inline-block does not add a line-break after the element, so the element can sit next to other elements.
 
