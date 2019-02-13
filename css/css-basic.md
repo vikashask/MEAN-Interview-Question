@@ -58,3 +58,15 @@ CSS Positioning Properties
     display: inline-block, the top and bottom margins/paddings are respected, but with display: inline they are not.
     display: inline-block does not add a line-break after the element, so the element can sit next to other elements.
 
+## CSS Layout - Horizontal & Vertical Align
+Center Align Elements
+    To horizontally center a block element (like <div>), use margin: auto;
+Center Align Text
+    To just center the text inside an element, use text-align: center;
+Center an Image
+    To center an image, set left and right margin to auto and make it into a block element:
+Left and Right Align - Using position
+    One method for aligning elements is to use position: absolute;:
+Left and Right Align - Using float
+    Another method for aligning elements is to use the float property:
+
