@@ -16,4 +16,14 @@
 ## The CSS Box Model
     All HTML elements can be considered as boxes
     It consists of: margins, borders, padding, and the actual content
+## The position Property
+>position: static = Static positioned elements are not affected by the top, bottom, left, and right properties.
+
+>position: relative = Setting the top, right, bottom, and left properties of a relatively-positioned element will cause it to be adjusted away from its normal position. Other content will not be adjusted to fit into any gap left by the element.
+
+>position: fixed = it always stays in the same place even if the page is scrolled.
+
+>position: absolute = if an absolute positioned element has no positioned ancestors, it uses the document body, and moves along with page scrolling
+
+>position: sticky = A sticky element toggles between relative and fixed, depending on the scroll position
     
