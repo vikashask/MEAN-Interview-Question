@@ -70,3 +70,24 @@ Left and Right Align - Using position
 Left and Right Align - Using float
     Another method for aligning elements is to use the float property:
 
+## CSS Combinators
+A combinator is something that explains the relationship between the selectors.
+    descendant selector (space)
+        div p {
+        background-color: yellow;
+        }
+    child selector (>)
+        selects all elements that are the immediate children 
+        div > p {
+        background-color: yellow;
+        }
+    adjacent sibling selector (+)
+        must have the same parent element, and "adjacent" means "immediately following".
+        div + p {
+        background-color: yellow;
+        }
+    general sibling selector (~)
+        selects all elements that are siblings of a specified element
+        div ~ p {
+        background-color: yellow;
+        }
