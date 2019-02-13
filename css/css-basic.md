@@ -29,12 +29,17 @@
     
 
 CSS Positioning Properties
-    
     Property	Description
-    bottom	Sets the bottom margin edge for a positioned box
-    clip	Clips an absolutely positioned element
-    left	Sets the left margin edge for a positioned box
-    position	Specifies the type of positioning for an element
-    right	Sets the right margin edge for a positioned box
-    top	Sets the top margin edge for a positioned box
-    z-index Sets the stack order of an element
+    bottom:	Sets the bottom margin edge for a positioned box
+    clip:	Clips an absolutely positioned element
+    left:	Sets the left margin edge for a positioned box
+    position:	Specifies the type of positioning for an element
+    right:	Sets the right margin edge for a positioned box
+    top:	Sets the top margin edge for a positioned box
+    z-index: Sets the stack order of an element
+    
+## Overlapping Elements
+    When elements are positioned, they can overlap other elements.
+    The z-index property specifies the stack order of an element (which element should be placed in front of, or behind, the others).
+    An element can have a positive or negative stack order:
+
