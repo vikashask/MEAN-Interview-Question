@@ -23,7 +23,8 @@
 
 >position: fixed = it always stays in the same place even if the page is scrolled.
 
->position: absolute = if an absolute positioned element has no positioned ancestors, it uses the document body, and moves along with page scrolling
+>position: absolute = if an absolute positioned element has no positioned ancestors, it uses the document body, and moves along with
+page scrolling
 
 >position: sticky = A sticky element toggles between relative and fixed, depending on the scroll position
     
@@ -42,4 +43,10 @@ CSS Positioning Properties
     When elements are positioned, they can overlap other elements.
     The z-index property specifies the stack order of an element (which element should be placed in front of, or behind, the others).
     An element can have a positive or negative stack order:
+## CSS Overflow
+    overflow property has the following values:
+    overflow: visible - Default. The overflow is not clipped. The content renders outside the element's box
+    overflow: hidden - The overflow is clipped, and the rest of the content will be invisible
+    overflow: scroll - The overflow is clipped, and a scrollbar is added to see the rest of the content
+    overflow: auto - Similar to scroll, but it adds scrollbars only when necessary
 
