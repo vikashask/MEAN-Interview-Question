@@ -2,11 +2,15 @@
 ### npm install -g @angular/cli
 ### ng help
 ### ng generate --help
-    ng g
+    ng g c
+    ng g service
+    ng g module
+    
 
 ### ng new my-first-project
     ng n
 ### ng serve
+    ng serve
     ng s
     ng s --aot=true|false : Build using Ahead of Time compilation.
     --baseHref=baseHref	: Base url for the application being built.
@@ -21,7 +25,7 @@
 ### ng test
     ng t
 
-### Updates your application and its dependencies. See https://update.angular.io/
+### Updates your application and its dependencies.
     ng update    
 
 ### ng version [options]
