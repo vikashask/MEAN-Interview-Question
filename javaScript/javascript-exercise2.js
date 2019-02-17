@@ -8,3 +8,8 @@ console.log(1=== parseInt('1'))
  console.log(0 === false); // return false, because both are of a different type.
  console.log(1 == "1"); // return true, automatic type conversion for value only.
  console.log(1 === "1"); // return false, because both are of a different type.
+ console.log(null == undefined); // return true.
+ console.log(null === undefined); // return false.
+ console.log('0' == false); // return true.
+ console.log('0' === false); // return false.
+ console.log(1=== parseInt("1")); // return true.
