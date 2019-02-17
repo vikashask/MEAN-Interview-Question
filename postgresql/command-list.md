@@ -22,22 +22,3 @@ PostgreSQL
 > \list | List databases> 
 
 > \conninfo connection information
-
->CREATE ROLE me WITH LOGIN PASSWORD 'password';
-    
->CREATE DATABASE api;
-    
->\list
-    
-    switch to new database
->\c api 
-
-    CREATE TABLE users (
-    ID SERIAL PRIMARY KEY,
-    name VARCHAR(30),
-    email VARCHAR(30)
-    );
-
-    INSERT INTO users (name, email) VALUES ('vik', 'vik@gmail.com'), ('jay', 'jay@gmail.com');
-
-    SELECT * FROM users;
