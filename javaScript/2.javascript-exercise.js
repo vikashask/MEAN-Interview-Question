@@ -64,3 +64,18 @@ while(arrayList.length){
   arrayList.pop();
 } 
 */
+
+/* How do you check if an object is an array or not? */
+var arrayList1 = [1,2,3];
+Array.isArray(arrayList1);
+
+var output = (function(x){
+  console.log('x=',x,'type of',typeof x);
+  
+  delete x;
+  return x;
+})(2);
+console.log(output);
+// 2
+// The delete operator is used to delete properties from an object.
+
