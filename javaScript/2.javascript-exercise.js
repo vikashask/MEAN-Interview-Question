@@ -17,7 +17,7 @@ console.log(1=== parseInt('1'))
 //1.  What is the difference between undefined and not defined in 
 var x; // declaring x
 console.log(x); //output: undefined
-console.log(y);  // Output: ReferenceError: y is not defined
+// console.log(y);  // Output: ReferenceError: y is not defined
 
 // 2.what would be output
 var y1 = 1;
@@ -37,3 +37,30 @@ var k = 1;
     k += typeof foo;
   }
   console.log(k); // output 1function
+
+  /* 
+  Write a function
+  console.log(mul(2)(3)(4)); // output : 24 
+  console.log(mul(4)(3)(4)); // output : 48
+  */
+
+ function multiply (x) {
+  return function (y) { // anonymous function 
+      return function (z) { // anonymous function 
+          return x * y * z; 
+      };
+  };
+}
+
+/* How to empty an array */
+var arrayList =  ['a','b','c','d','e','f'];
+// Method 1
+/* 
+> arrayList = []; // Empty the array 
+> arrayList.length = 0;
+> arrayList.splice(0, arrayList.length);
+
+while(arrayList.length){
+  arrayList.pop();
+} 
+*/
