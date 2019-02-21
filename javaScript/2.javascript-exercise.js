@@ -99,3 +99,12 @@ console.log(emp1.company);
 // xyz
 console.log(emp1.hasOwnProperty('company')); //output : false
 // emp1 object has company as its prototype property. The delete operator doesn't delete prototype property.
+
+/* what would be output */
+var trees = ["redwood","bay","cedar","oak","maple"];
+delete trees[3];
+console.log(trees);
+//  ["redwood", "bay", "cedar", empty, "maple"] in chrome
+// [ 'redwood', 'bay', 'cedar', <1 empty item>, 'maple' ] in node terminal
+trees.push();
+console.log(trees.length); // 5
