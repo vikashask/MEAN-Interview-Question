@@ -79,3 +79,12 @@ console.log(output);
 // 2
 // The delete operator is used to delete properties from an object.
 
+/* What will be the output of the code below? */
+var x1 = { foo : 1};
+var output2 = (function(){
+    delete x1.foo;
+    return x1.foo;
+  })();
+  console.log(output2);
+//undefined
+//x1 is an object
