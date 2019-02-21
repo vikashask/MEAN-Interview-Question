@@ -88,3 +88,14 @@ var output2 = (function(){
   console.log(output2);
 //undefined
 //x1 is an object
+
+/* What will be the output of the code below? */
+var Employee = {
+  company: 'xyz'
+}
+var emp1 = Object.create(Employee);
+delete emp1.company
+console.log(emp1.company);
+// xyz
+console.log(emp1.hasOwnProperty('company')); //output : false
+// emp1 object has company as its prototype property. The delete operator doesn't delete prototype property.
