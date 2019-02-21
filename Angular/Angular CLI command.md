@@ -6,12 +6,12 @@
     ng g service
     ng g module
     
-
 ### ng new my-first-project
     ng n
 ### ng serve
     ng serve
     ng s
+    ng s -o --p 3001
     ng s --aot=true|false : Build using Ahead of Time compilation.
     --baseHref=baseHref	: Base url for the application being built.
 ### ng build my-app -c production
