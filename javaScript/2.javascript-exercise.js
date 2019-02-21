@@ -126,4 +126,17 @@ console.log(y);
 // var foo = function bar(){ return 12; };
 // typeof bar(); 
 
+// Reference Error  below is the write
+var bar = function(){ return 12; };
+typeof bar();  
+
+// difference between the function declarations below?
+var foo1 = function(){ 
+    // Some code
+}; 
+ function bar1(){ 
+    // Some code
+}; 
+// The main difference is the function foo is defined at run-time whereas function bar is defined at parse time.
+
 
