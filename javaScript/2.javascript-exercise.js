@@ -116,3 +116,14 @@ console.log(bar + "xyz");
 console.log(bar + true);  
 console.log(bar + false);  
 // 1, "truexyz", 2, 1
+
+/* What would be output */
+var z = 1, y = z = typeof y;
+console.log(y); 
+// undefined
+
+/* What would be output */
+// var foo = function bar(){ return 12; };
+// typeof bar(); 
+
+
