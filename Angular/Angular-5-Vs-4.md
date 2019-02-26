@@ -1,6 +1,6 @@
 ### The Angular 5 Improvements
 
-    Improvements on Lazy loading for AngularLazy loading
+    Improvements on Lazy loading
 
 ### Contains bunch of new features, performance improvements and lot of bug fixes
     Make AOT the default
@@ -53,15 +53,15 @@
 
 ### ---------  What’s New in Angular 4? AND what are the Improvements in Angular 4? -------------
     additional Enhancement and Improvement.
-    1.    Smaller & Faster Apps
-    2.    View Engine Size Reduce
-    3.    Animation Package
-    4.    NgIf and ngFor Improvement
-    5.    Template
-    6.    NgIf with Else
-    7.    Use of AS keyword
-    8.    Pipes
-    9.    HTTP Request Simplified
+    1. Smaller & Faster Apps
+    2. View Engine Size Reduce
+    3. Animation Package
+    4. NgIf and ngFor Improvement
+    5. Template
+    6. NgIf with Else
+    7. Use of AS keyword
+    8. Pipes
+    9. HTTP Request Simplified
     10. Apps Testing Simplified
     11. Introduce Meta Tags
     12. Added some Forms Validators Attributes
