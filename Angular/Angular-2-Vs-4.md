@@ -2,22 +2,22 @@
 
 ### Angular 4 contains some additional Enhancement and Improvement. 
 Consider the following enhancements.
-1.    Smaller & Faster Apps
-2.    View Engine Size Reduce
-3.    Animation Package
-4.    NgIf and ngFor Improvement
-5.    Template : have to use ng-template
-6.    NgIf with Else
-7.    Use of AS keyword
-8.    Pipes
-9.    HTTP Request Simplified
-10. Apps Testing Simplified
-11. Introduce Meta Tags
-12. Added some Forms Validators Attributes
-13. Added Compare Select Options
-14. Enhancement in Router
-15. Added Optional Parameter
-16. Improvement Internationalization
+    1. Smaller & Faster Apps
+    2. View Engine Size Reduce
+    3. Animation Package
+    4. NgIf and ngFor Improvement
+    5. Template : have to use ng-template
+    6. NgIf with Else
+    7. Use of AS keyword
+    8. Pipes
+    9. HTTP Request Simplified
+    10. Apps Testing Simplified
+    11. Introduce Meta Tags
+    12. Added some Forms Validators Attributes
+    13. Added Compare Select Options
+    14. Enhancement in Router
+    15. Added Optional Parameter
+    16. Improvement Internationalization
 
 ### 1. Smaller & Faster Apps - 
     Angular 4 applications is smaller & faster in comparison with Angular 2.
@@ -42,13 +42,12 @@ Consider the following enhancements.
     <ng-template #empty><h2>No users.</h2></ng-template>
 
 ### 7. AS keyword – 
-    A new addition to the template syntax is the “as keyword” is use to simplify to the “let” syntax.
-    Use of as keyword,
     <div *ngFor="let user of users | slice:0:2 as total; index as = i">
         {{i+1}}/{{total.length}}: {{user.name}}
     </div>
 
     To subscribe only once to a pipe “|” with “async” and If a user is an observable, you can now use to write,
+
     <div *ngIf="users | async as usersModel">
         <h2>{{ usersModel.name }}</h2> <small>{{ usersModel.age }}</small>
     </div>
