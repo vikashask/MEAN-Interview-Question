@@ -53,3 +53,5 @@
 >Promises - chainging promises,promises.all
 
 >Json - json array,object, JSON.stringify,JSON.parse
+
+>Immutability :In functional programming data never changes. Data is immutable.
