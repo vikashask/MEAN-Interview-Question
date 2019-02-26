@@ -130,16 +130,13 @@ So TypeScript provides the following advantages over JavaScript-
 
 ### What Is Primeng? How Can It Be Used With Angular2?
 
-    PrimeNG is a collection of rich UI components for Angular 2. PrimeNG is a sibling of the popular 
-    JavaServer Faces Component Suite, PrimeFaces. All widgets are open source and free to use under Apache
-    License 2.0, a commercial friendly license. PrimeNG is developed by PrimeTek Informatics, a company 
-    with years of expertise in developing open source UI components. AngularJS makes it possible to use
-    predefined components for development like tables etc. This helps developers save time and efforts.
-    Using PrimeNG developers can create awesome applications in no time
+    PrimeNG is a collection of rich UI components for Angular 2.
+    https://www.primefaces.org/primeng/
 
 ### What Are Differences Between Components And Directives?
 
->Components : 
+>Components :
+
     For register component we use @Component meta-data annotation.
     Component is a directive which use shadow DOM to create encapsulate visual behavior called 
     components.Components are typically used to create UI widgets.
@@ -147,39 +144,18 @@ So TypeScript provides the following advantages over JavaScript-
     present per DOM element.
     @View decorator or templateurl template are mandatory in the component.
 
->Directives : 
+>Directives :
+
     For register directives we use @Directive meta-data annotation.
     Directives is used to add behavior to an existing DOM element.
     Directive is use to design re-usable components.
     Many directive can be used in a per DOM element.
     Directive don’t have View.
 
-### We Already Use Angular 1, Why Do We Need An Angular 2?
-
->Angular 2 is built for speed : 
-    It has faster initial loads.
-    faster change detection.
-    improved rendering times.
-    It takes advantage of features provided in the latest JavaScript standards and beyond(Such as classes, 
-    modules, and decorators)
-    building reusable user interface widgets.
-    It supports both Greenfield and Legacy browsers, Edge, Chrome, Firefox and Internet Explorer back to IE9.
-    It has fewer built-in directives to learn simpler binding.
-
-### What Is An Angular 2 Component?
-
-    Each component is comprised of a template, which is the HTML for the user interface. Add to that a 
-    class for the code 
-    associated with a view. The class contains the properties and methods, which perform actions for the 
-    view,
-    A component also has metadata, which provides additional information about the component to Angular.
-
 ### What Is Npm?
 
     Npm, or node package manager: is a command line utility that interacts with a repository of open source
-    projects, Become the package manager for JavaScript. Using npm we can install libraries, packages, and
-    applications,
-    along with their dependencies.
+    projects.
 
 ### How Can We Setting Up Angular 2 Application?
 
@@ -232,18 +208,13 @@ trusted.
 ### What Are Event Emitters And How It Works In Angular 2?
 
     Angular 2 doesn’t have bi-directional digest cycle, unlike angular 1. 
-    In angular 2, any change occurred in the component always gets propagated from the current component to
-    all its children in hierarchy. If the change from one component needs to be reflected to any of its
-    parent component in hierarchy, we can emit the event by using Event Emitter api.
-
+    
     In short, EventEmitter is class defined in @angular/core module which can be used by components and
     directives to emit custom events.
 
     @output() somethingChanged = new EventEmitter();
 
-    We use somethingChanged.emit(value) method to emit the event. This is usually done in setter when the
-    value is being changed in the class.
-
+    We use somethingChanged.emit(value) method to emit the event.
     This event emit can be subscribed by any component of the module by using subscribe method.
 
     myObj.somethingChanged.subscribe(val) => this.myLocalMethod(val));
