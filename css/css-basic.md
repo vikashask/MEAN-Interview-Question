@@ -1,8 +1,12 @@
 ## CSS Selectors
 > element Selector = like <p>
+
 > id Selector = write a hash (#) character
+
 > class Selector = write a period (.) character
+
 > Grouping Selectors
+
 > group selectors, separate each selector with a comma.
     example 
     h1, h2, p {
@@ -27,9 +31,8 @@
 page scrolling
 
 >position: sticky = A sticky element toggles between relative and fixed, depending on the scroll position
-    
 
-CSS Positioning Properties
+### CSS Positioning Properties
     Property	Description
     bottom:	Sets the bottom margin edge for a positioned box
     clip:	Clips an absolutely positioned element
@@ -38,17 +41,19 @@ CSS Positioning Properties
     right:	Sets the right margin edge for a positioned box
     top:	Sets the top margin edge for a positioned box
     z-index: Sets the stack order of an element
-    
+
 ## Overlapping Elements
     When elements are positioned, they can overlap other elements.
-    The z-index property specifies the stack order of an element (which element should be placed in front of, or behind, the others).
+    The z-index property specifies the stack order of an element (which element should be placed in front of, or behind).
     An element can have a positive or negative stack order:
+
 ## CSS Overflow
     overflow property has the following values:
     overflow: visible - Default. The overflow is not clipped. The content renders outside the element's box
     overflow: hidden - The overflow is clipped, and the rest of the content will be invisible
     overflow: scroll - The overflow is clipped, and a scrollbar is added to see the rest of the content
     overflow: auto - Similar to scroll, but it adds scrollbars only when necessary
+
 ## CSS Layout - display
     display: inline; /* the default for span */
     display: block;
@@ -59,20 +64,20 @@ CSS Positioning Properties
     display: inline-block does not add a line-break after the element, so the element can sit next to other elements.
 
 ## CSS Layout - Horizontal & Vertical Align
-Center Align Elements
-    To horizontally center a block element (like <div>), use margin: auto;
-Center Align Text
+`Center Align Elements`
+    To horizontally center a block element (like `<div>`), use margin: auto;
+`Center Align Text`
     To just center the text inside an element, use text-align: center;
-Center an Image
+`Center an Image`
     To center an image, set left and right margin to auto and make it into a block element:
-Left and Right Align - Using position
+`Left and Right Align` - Using position
     One method for aligning elements is to use position: absolute;:
-Left and Right Align - Using float
+`Left and Right Align` - Using float
     Another method for aligning elements is to use the float property:
 
 ## CSS Combinators
 A combinator is something that explains the relationship between the selectors.
-    descendant selector (space)
+    `descendant selector` (space)
         div p {
         background-color: yellow;
         }
