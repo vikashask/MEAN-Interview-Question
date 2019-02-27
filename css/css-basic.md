@@ -44,7 +44,7 @@ page scrolling
 
 ## Overlapping Elements
     When elements are positioned, they can overlap other elements.
-    The z-index property specifies the stack order of an element (which element should be placed in front of, or behind).
+    Z-index property specifies the stack order of an element (which element should be placed in front of, or behind)
     An element can have a positive or negative stack order:
 
 ## CSS Overflow
@@ -66,33 +66,41 @@ page scrolling
 ## CSS Layout - Horizontal & Vertical Align
 `Center Align Elements`
     To horizontally center a block element (like `<div>`), use margin: auto;
+
 `Center Align Text`
     To just center the text inside an element, use text-align: center;
+
 `Center an Image`
     To center an image, set left and right margin to auto and make it into a block element:
+
 `Left and Right Align` - Using position
     One method for aligning elements is to use position: absolute;:
+
 `Left and Right Align` - Using float
     Another method for aligning elements is to use the float property:
 
 ## CSS Combinators
 A combinator is something that explains the relationship between the selectors.
-    `descendant selector` (space)
-        div p {
-        background-color: yellow;
-        }
-    child selector (>)
-        selects all elements that are the immediate children 
-        div > p {
-        background-color: yellow;
-        }
-    adjacent sibling selector (+)
-        must have the same parent element, and "adjacent" means "immediately following".
-        div + p {
-        background-color: yellow;
-        }
-    general sibling selector (~)
-        selects all elements that are siblings of a specified element
-        div ~ p {
-        background-color: yellow;
-        }
+
+`descendant selector` (space)
+    div p {
+    background-color: yellow;
+    }
+
+`child selector (>)`
+    selects all elements that are the immediate children 
+    div > p {
+    background-color: yellow;
+    }
+
+`adjacent sibling selector (+)`
+    must have the same parent element, and "adjacent" means "immediately following".
+    div + p {
+    background-color: yellow;
+    }
+
+`general sibling selector (~)`
+    selects all elements that are siblings of a specified element
+    div ~ p {
+    background-color: yellow;
+    }
