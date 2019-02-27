@@ -13,7 +13,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
  <Route path="/order/:direction(asc|desc)" component={ComponentWithRegex}/>
     </div>
   </Router>
-);     
+);
 export default ParamsExample;
 ```
 ## Redirects (Auth)
