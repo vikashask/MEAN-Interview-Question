@@ -45,11 +45,27 @@ function priceAfterTax(productPrice) {
 ```
 ### Impure function
 
-### Pure component
+```
+var tax = 20;
+function calculateTax(productPrice) {
+ return (productPrice * (tax/100)) + productPrice; 
+}
+```
 
+### Pure component
+    functional component is a good example of a pure component
+    React.PureComponent
+```
+Hello = () => {
+  return <h1>Hello</h1>;
+}
+```
 ### stateless component
 
 ### statefull component
+Stateful components are always class components
+stateful components have a state that gets initialized in the constructor.
+
 
 ### Controlled component
 
