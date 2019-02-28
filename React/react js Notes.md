@@ -5,8 +5,8 @@
     * functional component
 
 ### class component
-    are es6 class
 ```
+Are es6 class
 class Hello extends Component{
    render(){
       return <div>Hello {this.props.name}</div>
@@ -17,8 +17,8 @@ class Hello extends Component{
     are function
     functional component is to accept props as an argument and return valid JSX.
     better performance , no state or lifecycle method
-    Functional components are easier to read, debug, and test. They offer performance benefits, decreased coupling, and
-    greater reusability.
+    Functional components are easier to read, debug, and test. They offer performance benefits, decreased coupling,
+    and greater reusability.
 
 ```
 function Hello(props){
@@ -27,10 +27,10 @@ function Hello(props){
 ```
 
 ### Pure function
-    The function always returns the same result if the same arguments are passed in.It does not depend on any state, or data,
-    change during a program’s execution.
-    The function does not produce any observable side effects such as network requests, input and output devices, or data 
-    mutation.
+    The function always returns the same result if the same arguments are passed in.It does not depend on any state,
+    or data, change during a program’s execution.
+    The function does not produce any observable side effects such as network requests, input and output devices, 
+    or data mutation.
     -Making a HTTP request
     -Mutating data
     -Printing to a screen or console
@@ -53,20 +53,21 @@ function calculateTax(productPrice) {
 ```
 
 ### Pure component
-    functional component is a good example of a pure component
-    React.PureComponent
 ```
+functional component is a good example of a pure component
+React.PureComponent
 Hello = () => {
   return <h1>Hello</h1>;
 }
 ```
+
 ### stateless component
     they are easy to write, understand, and test, and you can avoid the this keyword
 
 ### statefull component
-    Stateful components are always class components
-    stateful components have a state that gets initialized in the constructor.
 ```
+Stateful components are always class components
+Stateful components have a state that gets initialized in the constructor.
 constructor(props) {
   super(props);
   this.state = { count: 0 };
@@ -84,7 +85,7 @@ constructor(props) {
     ref are used to get their current value
 
 ### props vs state
-                                           | State  | Props
+Topics                                     | State  | Props
 -----------------------------------------  | ----   | ------
 Receive intial value from parent Component | yes    |   yes
 Parent component can change value          | no     |   yes
@@ -94,12 +95,18 @@ Set intial value of child component        | yes    |   yes
 Change inside child component              | no     |   yes
 
 ### create react app
+    npx create-react-app my-app
+    cd my-app
+    npm start
 
-### virtual DOM
-
-### Real DOM
-
-### React DOM
+### Real DOM vs Virtual dom
+    Real DOM	                        |   Virtual  DOM
+    --------------------                |   ---------------
+    It updates slow.	                |   It updates faster.
+    Can directly update HTML.           |   Can’t directly update HTML.
+    Creates a new DOM if element updates|	Updates the JSX if element updates.
+    DOM manipulation is very expensive.	|   DOM manipulation is very easy.
+    Too much of memory wastage.	        |   No memory wastage.
 
 ### angular vs react
 
@@ -115,11 +122,11 @@ Change inside child component              | no     |   yes
 
 ### imutable 
 
-cannot change
+    cannot change
 
 ### mutable 
-
-can change
+    that can be change
+   only objects and arrays are mutable, not primitive values.
 
 ### webpack
 
