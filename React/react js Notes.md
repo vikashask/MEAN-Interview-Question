@@ -82,8 +82,16 @@ constructor(props) {
     maintain there own state
     data is controlled by DOM
     ref are used to get their current value
-    
+
 ### props vs state
+                                           | State  | Props
+-----------------------------------------  | ----   | ------
+Receive intial value from parent Component | yes    |   yes
+Parent component can change value          | no     |   yes
+Set default value inside component         | yes    |   yes
+Change inside component                    | yes    |   no
+Set intial value of child component        | yes    |   yes
+Change inside child component              | no     |   yes
 
 ### create react app
 
@@ -118,6 +126,11 @@ can change
 ### lazy loading
 
 ### HOC higer order component
+    Are pure function
+    custome compoenent  which wraps another component
+    They accept dynamically provided child component
+    Do not modify input component
+    Do not copy any behaviour from input component
 
 ### redux saga vs thunk
 
