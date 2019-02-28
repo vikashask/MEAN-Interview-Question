@@ -16,10 +16,9 @@ class Hello extends Component{
 ### functional component
     are function
     functional component is to accept props as an argument and return valid JSX.
-    Functional components are easy to test
     better performance , no state or lifecycle method
-    Functional components are easy to debug
-    Functional components are more reusable
+    Functional components are easier to read, debug, and test. They offer performance benefits, decreased coupling, and
+    greater reusability.
 
 ```
 function Hello(props){
@@ -28,7 +27,22 @@ function Hello(props){
 ```
 
 ### Pure function
+    The function always returns the same result if the same arguments are passed in.It does not depend on any state, or data,
+    change during a program’s execution.
+    The function does not produce any observable side effects such as network requests, input and output devices, or data 
+    mutation.
+    -Making a HTTP request
+    -Mutating data
+    -Printing to a screen or console
+    -DOM Query/Manipulation
+    -Math.random()
+    -Getting the current time
 
+```
+function priceAfterTax(productPrice) {
+ return (productPrice * 0.20) + productPrice;
+}
+```
 ### Impure function
 
 ### Pure component
