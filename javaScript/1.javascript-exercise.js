@@ -49,20 +49,19 @@ console.log(5>6>7);
 let a = () => arguments;
 // console.log('arguments',a("hi"));
 
-// 6 o/p
-
+// 6 what will will be o/p
 let b = (...n) => {return n};
 console.log(b("hi"));
 // o/p hi
 
-// 7 o/p
+// 7 what will will be o/p
 
 let x  = function(){
     return {
         mess:'hi'
     }
 }
-console.log(x());
+console.log('x in function',x());
 // o/p  {mess: "hi"}
 
 // 8 how to prevent addding property
@@ -84,13 +83,13 @@ let profilePor = {
     name:'vikash'
 }
 
-Object.defineProperties(profilePor,'age',{
-    value:3,
-    writable:false
-})
-profilePor.name = 'verma';
-profilePor.age = 14;
-console.log(profilePor);
+// Object.defineProperties(profilePor,'age',{
+//     value:3,
+//     writable:false
+// })
+// profilePor.name = 'verma';
+// profilePor.age = 14;
+// console.log(profilePor);
 
 
 // 11 why infinte
@@ -136,7 +135,7 @@ const obj  = {
     }
 }
 
-obj.getA().getB();
+// obj.getA().getB();
 // no
 
 // correct one is 
@@ -155,7 +154,7 @@ const objOne  = {
 objOne.getA().getB();
 
 // 15 print this
-[1,2].print();   // 1,2
+// [1,2].print();   // 1,2
 
 // 1st way
 Array.prototype.print = () => {
