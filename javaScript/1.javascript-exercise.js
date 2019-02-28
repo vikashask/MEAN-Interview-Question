@@ -1,22 +1,28 @@
-// 1 Remove duplicate from array and output should ne [1,2,5,6,7]
+/* 
+** 1 Remove duplicate from array and output should ne [1,2,5,6,7] 
+*/ 
 let numbers = [1,2,2,5,5,6,7];
 console.log([ ...new Set(numbers)]);
 
-// 2 Difference between let and const
+/*
+**  2 Difference between let and const
+ */
 let letAndConst = function() {
     {
         let let1 = 'let';
         var v = 'var';
     }
     console.log(v);
-    console.log(let1);
+    // console.log(let1);
     
 }
 
 letAndConst();
-
+//O/P var
+// ReferenceError: let1 is not defined
 
 // 3 Immediately scope function
+
 let scopeFun = function() {
     { 
         (function(){
@@ -24,24 +30,24 @@ let scopeFun = function() {
             var v = 'var';
         })();
     }
-    console.log(v);
-    console.log(l);
+    // console.log(l);
+    // console.log(v);
     
 }
 
 scopeFun();
+// ReferenceError: l is not defined
+// ReferenceError: v is not defined
 
-//4 O/p
+//4 what will will be O/p ?
 console.log(5<6<7); 
 // true<7  // 1<7 // true
 console.log(5>6>7); 
-// true > 6 false true means 1
+// true > 6 // true means 1 false
 
-
-// 5 o/p
-
+// 5 what will will be o/p 
 let a = () => arguments;
-console.log(a("hi"));
+// console.log('arguments',a("hi"));
 
 // 6 o/p
 
