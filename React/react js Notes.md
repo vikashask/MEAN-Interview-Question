@@ -61,16 +61,28 @@ Hello = () => {
 }
 ```
 ### stateless component
+    they are easy to write, understand, and test, and you can avoid the this keyword
 
 ### statefull component
-Stateful components are always class components
-stateful components have a state that gets initialized in the constructor.
-
+    Stateful components are always class components
+    stateful components have a state that gets initialized in the constructor.
+```
+constructor(props) {
+  super(props);
+  this.state = { count: 0 };
+}
+```
 
 ### Controlled component
+    Don'tmaintain therir own state
+    Data is controlled by parent component
+    took current value through props and notifi changes via callback
 
 ### Uncontrolled component
-
+    maintain there own state
+    data is controlled by DOM
+    ref are used to get their current value
+    
 ### props vs state
 
 ### create react app
