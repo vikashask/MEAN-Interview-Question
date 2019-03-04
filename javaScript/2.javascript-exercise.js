@@ -4,15 +4,24 @@ console.log(1 === '1')
 // Its returns false because it's not auto-type conversion and it check value and type both.
 console.log(1=== parseInt('1'))
 //  its returns true.
- console.log(0 == false); // return true, because both are same type.
- console.log(0 === false); // return false, because both are of a different type.
- console.log(1 == "1"); // return true, automatic type conversion for value only.
- console.log(1 === "1"); // return false, because both are of a different type.
- console.log(null == undefined); // return true.
- console.log(null === undefined); // return false.
- console.log('0' == false); // return true.
- console.log('0' === false); // return false.
- console.log(1=== parseInt("1")); // return true.
+ console.log(0 == false); 
+ // return true, because both are same type.
+ console.log(0 === false);
+  // return false, because both are of a different type.
+ console.log(1 == "1"); 
+ // return true, automatic type conversion for value only.
+ console.log(1 === "1"); 
+ // return false, because both are of a different type.
+ console.log(null == undefined); 
+ // return true.
+ console.log(null === undefined); 
+ // return false.
+ console.log('0' == false); 
+ // return true.
+ console.log('0' === false);
+  // return false.
+ console.log(1=== parseInt("1")); 
+ // return true.
 
 //1.  What is the difference between undefined and not defined in 
 var x; // declaring x
@@ -39,9 +48,8 @@ var k = 1;
   console.log(k); // output 1function
 
   /* 
-  Write a function
+  Write a function curring function
   console.log(mul(2)(3)(4)); // output : 24 
-  console.log(mul(4)(3)(4)); // output : 48
   */
 
  function multiply (x) {
@@ -138,5 +146,3 @@ var foo1 = function(){
     // Some code
 }; 
 // The main difference is the function foo is defined at run-time whereas function bar is defined at parse time.
-
-
