@@ -18,8 +18,8 @@ let letAndConst = function() {
 }
 
 letAndConst();
-//O/P var
-// ReferenceError: let1 is not defined
+    //O/P var
+    // ReferenceError: let1 is not defined
 
 // 3 Immediately scope function
 
@@ -36,23 +36,23 @@ let scopeFun = function() {
 }
 
 scopeFun();
-// ReferenceError: l is not defined
-// ReferenceError: v is not defined
+    // ReferenceError: l is not defined
+    // ReferenceError: v is not defined
 
 //4 what will will be O/p ?
 console.log(5<6<7); 
-// true<7  // 1<7 // true
+    // true<7  // 1<7 // true
 console.log(5>6>7); 
-// true > 6 // true means 1 false
+    // true > 6 // true means 1 false
 
 // 5 what will will be o/p 
 let a = () => arguments;
-// console.log('arguments',a("hi"));
+    // console.log('arguments',a("hi"));
 
 // 6 what will will be o/p
 let b = (...n) => {return n};
 console.log(b("hi"));
-// o/p hi
+    // o/p hi
 
 // 7 what will will be o/p
 
@@ -62,7 +62,7 @@ let x  = function(){
     }
 }
 console.log('x in function',x());
-// o/p  {mess: "hi"}
+    // o/p  {mess: "hi"}
 
 // 8 how to prevent addding property
 
@@ -71,7 +71,7 @@ let profile = {
 }
 profile.age = 3;
 console.log(profile);
-// use Object.freeze(profile)
+    // use Object.freeze(profile)
 
 //  9 update propery only not to add
 
@@ -103,23 +103,27 @@ let x1 = {
     b:2
 };
 const xArr = Object.entries(x1);
-
+    console.log("12.get only array from object",xArr);
+    // 12.get only array from object [ [ 'a', 1 ], [ 'b', 2 ] ]
 // 2nd way
 const Arrayx = []
 for(let i in x1){
     Arrayx.push(i);
 }
-// o/p = ["a", "b"]
+console.log("12.get only array from object",Arrayx);
+    // 12.get only array from object [ 'a', 'b' ]
 
 // 13 reverse string
 let xHi = "hi";
 let yHi = "ih";
 
 const reverseStr = (str) =>{
-    str.split('').reverse().join('')
+    return str.split('').reverse().join('')
 }
-
-console.log(reverseStr === yHi);
+    console.log("13.reverseStr",reverseStr(xHi));
+    console.log(reverseStr(xHi) === yHi);
+    // 13.reverseStr ih
+    // true
 
 // 14 object value
 
@@ -151,7 +155,9 @@ const objOne  = {
     }
 }
 
-objOne.getA().getB();
+// objOne.getA().getB();
+console.log("14",objOne.getA().getB());
+
 
 // 15 print this
 // [1,2].print();   // 1,2
@@ -168,9 +174,9 @@ const aReverse =function(x){
 const bReverse =function(x,y){
     this.y = y;
 }
-const newB = new b('x','y');
-newB.getX();
-newB.getY();
+// const newB = new b('x','y');
+// newB.getX();
+// newB.getY();
 
 // 17 clone 
 const objClone = {
@@ -183,7 +189,7 @@ const objClone = {
 const clone  = Object.assign({},objClone);
 
 clone.a.b.c = 2;
-console.log(obj.a.b.c);
+    // console.log(obj.a.b.c);
 
 // 18 reverse string
 const aaReverse = [1,2,3,3];
