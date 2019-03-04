@@ -100,13 +100,13 @@ Change inside child component              | no     |   yes
     npm start
 
 ### Real DOM vs Virtual dom
-Real DOM	                         |   Virtual  DOM
+Real DOM	                           |   Virtual  DOM
 ----------------------------------  |   ---------------
-It updates slow.	                   |   It updates faster.
+It updates slow.	                  |   It updates faster.
 Can directly update HTML.           |   Can’t directly update HTML.
 Creates a new DOM if element updates|	  Updates the JSX if element updates.
 DOM manipulation is very expensive. |   DOM manipulation is very easy.
-Too much of memory wastage.	       |   No memory wastage.
+Too much of memory wastage.	      |   No memory wastage.
 
 ### angular vs react
 
@@ -125,7 +125,7 @@ Too much of memory wastage.	       |   No memory wastage.
     cannot change
 
 ### mutable 
-    that can be change
+   that can be change
    only objects and arrays are mutable, not primitive values.
 
 ### webpack
