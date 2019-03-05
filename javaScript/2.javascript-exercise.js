@@ -19,19 +19,26 @@ console.log("7",1 === "1");
  console.log('10','0' == false); 
  console.log('11','0' === false);
  console.log('12',1=== parseInt("1")); 
- 
+
  //8  true.
  //9  false.
  //10 true.
  //11 false.
  //12 true.
 
-//1.  What is the difference between undefined and not defined in 
+ var bar = true;
+console.log(bar + 0);   
+console.log(bar + "xyz");  
+console.log(bar + true);  
+console.log(bar + false);  
+// 1, "truexyz", 2, 1
+
+//1.? What is the difference between undefined and not defined in 
 var x; // declaring x
 console.log(x); //output: undefined
 // console.log(y);  // Output: ReferenceError: y is not defined
 
-// 2.what would be output
+// 2.? what would be output
 var y1 = 1;
   if (function f(){}) {
     y1 += typeof f;
@@ -42,16 +49,19 @@ var y1 = 1;
 eval(function f(){}) returns function f(){} (which is true)   
 if statement, executing typeof f returns undefined because the if statement code executes at run time, 
 and the statement inside the if condition is evaluated during run time.
+  
+  3.?
 */
-var k = 1;
+  var k = 1;
   if (1) {
     function foo(){};
     k += typeof foo;
   }
-  console.log(k); // output 1function
+  console.log(k); 
+  // output 1function
 
   /* 
-  Write a function curring function
+  4.? Write a function curring function
   console.log(mul(2)(3)(4)); // output : 24 
   */
 
@@ -63,7 +73,7 @@ var k = 1;
   };
 }
 
-/* How to empty an array */
+/* 5.? How to empty an array */
 var arrayList =  ['a','b','c','d','e','f'];
 // Method 1
 /* 
@@ -76,7 +86,7 @@ while(arrayList.length){
 } 
 */
 
-/* How do you check if an object is an array or not? */
+/* 6.? How do you check if an object is an array or not? */
 var arrayList1 = [1,2,3];
 Array.isArray(arrayList1);
 
@@ -90,7 +100,7 @@ console.log(output);
 // 2
 // The delete operator is used to delete properties from an object.
 
-/* What will be the output of the code below? */
+/* 7.? What will be the output of the code below? */
 var x1 = { foo : 1};
 var output2 = (function(){
     delete x1.foo;
@@ -100,7 +110,7 @@ var output2 = (function(){
 //undefined
 //x1 is an object
 
-/* What will be the output of the code below? */
+/* 8.? What will be the output of the code below? */
 var Employee = {
   company: 'xyz'
 }
@@ -111,7 +121,7 @@ console.log(emp1.company);
 console.log(emp1.hasOwnProperty('company')); //output : false
 // emp1 object has company as its prototype property. The delete operator doesn't delete prototype property.
 
-/* what would be output */
+/* 9.? what would be output */
 var trees = ["redwood","bay","cedar","oak","maple"];
 delete trees[3];
 console.log(trees);
@@ -120,26 +130,21 @@ console.log(trees);
 trees.push();
 console.log(trees.length); // 5
 
-/* What would be Output */
-var bar = true;
-console.log(bar + 0);   
-console.log(bar + "xyz");  
-console.log(bar + true);  
-console.log(bar + false);  
-// 1, "truexyz", 2, 1
-
-/* What would be output */
+/* 10.? What would be output */
 var z = 1, y = z = typeof y;
 console.log(y); 
 // undefined
 
-/* What would be output */
-// var foo = function bar(){ return 12; };
+/* 11.? What would be output */
+var foo = function bar(){ return 12; };
 // typeof bar(); 
 
-// Reference Error  below is the write
+// O/P Reference Error  below is the write
+
 var bar = function(){ return 12; };
-typeof bar();  
+typeof bar(); 
+console.log("typeof bar()",bar());
+ 
 
 // difference between the function declarations below?
 var foo1 = function(){ 
