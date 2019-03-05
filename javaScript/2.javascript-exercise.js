@@ -14,16 +14,17 @@ console.log("7",1 === "1");
  //6. true, automatic type conversion for value only.
  //7. false, because both are of a different type.
  
- console.log(null == undefined); 
- console.log(null === undefined); 
- console.log('0' == false); 
- console.log('0' === false);
- console.log(1=== parseInt("1")); 
- //8. true.
- //9. false.
- //10  true.
- //11  false.
- //12  true.
+ console.log('8',null == undefined); 
+ console.log('9',null === undefined); 
+ console.log('10','0' == false); 
+ console.log('11','0' === false);
+ console.log('12',1=== parseInt("1")); 
+ 
+ //8  true.
+ //9  false.
+ //10 true.
+ //11 false.
+ //12 true.
 
 //1.  What is the difference between undefined and not defined in 
 var x; // declaring x
