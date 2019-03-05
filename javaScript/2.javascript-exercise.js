@@ -1,27 +1,29 @@
-console.log(1 == '1')
-// Its returns true because it's an auto-type conversion and it checks only value not type.
-console.log(1 === '1')
-// Its returns false because it's not auto-type conversion and it check value and type both.
-console.log(1=== parseInt('1'))
-//  its returns true.
- console.log(0 == false); 
- // return true, because both are same type.
- console.log(0 === false);
-  // return false, because both are of a different type.
- console.log(1 == "1"); 
- // return true, automatic type conversion for value only.
- console.log(1 === "1"); 
- // return false, because both are of a different type.
+console.log('1.',1 == '1')
+console.log("2.",1 === '1')
+console.log("3.",1=== parseInt('1'))
+// 1. TRUE because it's an auto-type conversion and it checks only value not type.
+// 2. FALSE because it's not auto-type conversion and it check value and type both.
+// 3. TRUE.
+ 
+console.log("4",0 == false); 
+console.log("5",0 === false);
+console.log("6",1 == "1"); 
+console.log("7",1 === "1"); 
+ //4. true, because both are same type.
+ //5. false, because both are of a different type.
+ //6. true, automatic type conversion for value only.
+ //7. false, because both are of a different type.
+ 
  console.log(null == undefined); 
- // return true.
  console.log(null === undefined); 
- // return false.
  console.log('0' == false); 
- // return true.
  console.log('0' === false);
-  // return false.
  console.log(1=== parseInt("1")); 
- // return true.
+ //8. true.
+ //9. false.
+ //10  true.
+ //11  false.
+ //12  true.
 
 //1.  What is the difference between undefined and not defined in 
 var x; // declaring x
