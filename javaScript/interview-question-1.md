@@ -1,8 +1,5 @@
-## What is JavaScript?
-The JavaScript is most popular scripting languages and it developed by Netscape and used to develop the client side web applications.
-
 ## Is JavaScript Case Sensitive?
-Yes! JavaScript is a case sensitive because a function “str” is not equal to “Str”.
+Yes! because a function “str” is not equal to “Str”.
 
 ## What Is the Type of JavaScript?
 There are different of Type as given below.
@@ -25,40 +22,34 @@ The double equal “==” is an auto-type conversion and it checks only value no
 The three equal “===” is not auto-type conversion and it check value and type both.﻿
 
 ## The real example as given below –
-    if(1 == ”1”)
-//Its returns true because it's an auto-type conversion and it checks only value not type.
+    if(1 == '1')
+    // true
 
-    if(1 === ”1”)
-//Its returns false because it's not auto-type conversion and it check value and type both.
+    if(1 === '1')
+    //false 
 
     If(1=== parseInt(”1”))
-    // its returns true.
-    // alert(0 == false); // return true, because both are same type.
-    // alert(0 === false); // return false, because both are of a different type.
-    // alert(1 == "1"); // return true, automatic type conversion for value only.
-    // alert(1 === "1"); // return false, because both are of a different type.
-    // alert(null == undefined); // return true.
-    // alert(null === undefined); // return false.
-    // alert('0' == false); // return true.
-    // alert('0' === false); // return false.
-    // alert(1=== parseInt("1")); // return true.
+    // true.
+    console.log(0 == false);    // return true, because both are same type.
+    console.log(0 === false);   // return false, because both are of a different type.
+    console.log(1 == "1");      // return true, automatic type conversion for value only.
+    console.log(1 === "1");     // return false, because both are of a different type.
+    console.log(null == undefined); // return true.
+    console.log(null === undefined); // return false.
+    console.log('0' == false);  // return true.
+    console.log('0' === false); // return false.
+    console.log(1=== parseInt("1")); // return true.
 
 ## What Is an Object?
-The object is a collection of properties and the each property associated with the name-value pairs. The object can contain any data types (numbers, arrays, object etc.)
+    The object is a collection of properties and the each property associated with the name-value pairs. The object can contain any data types (numbers, arrays, object etc.)
 
-The example as given below –
-var myObject= {empId : “001”, empCode :”X0091”};
+    var myObject= {empId : “001”, empCode :”X0091”};
 
-In the above example, here are two properties one is empId and other is empCode and its values are “001” and “X0091”.
-
-The properties name can me string or number. If a property name is number i.e.
-
-var numObject= {1 : “001”, 2 :”X0091”};
+    The properties name can me string or number. If a property name is number i.e.
+    var numObject= {1 : “001”, 2 :”X0091”};
 
     Console.log(numObject.1); //This line throw an error.
     Console.log(numObject[“1”]); // will access to this line not get any error.
-
-As per my thought, the number property name should be avoided.
 
 Types of creating an object
 * Object literals
@@ -124,13 +115,8 @@ console.log(x); //undefined
 ## What is array? 
 Array is a collection of index items and it is a number indexes.
 
-Some of programming language support array as named indexes and the JavaScript not support the array as
- name indexes and its provide only number indexes but provide this feature using the associative array.
-
 The array with name indexes are called associative array and the associative array is provide a ways to 
 store the information.
-
-The number index array example as given below -
 
     var users = new Object();
     users["Name1"] = "vikash 1";
@@ -141,7 +127,6 @@ alert(Object.keys(users).length); //output is 3.
     var length = Object.keys(users).length;  // 3
    
 The name index array example as given below -
-
     var users = [];
     users["Name1"] = "vikash 1";
     users["Name2"] = "vikash 2";
@@ -151,7 +136,6 @@ The name index array example as given below -
     var detail = users[0];             // users[0] will return undefined
     
 ## Where To Use the Associate Array?
-I am going to explain the associate array over the database table columns. A table have some columns and its type i.e.
 
 The empName as text type, empAge as number type and enpDOB as date type
 
@@ -165,8 +149,6 @@ If we need to find the type of a column that time we can create the associate ar
 
     console.log("Find the emp age type :" + empDetailType["empAge"]);
 How To Achieve Inheritance in JavaScript?
-In the JavaScript, we can implement the inheritance using the some alternative ways and we cannot define 
-a class keyword but we create a constructor function and using new keyword achieves it.  
 
 The some alternative ways as given below –
 * Pseudo classical inheritance
@@ -225,9 +207,6 @@ The example as given below -
     typeof [10, 20, 30, 40]             // Returns object
 
 ## What Is a Public, Private and Static Variable in JavaScript?
-I am going to explain like strongly type object oriented language (OOPs) like(C#, C++ and java etc.).
-
-Fist I am creating a conductor class and trying to achieve to declare the public, private and static variables and detail as given below –
 
     function myEmpConsepts() { // This myEmpConsepts is a constructor  function.
         var empId = "00201"; //This is a private variable.
@@ -246,37 +225,10 @@ Fist I am creating a conductor class and trying to achieve to declare the public
     myEmpConsepts.empStaticVaiable = "Department";
     var instanciateToClass = new myEmpConsepts();
 
-## How To Create the Namespace in JavaScript?
-how to create the namespace in JavaScript.
-
-    //Create the namespace.
-    var nameSpace = nameSpace || {};
-
-    nameSpace.myEmpConsepts = function () {
-        var empId = "00201"; //This is a private variable.
-        this.empName = "vikash Singh"; //This is a public variable.
-        //This is public function
-        this.getEmp = function () {
-            return "vikash Singh"
-        }
-
-        //This is private function
-        var getEmp = function () {
-            return "vikash Singh"
-        }
-
-        return {
-            getEmp: getEmp,// work as public
-            getEmp: getEmp // work as public
-        }
-    }();
-
 ## How to Add/Remove Properties to Object in run-time in JavaScript?
 I am going to explain by example for add and remove properties from JavaScript objects as give below.
 
-This example for delete property -
-
-//This is the JSON object.
+//  JSON object.
 
     var objectJSON = {
         id: 1,
@@ -294,21 +246,10 @@ This example for delete property -
         this.splice(index, 3);
     }
 
-This example for add property -
-
 //This is used to add the property.
 
     objectJSON.age = 30;
     console.log(objectJSON.age); //The result is 30;
-
-//This is the JSON object.
-
-    var objectJSON = {
-        id: 1,
-        name: "vikash Singh",
-        dept: "IT",
-        age: 30
-    };
 
 ## How To Extending built-in Objects in JavaScript?
 JavaScript support built-in objects which use to develop the flexibility of JavaScript. The built in 
@@ -321,22 +262,6 @@ Example as give below -
     var date = new Date(); //This is date built-in object.
     var math = Math.abs(10); // this is math built-in object.
     var string = "my string" // this is string built-in object.
-
-## Why Never Use New Array in JavaScript?
-We have some fundamental issues with new Array () the example in detail for array constructor function as given below.
-
-## When Array Have more than one Integer?
-    var newArray = new Array(10, 20, 30, 40, 50);
-
-    console.log(newArray[0]); //returns 10.
-    console.log(newArray.length); //returns 5.
-
-## When Array Have Only One Integer?
-    var newArray = new Array(10);
-    console.log(newArray[0]); //returns undefined
-    console.log(newArray.length); //returns 10 because it has an error "array index out of bound";
-
-//This is the fundamental deference to need to avoid the new array ();
 
 ## What is eval() and floor() functions in JavaScript?
 The eval() function used in execute an argument as expression or we can say that evaluate a string as expression and it used to parse the JSON.
@@ -358,10 +283,7 @@ The is join() function used to join the separator in the array.
 
 Syntax: myArray.join(mySeparator);
 
-The example as given below -
 var alfabets = ["A", "B", "C", "D"];
-
-//Join without seperator
 var result1 = alfabets.join();//The output is A B C D.
 
 //Join with seperator.
@@ -405,9 +327,7 @@ That means simply accessing variable outside of your scope creates a closure.
 
 ## What is JavaScript Hoisted?
 In the JavaScript, the variables can be used before declared, this kinds of mechanism is called Hoisted. 
-It's default behaviour of JavaScript.
 
-You can easily understanding in the below example in detail -
 //The variable declaration looks like.
     var emp;
 
@@ -429,8 +349,6 @@ console.log(emp); //The variable named emp in the outer scope still contains 10.
 
 ## What Is Function Overloading in JavaScript?
 There is no real function overloading in JavaScript and it allows passing any number of parameters of any type.
-
-You have to check inside the function how many arguments have been passed and what is the type arguments using typeof.
 
 The example for function overloading not supporting in JavaScript as gives below -
     function sum(a, b) {
@@ -455,8 +373,6 @@ We can achieve using the several different techniques as give below -
 * We can use the arguments array to access any given argument by using arguments[i]
 
 ## What Is Prototype in JavaScript?
-The prototype is a fundamental concept of JavaScript and its must to known JavaScript developers.
-
 All the JavaScript objects have an object and its property called prototype and its used to add and the custom functions and property.
 
 The example without prototype as given below -
