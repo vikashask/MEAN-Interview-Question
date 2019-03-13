@@ -11,6 +11,15 @@
     -One-way in (target)="statement"
     -Binding target <img [src]="heroImageUrl">
     -Template statements <button (click)="deleteHero()">Delete hero</button>
+    User Input
+    Life Cycle Hooks
+    Component interaction
+    Component styles
+    Angular Elements
+    Dynamic Components
+    Attributes Directive
+    Structurals Directive
+    Pipes
 
 ### Forms
 ### Observables & RxJS
