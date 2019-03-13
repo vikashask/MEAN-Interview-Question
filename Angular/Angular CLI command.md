@@ -10,6 +10,9 @@
 
 ### ng new my-first-project
     ng n
+
+### ng new customer-app --routing
+
 ### ng serve
     ng serve
     ng s

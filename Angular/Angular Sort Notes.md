@@ -22,6 +22,11 @@
     Pipes
 
 ### Forms
+    Reactive Forms
+    Templates-driven Form
+    Forms validation
+    Dynamic forms
+    
 ### Observables & RxJS
 ### Bootstrapping
 ### NgModules
