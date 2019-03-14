@@ -31,6 +31,11 @@
 ### Bootstrapping
 ### NgModules
 ### Dependency Injection
+    Angular Dependency Injection
+    Hierarchical Dependency Injectors
+    DI Provider
+    DI in Action
+    Navigate the Component Tree
 ### HttpClient
 ### Routing & Navigation
 ### Animations
