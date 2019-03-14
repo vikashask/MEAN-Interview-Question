@@ -30,6 +30,12 @@
 ### Observables & RxJS
 ### Bootstrapping
 ### NgModules
+    JavaScript Modules vs. NgModules
+    Entry Components
+    Feature Modules
+    Provider
+    Singleton services
+ 
 ### Dependency Injection
     Angular Dependency Injection
     Hierarchical Dependency Injectors
