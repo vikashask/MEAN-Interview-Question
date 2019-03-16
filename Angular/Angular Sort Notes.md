@@ -35,6 +35,9 @@
     Feature Modules
     Provider
     Singleton services
+    Lazy Loading Feature Modules
+    Sharing Modules
+    NgModule API
  
 ### Dependency Injection
     Angular Dependency Injection
