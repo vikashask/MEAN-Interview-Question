@@ -113,8 +113,14 @@ Too much of memory wastage.	      |   No memory wastage.
 ### jsx
 
 ### life cycle
+    Four phases of a React component
+    Initialization
+    Mounting
+    Update
+    Unmounting
 
 ### setState
+    It will use this.setState() to schedule updates to the component local state:
 
 ### forceUpdate
 
