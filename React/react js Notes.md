@@ -129,6 +129,9 @@ Too much of memory wastage.	      |   No memory wastage.
    only objects and arrays are mutable, not primitive values.
 
 ### webpack
+    webpack is a module bundler. Its main purpose is to bundle JavaScript files for usage in a browser, yet it is also capable
+     of transforming, bundling, or packaging just about any resource or asset.
+
     Webpack is a popular module bundling system built on top of Node.js. It can handle not only combination and minification of
      JavaScript and CSS files, but also other assets such as image files (spriting) through the use of plugins.
 
