@@ -111,6 +111,8 @@ Too much of memory wastage.	      |   No memory wastage.
 ### angular vs react
 
 ### jsx
+    This funny tag syntax is neither a string nor HTML.
+    It is called JSX, and it is a syntax extension to JavaScript
 
 ### life cycle
     Four phases of a React component
