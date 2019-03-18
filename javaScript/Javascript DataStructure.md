@@ -76,9 +76,29 @@ Limiting Object References
 The delete Operator
 
 ## 8: Recursion  99 
-Introducing Recursion 99 Rules of Recursion  100 Base Case 100 Divide-and-Conquer Method  101 Classic Example: Fibonacci Sequence  101 Fibonacci Sequence: Tail Recursion  102 Pascal’s Triangle 103 Big-O for Recursion 105 Recurrence Relations  105 Master Theorem  106 Recursive Call Stack Memory  107 
-Chapter 9: Sets  117 
-Introducing Sets 117 Set Operations  117 Insertion  118 Deletion  118 Contains 118 Other Utility Functions 119 Intersection 119 isSuperSet  119 Union  120 Difference  120 
+Introducing Recursion 99 
+    Rules of Recursion  100 
+    Base Case 100 
+    Divide-and-Conquer Method  101
+    Classic Example: Fibonacci Sequence  101 
+    Fibonacci Sequence: Tail Recursion  102 
+    Pascal’s Triangle 103 
+Big-O for Recursion 105 
+    Recurrence Relations  105 
+    Master Theorem  106 
+Recursive Call Stack Memory  107 
+
+## 9: Sets  117 
+Introducing Sets 117 
+Set Operations  117 
+    Insertion  118 
+    Deletion  118 
+    Contains 118 
+Other Utility Functions 119 
+    Intersection 119 
+    isSuperSet  119 
+    Union  120 
+    Difference  120 
 
 ## 10: Searching and Sorting  125 
 Searching 125 Linear Search  125 Binary Search  127 
