@@ -1,39 +1,79 @@
 
-## 1: Big-O Notation 1 
+## 1: Big-O Notation
 Big-O Notation Primer  
 
-## 2: JavaScript: Unique Parts 13 
+## 2: JavaScript: Unique Parts
 JavaScript Scope  
-Global Declaration: Global Scope 13 
-Declaration with var: Functional Scope  
-Declaration with let: Block Scope 15 
+    Global Declaration: Global Scope
+    Declaration with var: Functional Scope  
+    Declaration with let: Block Scope
 Equality and Types  
-Variable Types 
-Truthy/Falsey Check  
-=== vs ==  
-Objects  
+    Variable Types 
+    Truthy/Falsey Check  
+    === vs ==  
+    Objects  
 
-## 3: JavaScript Numbers 21 
-Number System  21 JavaScript Number Object  23 Integer Rounding  23 NumberEPSILON  24 Maximums 24 Minimums 25 Size Summary  26 Number Algorithms 26 Prime Factorization  28 Random Number Generator  
+## 3: JavaScript Numbers
+Number System  
+JavaScript Number Object  
+    Integer Rounding
+    NumberEPSILON
+    Maximums
+    Minimums 
+    Size Summary 
+    Number Algorithms 
+    Prime Factorization
+Random Number Generator  
 
-## 4: JavaScript Strings 35 
-JavaScript String Primitive  35 String Access 35 String Comparison 36 String Search 36 String Decomposition  38 String Replace  38 
-Regular Expressions  38 Basic Regex 39 Commonly Used Regexes  39 
-Encoding  41 Base64 Encoding 42 
-String Shortening  43 Encryption 45 RSA Encryption 
+## 4: JavaScript Strings 
+JavaScript String Primitive  
+    String Access 
+    String Comparison 
+    String Search
+    String Decomposition 
+    String Replace
+Regular Expressions  38 
+    Basic Regex
+    Commonly Used Regexes 
+Encoding
+    Base64 Encoding 
+String Shortening
+Encryption
+RSA Encryption
+
 ## 5: JavaScript Arrays 53 
-Introducing Arrays 53 Insertion  53 Deletion  54 Access  54 
-Iteration 54 for (Variables; Condition; Modification)  55 for ( in )  56 for ( of ) 56 forEach( ) 56 
-Helper Functions  57 slice(begin,end)  57 splice(begin,size,element1,element2...) 58 concat() 59 length Property  59 Spread Operator  60 
-Exercises 60 JavaScript Functional Array Methods  67 Map 67 Filter  68 Reduce  
+Introducing Arrays
+    Insertion 
+    Deletion 
+    Access
+Iteration 
+    for (Variables; Condition; Modification)  
+    for ( in )  
+    for ( of ) 56 forEach( ) 
+Helper Functions
+    slice(begin,end)
+    splice(begin,size,element1,element2...) 
+    concat() 
+    length Property  
+    Spread Operator
+JavaScript Functional Array Methods  
+    Map 
+    Filter 
+    Reduce  
 Multidimensional Arrays  68 
 
 ## 6: JavaScript Objects  83 
-JavaScript Object Property  83 Prototypal Inheritance 84 Constructor and Variables 85 Summary 86 Exercises 87 
+JavaScript Object Property
+Prototypal Inheritance 
+Constructor and Variables 
 
 ## 7: JavaScript Memory Management  89 
-Memory Leaks  89 Reference to an Object  89 Leaking DOM  90 Global window Object 91 Limiting Object References  92 The delete Operator 92 
-Summary 93 
+Memory Leaks 
+Reference to an Object  
+Leaking DOM  
+Global window Object 
+Limiting Object References  
+The delete Operator
 
 ## 8: Recursion  99 
 Introducing Recursion 99 Rules of Recursion  100 Base Case 100 Divide-and-Conquer Method  101 Classic Example: Fibonacci Sequence  101 Fibonacci Sequence: Tail Recursion  102 Pascal’s Triangle 103 Big-O for Recursion 105 Recurrence Relations  105 Master Theorem  106 Recursive Call Stack Memory  107 
