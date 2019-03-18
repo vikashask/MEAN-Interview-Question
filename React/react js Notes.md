@@ -113,6 +113,13 @@ Too much of memory wastage.	      |   No memory wastage.
 ### jsx
     This funny tag syntax is neither a string nor HTML.
     It is called JSX, and it is a syntax extension to JavaScript
+    Embedding Expressions in JSX
+    JSX is an Expression Too
+    Specifying Attributes with JSX
+    Specifying Children with JSX
+    JSX Prevents Injection Attacks
+    JSX Represents Objects
+
 
 ### life cycle
     Four phases of a React component
