@@ -117,13 +117,13 @@ JavaScript’s Built-in Sort
 ## 11: Hash Tables
 Introducing Hash Tables
 Hashing Techniques 
-Prime Number Hashing 
-Probing
-Rehashing/Double-Hashing 
+    Prime Number Hashing 
+    Probing
+    Rehashing/Double-Hashing 
 Hash Table Implementation 
-Using Linear Probing 
-Using Quadratic Probing
-Using Double-Hashing with Linear Probing 
+    Using Linear Probing 
+    Using Quadratic Probing
+    Using Double-Hashing with Linear Probing 
 
 ## 12: Stacks and Queues 
 Stacks  163 Peek 165 Insertion  165 Deletion  166 Access  166 Search  167 
