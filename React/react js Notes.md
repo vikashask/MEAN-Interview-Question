@@ -111,10 +111,25 @@ Too much of memory wastage.	      |   No memory wastage.
 ### angular vs react
 
 ### jsx
+    This funny tag syntax is neither a string nor HTML.
+    It is called JSX, and it is a syntax extension to JavaScript
+    Embedding Expressions in JSX
+    JSX is an Expression Too
+    Specifying Attributes with JSX
+    Specifying Children with JSX
+    JSX Prevents Injection Attacks
+    JSX Represents Objects
+
 
 ### life cycle
+    Four phases of a React component
+    Initialization
+    Mounting
+    Update
+    Unmounting
 
 ### setState
+    It will use this.setState() to schedule updates to the component local state:
 
 ### forceUpdate
 
@@ -129,6 +144,11 @@ Too much of memory wastage.	      |   No memory wastage.
    only objects and arrays are mutable, not primitive values.
 
 ### webpack
+    webpack is a module bundler. Its main purpose is to bundle JavaScript files for usage in a browser, yet it is also capable
+     of transforming, bundling, or packaging just about any resource or asset.
+
+    Webpack is a popular module bundling system built on top of Node.js. It can handle not only combination and minification of
+     JavaScript and CSS files, but also other assets such as image files (spriting) through the use of plugins.
 
 ### lazy loading
 

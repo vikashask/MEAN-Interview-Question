@@ -5,9 +5,14 @@
     ng g c
     ng g service
     ng g module
-    
+
+### ng generate class hero 
+
 ### ng new my-first-project
     ng n
+
+### ng new customer-app --routing
+
 ### ng serve
     ng serve
     ng s
