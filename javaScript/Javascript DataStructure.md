@@ -41,7 +41,7 @@ String Shortening
 Encryption
 RSA Encryption
 
-## 5: JavaScript Arrays 53 
+## 5: JavaScript Arrays
 Introducing Arrays
     Insertion 
     Deletion 
@@ -60,14 +60,14 @@ JavaScript Functional Array Methods
     Map 
     Filter 
     Reduce  
-Multidimensional Arrays  68 
+Multidimensional Arrays 
 
-## 6: JavaScript Objects  83 
+## 6: JavaScript Objects
 JavaScript Object Property
 Prototypal Inheritance 
 Constructor and Variables 
 
-## 7: JavaScript Memory Management  89 
+## 7: JavaScript Memory Management 
 Memory Leaks 
 Reference to an Object  
 Leaking DOM  
@@ -75,45 +75,62 @@ Global window Object
 Limiting Object References  
 The delete Operator
 
-## 8: Recursion  99 
-Introducing Recursion 99 
-    Rules of Recursion  100 
-    Base Case 100 
-    Divide-and-Conquer Method  101
-    Classic Example: Fibonacci Sequence  101 
-    Fibonacci Sequence: Tail Recursion  102 
-    Pascal’s Triangle 103 
-Big-O for Recursion 105 
-    Recurrence Relations  105 
-    Master Theorem  106 
-Recursive Call Stack Memory  107 
+## 8: Recursion 
+Introducing Recursion 
+    Rules of Recursion 
+    Base Case
+    Divide-and-Conquer Method
+    Classic Example: Fibonacci Sequence 
+    Fibonacci Sequence: Tail Recursion 
+    Pascal’s Triangle 
+Big-O for Recursion
+    Recurrence Relations 
+    Master Theorem
+Recursive Call Stack Memory 
 
-## 9: Sets  117 
-Introducing Sets 117 
-Set Operations  117 
-    Insertion  118 
-    Deletion  118 
-    Contains 118 
-Other Utility Functions 119 
-    Intersection 119 
-    isSuperSet  119 
-    Union  120 
-    Difference  120 
+## 9: Sets
+Introducing Sets 
+Set Operations 
+    Insertion 
+    Deletion 
+    Contains 
+Other Utility Functions
+    Intersection
+    isSuperSet 
+    Union 
+    Difference 
 
-## 10: Searching and Sorting  125 
-Searching 125 Linear Search  125 Binary Search  127 
-Sorting  129 Bubble Sort 129 Selection Sort  131 Insertion Sort  132 Quicksort  134 Quickselect 137 Mergesort  138 Count Sort 140 JavaScript’s Built-in Sort 141 
-Summary 142 
+## 10: Searching and Sorting 
+Searching
+    Linear Search
+    Binary Search 
+Sorting 
+    Bubble Sort
+    Selection Sort
+    Insertion Sort
+    Quicksort
+    Quickselect
+    Mergesort
+    Count Sort
+JavaScript’s Built-in Sort
 
-## 11: Hash Tables  151 
-Introducing Hash Tables 151 Hashing Techniques  152 Prime Number Hashing  152 Probing  154 Rehashing/Double-Hashing 155 Hash Table Implementation 156 Using Linear Probing  156 Using Quadratic Probing 158 Using Double-Hashing with Linear Probing 160 
+## 11: Hash Tables
+Introducing Hash Tables
+Hashing Techniques 
+    Prime Number Hashing 
+    Probing
+    Rehashing/Double-Hashing 
+Hash Table Implementation 
+    Using Linear Probing 
+    Using Quadratic Probing
+    Using Double-Hashing with Linear Probing 
 
-## 12: Stacks and Queues 163 
+## 12: Stacks and Queues 
 Stacks  163 Peek 165 Insertion  165 Deletion  166 Access  166 Search  167 
 Queues  167 Peek 169 Insertion  169 Deletion  169 Access  170 Search  171 
 Summary 171 
 
-## 13: Linked Lists  179 
+## 13: Linked Lists 
 Singly Linked Lists  179 Insertion  180 Deletion by Value  181 
 Deletion at the Head  182 
 Search  183 Doubly Linked Lists 184 Insertion at the Head  185 Insertion at the Tail  185 Deletion at the Head  186 Deletion at the Tail 187 Search  188 
