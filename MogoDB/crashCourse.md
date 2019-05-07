@@ -147,3 +147,12 @@ db.post.aggregate([{$group : {_id : "$by", first_tutorial : {$last : "$likes"}}}
 
 >mongod --port "PORT" --dbpath "YOUR_DB_DATA_PATH" --replSet "REPLICA_SET_INSTANCE_NAME"
 >mongod --port 27017 --dbpath "D:\set up\mongodb\data" --replSet rs0
+
+# Sharding: is the process of storing data records across multiple machines
+    Why Sharding?
+    In replication, all writes go to master node
+    Latency sensitive queries still go to master
+    Single replica set has limitation of 12 nodes
+    Memory can't be large enough when active dataset is big
+    Local disk is not big enough
+    Vertical scaling is too expensive
