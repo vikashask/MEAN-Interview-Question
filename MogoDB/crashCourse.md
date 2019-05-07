@@ -156,3 +156,11 @@ db.post.aggregate([{$group : {_id : "$by", first_tutorial : {$last : "$likes"}}}
     Memory can't be large enough when active dataset is big
     Local disk is not big enough
     Vertical scaling is too expensive
+
+# Create Backup: create backup of database in MongoDB, you should use mongodump command
+>mongodump
+>mongodump --host HOST_NAME --port PORT_NUMBER
+
+Restore data
+>mongorestore
+
