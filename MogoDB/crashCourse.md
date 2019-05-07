@@ -135,3 +135,15 @@ db.post.aggregate([{$group : {_id : "$by", url : {$addToSet : "$url"}}}])
 db.post.aggregate([{$group : {_id : "$by", first_tutorial : {$first : "$likes"}}}])
 ## Last Gets the first document from the source documents according to the grouping.
 db.post.aggregate([{$group : {_id : "$by", first_tutorial : {$last : "$likes"}}}])
+
+# Replication 
+    process of synchronizing data across multiple servers.
+    To keep your data safe
+    High (24*7) availability of data
+    Disaster recovery
+    No downtime for maintenance (like backups, index rebuilds, compaction)
+    Read scaling (extra copies to read from)
+    Replica set is transparent to the application
+
+>mongod --port "PORT" --dbpath "YOUR_DB_DATA_PATH" --replSet "REPLICA_SET_INSTANCE_NAME"
+>mongod --port 27017 --dbpath "D:\set up\mongodb\data" --replSet rs0
