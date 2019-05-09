@@ -164,3 +164,5 @@ db.post.aggregate([{$group : {_id : "$by", first_tutorial : {$last : "$likes"}}}
 Restore data
 >mongorestore
 
+# Deployment
+>mongostat
