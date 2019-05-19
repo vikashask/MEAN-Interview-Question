@@ -75,7 +75,7 @@ constructor(props) {
 ```
 
 ### Controlled component
-    Don'tmaintain therir own state
+    Don't maintain their own state
     Data is controlled by parent component
     took current value through props and notifi changes via callback
 
@@ -154,7 +154,7 @@ Too much of memory wastage.	      |   No memory wastage.
 
 ### HOC higer order component
     Are pure function
-    custome compoenent  which wraps another component
+    custome component  which wraps another component
     They accept dynamically provided child component
     Do not modify input component
     Do not copy any behaviour from input component
