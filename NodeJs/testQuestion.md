@@ -18,4 +18,13 @@ var buff = new Buffer([20,30])
 var buff = new Buffer('example','utf-8')
 var buff = new Buffer('example','base-64')
 
-what code can be used to copy an ASCII string into a buffer,one byte at a time ?
+>what code can be used to copy an ASCII string into a buffer,one byte at a time ?
+
+>which is the following module is not used for tetsing environment in node js
+mocha,jasmine,bower,vows
+
+>what could be the possible cause for the error,ETIMEDOUT Operation time out
+port is not opened on destination system
+proces execution time is not set
+request was not completed in time
+firewall rules deny the connection
