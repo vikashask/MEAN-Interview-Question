@@ -28,3 +28,22 @@ port is not opened on destination system
 proces execution time is not set
 request was not completed in time
 firewall rules deny the connection
+
+>what will be the output
+function async(arg,callback){
+    console.log('do something with \''+arg+'\',');
+    settimeout(function(){callback(arg*2),1000})
+}
+
+var items = [1,2,3,4,5,6];
+var result =[];
+function series(item) {
+    if(item){
+        async(item,function(result){
+            result.push(result);
+            return series(items.shift());
+        })
+    }
+}
+
+series(items.shift);
