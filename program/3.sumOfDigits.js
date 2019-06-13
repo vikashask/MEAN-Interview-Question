@@ -26,3 +26,16 @@ return `sum of ${value} is ${sum}`;
 let sum = sumOfDigitsString(234);
 console.log(sum);
 
+// var sumGlobal = 0;
+function add_digits(no) {
+    var sum = 0;
+    if (no == 0) {
+      return 0;
+    }
+    sum = no%10 + add_digits(no/10);
+    return Math.floor(sum);
+    return `sum of ${no} is ${Math.floor(sum)}`;
+  }
+
+let resultRecursive = add_digits(123);
+console.log('recursive',resultRecursive);
