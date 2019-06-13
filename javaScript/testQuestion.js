@@ -17,7 +17,7 @@ var func = b();
 
 // o/p 2
 //2. what will be output
-function add(a,b){
+function add2(a,b){
     var ddd = function (b){return a+b;};
     if(typeof b =='undefined'){
         return ddd;
@@ -26,5 +26,19 @@ function add(a,b){
     }
 }
 
-add(2)(3) // 5
-add(2,3) // 5
+add2(2)(3) // 5
+add2(2,3) // 5
+
+//3. what will be output
+function add3(x) {
+    return function(y) {
+        if (typeof y !== 'undefined') {
+            x = x + y;
+            return arguments.callee;
+        } else {
+            return x;
+        }
+    };
+}
+add3(1)(2)(3)(); //6
+add3(1)(1)(1)(1)(1)(1)(); //6
