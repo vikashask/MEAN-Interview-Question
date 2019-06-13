@@ -16,3 +16,15 @@ function b() {
 var func = b();
 
 // o/p 2
+//2. what will be output
+function add(a,b){
+    var ddd = function (b){return a+b;};
+    if(typeof b =='undefined'){
+        return ddd;
+    }else{
+        return ddd(b);
+    }
+}
+
+add(2)(3) // 5
+add(2,3) // 5
