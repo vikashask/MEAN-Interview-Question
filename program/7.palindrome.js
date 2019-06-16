@@ -9,3 +9,13 @@ var isPalindrome = function (string) {
 }
 console.log(isPalindrome('121'));
 
+// check palidrome for number
+var isNumberPalindrome = function (number) {
+    if (number == number.toString().split('').reverse().join('')) {
+        console.log(number + ' is palindrome.');
+    }
+    else {
+        console.log(number + ' is not palindrome.');
+    }
+}
+console.log(isNumberPalindrome(1213));
