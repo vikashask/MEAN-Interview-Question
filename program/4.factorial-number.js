@@ -9,3 +9,13 @@ function factorial(number) {
 
 console.log(factorial(5));
 
+// Factorial using recursion
+
+function factorialRecursion(number) {
+    if(number ==0){
+        return 1;
+    }
+    return number * factorialRecursion(number-1)
+}
+
+console.log(factorialRecursion(5));
