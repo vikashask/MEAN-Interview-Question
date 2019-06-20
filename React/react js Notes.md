@@ -124,9 +124,9 @@ Too much of memory wastage.	      |   No memory wastage.
 ### life cycle
     Four phases of a React component
     Initialization
-    Mounting
-    Update
-    Unmounting
+    Mounting : componentWillMount(), componentDidMount()
+    Update : componentWillRecieveProps(), shouldComponentUpdate(), componentWillUpdate(), componentDidUpdate()
+    Unmounting :componentWillUnmount()
 
 ### setState
     It will use this.setState() to schedule updates to the component local state:
