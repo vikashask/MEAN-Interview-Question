@@ -14,7 +14,7 @@ class Hello extends Component{
 }
 ```
 ### functional component
-    are function
+    is a function
     functional component is to accept props as an argument and return valid JSX.
     better performance , no state or lifecycle method
     Functional components are easier to read, debug, and test. They offer performance benefits, decreased coupling,

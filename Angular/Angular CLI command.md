@@ -18,7 +18,7 @@
     ng s
     ng s -o --p 3001
     ng s --aot=true|false : Build using Ahead of Time compilation.
-    --baseHref=baseHref	: Base url for the application being built.
+         --baseHref=baseHref	: Base url for the application being built.
 ### ng build my-app -c production
     --baseHref=baseHref
     --prod=true|false  : When true, sets the build configuration to the production target.
