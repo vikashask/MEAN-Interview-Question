@@ -16,7 +16,6 @@ let letAndConst = function() {
     // console.log(let1);
     
 }
-
 letAndConst();
     //O/P var
     // ReferenceError: let1 is not defined
