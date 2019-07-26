@@ -10,10 +10,14 @@
 
 >where mongo should use
 
->compair mogno and oracle
+>compair mongoDB and oracle
 
 >how do increase performance of web application
  
+>how to secure your web application and api
+
+>compair node api and graphql
+
 >event loop
 
 >array methods 
