@@ -24,3 +24,9 @@ Azure devops tools
     Continuous delivery 
     Traceability and compliance 
     Hooks for other products
+
+## Test Plans
+    Planned and exploratory testing solution 
+    Capture rich data 
+    Test across web and desktop 
+    Get end-to-end traceability
