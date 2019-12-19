@@ -30,3 +30,9 @@ Azure devops tools
     Capture rich data 
     Test across web and desktop 
     Get end-to-end traceability
+
+## Artifacts
+    Package management NuGet, NPM 
+    Artifact repo 
+    Track usage of external packages 
+    Traceabilit
