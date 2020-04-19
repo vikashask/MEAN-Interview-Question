@@ -25,3 +25,55 @@ An HTML element becomes a grid container when its display property is set to gri
 }
 `
 
+### CSS Grid Container
+> The grid-template-columns Property
+The grid-template-columns property defines the number of columns in your grid layout, and it can define the width of each column
+
+    .grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    }
+
+    grid-template-columns: auto auto auto auto;  4 columns
+    grid-template-columns: auto auto auto auto auto;  5 columns
+    grid-template-columns: auto auto auto;  3 columns
+
+    Set a size for the 4 columns:
+    grid-template-columns: 80px 200px auto 40px;
+
+> The grid-template-rows Property
+    The grid-template-rows property defines the height of each row.
+    .grid-container {
+    display: grid;
+    grid-template-rows: 80px 200px;
+    }
+    1st row 80px
+    2nd row 200px
+
+>The justify-content Property
+    The justify-content property is used to align the whole grid inside the container.
+
+    .grid-container {
+    display: grid;
+    justify-content: space-evenly;
+    }
+
+    justify-content: space-around;
+    justify-content: space-between;
+    justify-content: center;
+    justify-content: start;
+    justify-content: end;
+
+> The align-content Property
+    The align-content property is used to vertically align the whole grid inside the container.
+
+    .grid-container {
+    display: grid;
+    height: 400px;
+    align-content: center;
+    }
+    align-content: space-evenly;
+    align-content: space-around;
+    align-content: space-between;
+    align-content: start;
+    align-content: end;
