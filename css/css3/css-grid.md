@@ -77,3 +77,20 @@ The grid-template-columns property defines the number of columns in your grid la
     align-content: space-between;
     align-content: start;
     align-content: end;
+
+### Child Elements (Items)
+    A grid container contains grid items.
+    Note: The grid-column property is a shorthand property for the grid-column-start and the grid-column-end properties.
+    Example
+    Make "item1" start on column 1 and end before column 5:
+    .item1 {
+    grid-column: 1 / 5;
+    }
+
+    Make "item1" start on column 1 and span 3 columns:
+    .item1 {
+    grid-column: 1 / span 3;
+    }
+
+    > The grid-row Property:
+
