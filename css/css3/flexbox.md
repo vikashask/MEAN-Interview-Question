@@ -1,4 +1,5 @@
 ### What is Flexbox?
+
 > A Set of CSS Properties
 > Creating Flexible Layouts
 > Distributing Extra Space
@@ -8,18 +9,25 @@
 - it provide rever and rearrange the display item
 - and easy to steach item in there container
 
->flex-direction:
-row
-column
-column-reverse
->flex-wrap:
-wrap
->text-wrap:
-normal;
-nowrap;
->flex-flow:
-like column wrap
+> flex-direction:
+
+    row
+    column
+    column-reverse
+
+> flex-wrap:
+
+    wrap
+
+> text-wrap:
+
+    normal;
+    nowrap;
+
+> flex-flow:
+
+    like column wrap
 
 ## Display Order
-order
 
+order
