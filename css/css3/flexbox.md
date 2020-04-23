@@ -40,6 +40,46 @@
     center :value displays display the flex lines in the middle of the container:
     flex-start :value displays the flex lines at the start of the container:
 
+> Perfect Centering : justify-content and align-items properties to center, and the flex item will be perfectly centered:
+
+    .flex-container {
+        display: flex;
+        height: 300px;
+        justify-content: center;
+        align-items: center;
+    }
+
+> order
+
+    <div style="order: 3">1</div>
+    <div style="order: 2">2</div>
+
+> flex-grow
+
+    <div style="flex-grow: 1">1</div>
+    <div style="flex-grow: 1">2</div>
+    <div style="flex-grow: 8">3</div>
+
+> flex-shrink
+
+    <div style="flex-shrink: 0">3</div>
+
+> flex-basis
+
+      <div style="flex-basis: 200px">3</div>
+
+> flex
+
+    <div>2</div>
+    <div style="flex: 0 0 200px">3</div>
+
+> align-self
+
+    <div style="align-self: center">3</div>
+
+    <div style="align-self: flex-start">2</div>
+    <div style="align-self: flex-end">3</div>
+
 > flex-flow:
 
     like column wrap
