@@ -32,6 +32,14 @@
     stretch :value stretches the flex items to fill the container
     baseline :value aligns the flex items such as their baselines aligns:
 
+> align-content:property is used to align the flex lines.
+
+    space-between :value displays the flex lines with equal space between them:
+    space-around : value displays the flex lines with space before, between, and after them:
+    stretch : value stretches the flex lines to take up the remaining space (this is default):
+    center :value displays display the flex lines in the middle of the container:
+    flex-start :value displays the flex lines at the start of the container:
+
 > flex-flow:
 
     like column wrap
