@@ -17,3 +17,27 @@ function Example() {
     </div>
   );
 }
+
+Declaring multiple state variables
+function ExampleWithManyStates() {
+  // Declare multiple state variables!
+  const [age, setAge] = useState(42);
+  const [fruit, setFruit] = useState('banana');
+  const [todos, setTodos] = useState([{ text: 'Learn Hooks' }]);
+}
+⚡️ Effect Hook
+useEffect, adds the ability to perform side effects from a function component,It serves the same purpose as componentDidMount, componentDidUpdate, and componentWillUnmount in React classes. React runs the effects after every render — including the first render. 
+
+🔌 Other Hooks
+useContext lets you subscribe to React context without introducing nesting.
+And useReducer lets you manage local state of complex components with a reducer:
+
+Hooks don’t work inside classes. But you can use them instead of writing classes.
+
+Tip: Use Multiple Effects to Separate Concerns
+
+🔌 Hooks rules
+✅ Call Hooks from React function components.
+✅ Only call Hooks inside at the top level
+✅ Call Hooks from custom Hooks
+
