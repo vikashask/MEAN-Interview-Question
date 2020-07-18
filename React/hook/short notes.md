@@ -41,3 +41,21 @@ Tip: Use Multiple Effects to Separate Concerns
 ✅ Only call Hooks inside at the top level
 ✅ Call Hooks from custom Hooks
 
+🔌 Custom Hooks
+A custom Hook is a JavaScript function whose name starts with ”use” and that may call other Hooks. For example, useFriendStatus
+
+import { useState, useEffect } from 'react';
+function useFriendStatus(friendID) {
+  const [isOnline, setIsOnline] = useState(null);
+  useEffect(() => {
+    function handleStatusChange(status) {
+      setIsOnline(status.isOnline);
+    }
+    ChatAPI.subscribeToFriendStatus(friendID, handleStatusChange);
+    return () => {
+      ChatAPI.unsubscribeFromFriendStatus(friendID, handleStatusChange);
+    };
+  });
+  return isOnline;
+}
+
