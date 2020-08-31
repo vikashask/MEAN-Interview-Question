@@ -1,4 +1,5 @@
 ## let you use state and other React features without writing a class.
+Hooks are a new addition in React 16.8.
 
 ## 📌 State Hook
 ```
@@ -29,8 +30,35 @@ function ExampleWithManyStates() {
   const [todos, setTodos] = useState([{ text: 'Learn Hooks' }]);
 }
 
-## ⚡️ Effect Hook
-useEffect, adds the ability to perform side effects from a function component,It serves the same purpose as componentDidMount, componentDidUpdate, and componentWillUnmount in React classes. React runs the effects after every render — including the first render. 
+## ⚡️ Effect Hook (useEffect)
+  useEffect, adds the ability to perform side effects from a function component,It serves the same purpose as componentDidMount, componentDidUpdate, and componentWillUnmount in React classes. 
+  React runs the effects after every render — including the first render. 
+
+  Just like with useState, you can use more than a single effect in a component:
+
+
+```
+import React, { useState, useEffect } from 'react';
+
+function Example() {
+  const [count, setCount] = useState(0);
+
+  // Similar to componentDidMount and componentDidUpdate:
+  useEffect(() => {
+    // Update the document title using the browser API
+    document.title = `You clicked ${count} times`;
+  });
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+```
 
 ## 🔌 Other Hooks
 useContext lets you subscribe to React context without introducing nesting.
@@ -41,13 +69,14 @@ Hooks don’t work inside classes. But you can use them instead of writing class
 Tip: Use Multiple Effects to Separate Concerns
 
 ## 🔌 Hooks rules
-✅ Call Hooks from React function components.
-✅ Only call Hooks inside at the top level
-✅ Call Hooks from custom Hooks
+  ✅ Call Hooks from React function components.
+  ✅ Only call Hooks inside at the top level
+  ✅ Call Hooks from custom Hooks
 
 ## 🔌 Custom Hooks
 A custom Hook is a JavaScript function whose name starts with ”use” and that may call other Hooks. For example, useFriendStatus
 
+```
 import { useState, useEffect } from 'react';
 function useFriendStatus(friendID) {
   const [isOnline, setIsOnline] = useState(null);
@@ -62,4 +91,4 @@ function useFriendStatus(friendID) {
   });
   return isOnline;
 }
-
+```
