@@ -1,5 +1,5 @@
-## Typechecking With PropTypes
-As your app grows, you can catch a lot of bugs with typechecking. 
+## Type checking With PropTypes
+As your app grows, you can catch a lot of bugs with type checking. 
 PropTypes exports a range of validators that can be used to make sure the data you receive is valid
 ```
     import PropTypes from 'prop-types';
@@ -108,7 +108,7 @@ render() {
 }
 
 ## Higher-Order Components
-A higher-order component (HOC) is an advanced technique in React for reusing component logic. HOCs are not part of the React API, per se. They are a pattern that emerges from React’s compositional nature.
+A higher-order component (HOC) is an advanced technique in React for reusing component logic. HOCs are not part of the React API, per se. They are a pattern that emerges from React compositional nature.
 
 ``` a higher-order component is a function that takes a component and returns a new component.```
 ## Render Props

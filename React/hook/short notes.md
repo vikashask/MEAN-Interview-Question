@@ -92,3 +92,19 @@ function useFriendStatus(friendID) {
   return isOnline;
 }
 ```
+
+### Basic Hooks https://reactjs.org/docs/hooks-reference.html
+
+  useState
+  useEffect
+  useContext
+
+### Additional Hooks
+
+  useReducer
+  useCallback
+  useMemo
+  useRef
+  useImperativeHandle
+  useLayoutEffect
+  useDebugValue
