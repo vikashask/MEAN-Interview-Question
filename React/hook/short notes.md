@@ -40,10 +40,10 @@ function Example() {
       <button onClick={() => setCount(count + 1)}>
         Click me
       </button>
-📌 correct way to set state
-📌      <button onClick={() => setCount(prevCount => prevCount + 1)}>
-📌       Click me
-📌    </button>
+// 📌 correct way to set state
+      <button onClick={() => setCount(prevCount => prevCount + 1)}>
+       Click me
+    </button>
     </div>
   );
 }
@@ -63,7 +63,7 @@ const [todos, setTodos] = useState([{ text: 'Learn Hooks' }]);
 useEffect, adds the ability to perform side effects from a function component,It serves the same purpose as componentDidMount, componentDidUpdate, and componentWillUnmount in React classes.
 React runs the effects after every render — including the first render.
 
-Just like with useState, you can use more than a single effect in a component:
+📌 Just like with useState, you can use more than a single effect in a component:
 
 ```
 import React, { useState, useEffect } from 'react';
