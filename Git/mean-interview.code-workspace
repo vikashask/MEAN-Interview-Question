@@ -1,0 +1,14 @@
+{
+  "folders": [
+	{
+		"path": ".."
+	},
+	{
+		"path": "../../js-topic"
+	},
+	{
+		"path": "../../es6"
+	}
+],
+  "settings": {}
+}

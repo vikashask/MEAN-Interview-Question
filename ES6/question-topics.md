@@ -1,46 +1,69 @@
+## Constants
 
-Constants
-Scoping
+## Scoping
+
     Block-Scoped Variables
     Block-Scoped Functions
-Arrow Functions
+
+## Arrow Functions
+
     Expression Bodies
     Statement Bodies
     Lexical this
-Extended Parameter Handling
+
+## Extended Parameter Handling
+
     Default Parameter Values
-    Rest Parameter
-    Spread Operator
-Template Literals
+    - Rest Parameter : It is a collection of all remaining elements into an array
+        var myName = ["vikash" , "jay" , "raju"] ;
+        const [firstName , ...familyName] = myName ;
+        console.log(familyName); // [ "jay" , "raju"] ;
+
+        function myData(...args){
+        console.log(args) ; // ["vikash",24,"Front-End Developer"]
+        }
+        myData("vikash",24,"Front-End Developer") ;
+    - Spread Operator : It’s the opposite to rest parameter , where rest parameter collects items into an array, the spread operator unpacks
+        the collected elements into single elements.
+        var myName = ["vikash" , "jay" , "raju"];
+        var newArr = [...myName ,"FrontEnd" , 24];
+        console.log(newArr) ; // ["vikash" , "jay" , "raju" , "FrontEnd" , 24 ] ;
+
+## Template Literals
+
     String Interpolation
     Custom Interpolation
     Raw String Access
-Extended Literals
+
+## Extended Literals
+
     Binary & Octal Literal
     Unicode String & RegExp Literal
-Enhanced Regular Expression
+
+## Enhanced Regular Expression
+
     Regular Expression Sticky Matching
-Enhanced Object Properties
+
+## Enhanced Object Properties
+
     Property Shorthand
     Computed Property Names
     Method Properties
 
-### 1.New Variables — Creation, Updating and Scoping
-### 2.Function Improvements: Arrows and Default Arguments
-### 3.Template Strings
-### 4.Additional String Improvements
-### 5.Destructuring
-### 6.Iterables & Looping
-### 7.An Array of Array Improvements
-### 8. ...Spread and ...Rest
-### 9.Object Literal Upgrades
-### 10.Promises
-### 11.Symbols
-### 12.Code Quality with ESLint
-### 13.JavaScript Modules and Using npm
-### 15.Classes
-### 16.Generators
-### 18.Sets and WeakSets
-### 19.Map and Weak Map
-### 20.Async + Await Flow Control
+## Promises
 
+## Destructuring
+
+## Symbols
+
+## JavaScript Modules and Using npm
+
+## Classes
+
+## Generators
+
+## Sets and WeakSets
+
+## Map and Weak Map
+
+## Async + Await Flow Control
