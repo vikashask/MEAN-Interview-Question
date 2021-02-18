@@ -1,14 +1,16 @@
-Manage more complicated state than you would want to manage with useState
+- Manage more complicated state than you would want to manage with useState
 
-useReducer returns an array of 2 elements, similar to the useState hook. The first is the current state, and the second is a dispatch function.
+- useReducer returns an array of 2 elements, similar to the useState hook. The first is the current state, and the second is a dispatch function.
 
-    const [sum, dispatch] = useReducer((state, action) => {
-    return state + action;
-    }, 0);
+  const [sum, dispatch] = useReducer((state, action) => {
+  return state + action;
+  }, 0);
 
-    <button onClick={() => dispatch(1)}>
-        Add 1
-    </button>
+  <button onClick={() => dispatch(1)}>
+  Add 1
+  </button>
+
+- codesandbox: link https://codesandbox.io/s/react-test-h3d7f?file=/src/component/ShopingListReducer.js
 
 ```
 import React, { useReducer, useRef } from "react";

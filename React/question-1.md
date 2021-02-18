@@ -16,3 +16,24 @@ you are adding a event listener in componentDidMount and removing it in componen
     componentWillUnmount() {
     window.removeEventListener('mousemove', () => {})
     }
+
+## How to unmount component in react hook
+
+```
+useEffect(() => {
+	//your code goes here
+    return () => {
+      //your cleanup code codes here
+    };
+},[]);
+
+useEffect(() => {
+  window.addEventListener('mousemove', () => {});
+
+  // returned function will be called on component unmount
+  return () => {
+    window.removeEventListener('mousemove', () => {})
+  }
+}, [])
+
+```
