@@ -20,7 +20,7 @@ const ShopingList = () => {
 
   const [items, dispatch] = useReducer((state, action) => {
     switch (action.type) {
-      case "add":
+      case   "add":
         return [
           ...state,
           {
