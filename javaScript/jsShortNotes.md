@@ -1,57 +1,60 @@
->Design pattern
+> Design pattern
+
     chaining,constructor,module pattern,observer pattern,singleton pattern,
->destructuring
 
->event bubleing 
+> destructuring
 
->event capturing
+> event bubbling
 
->event delegation
+> event capturing : Event capturing is the event starts from top element to the target element. It is the opposite of Event bubbling, which starts from target element to the top element.
 
->event propagation
+> event delegation
 
->closure
+> event propagation
+> https://www.tutorialrepublic.com/javascript-tutorial/javascript-event-propagation.php
 
->Hoisting
+> closure
 
->function hoisting
+> Hoisting
 
->exports and imports?
+> function hoisting
 
->module.exports and export
+> exports and imports?
 
->Prototype
+> module.exports and export
 
->prototype chain
+> Prototype
 
->difference between Call, Apply and Bind
+> prototype chain
 
->call 
+> difference between Call, Apply and Bind
 
->bind
+> call
 
->apply
+> bind
 
->curring
+> apply
 
->higher order function
+> curring
 
->unary function = that accepts exactly one argument.
+> higher order function
 
->lambda or arrow functions
+> unary function = that accepts exactly one argument.
 
->compare Object and Map
+> lambda or arrow functions
 
->getter setter
+> compare Object and Map
 
->rest paramater
+> getter setter
 
->await
+> rest paramater
 
->spread
+> await
 
->Promises - chainging promises,promises.all
+> spread
 
->Json - json array,object, JSON.stringify,JSON.parse
+> Promises - chainging promises,promises.all
 
->Immutability :In functional programming data never changes. Data is immutable.
+> Json - json array,object, JSON.stringify,JSON.parse
+
+> Immutability :In functional programming data never changes. Data is immutable.
