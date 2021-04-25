@@ -5,12 +5,20 @@
 1. function
 2. dependency array: run every time if value is updated.
 
-## Runs Once on First Render
+## Runs Once on First Render and conditionally
 
 ```
 useEffect(() => {
     console.log('This runs once on first render');
 }, []);
+```
+
+### runs on each render and each update
+
+```
+useEffect(() => {
+    console.log('This runs once on first render');
+}, ]);
 ```
 
 ## Runs On a Specified Dependency

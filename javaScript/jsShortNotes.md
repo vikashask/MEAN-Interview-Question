@@ -47,13 +47,13 @@
 
 > getter setter
 
-> rest paramater
+> rest parameter
 
 > await
 
 > spread
 
-> Promises - chainging promises,promises.all
+> Promises - chain promises,promises.all
 
 > Json - json array,object, JSON.stringify,JSON.parse
 
