@@ -8,6 +8,9 @@
 	},
 	{
 		"path": "../../es6"
+	},
+	{
+		"path": "../../../Node/nodejs-topics"
 	}
 ],
   "settings": {}

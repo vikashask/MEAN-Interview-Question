@@ -1,10 +1,12 @@
 ### component
+
     Components let you split the UI into independent, reusable pieces, and think about each piece in isolation
     2 types of component
     * class component
     * functional component
 
 ### class component
+
 ```
 Are es6 class
 class Hello extends Component{
@@ -13,7 +15,9 @@ class Hello extends Component{
    }
 }
 ```
+
 ### functional component
+
     is a function
     functional component is to accept props as an argument and return valid JSX.
     better performance , no state or lifecycle method
@@ -27,9 +31,10 @@ function Hello(props){
 ```
 
 ### Pure function
+
     The function always returns the same result if the same arguments are passed in.It does not depend on any state,
     or data, change during a program’s execution.
-    The function does not produce any observable side effects such as network requests, input and output devices, 
+    The function does not produce any observable side effects such as network requests, input and output devices,
     or data mutation.
     -Making a HTTP request
     -Mutating data
@@ -43,16 +48,18 @@ function priceAfterTax(productPrice) {
  return (productPrice * 0.20) + productPrice;
 }
 ```
+
 ### Impure function
 
 ```
 var tax = 20;
 function calculateTax(productPrice) {
- return (productPrice * (tax/100)) + productPrice; 
+ return (productPrice * (tax/100)) + productPrice;
 }
 ```
 
 ### Pure component
+
 ```
 functional component is a good example of a pure component
 React.PureComponent
@@ -62,9 +69,11 @@ Hello = () => {
 ```
 
 ### stateless component
+
     they are easy to write, understand, and test, and you can avoid the this keyword
 
-### statefull component
+### stateful component
+
 ```
 Stateful components are always class components
 Stateful components have a state that gets initialized in the constructor.
@@ -75,42 +84,48 @@ constructor(props) {
 ```
 
 ### Controlled component
+
     Don't maintain their own state
     Data is controlled by parent component
-    took current value through props and notifi changes via callback
+    took current value through props and notification changes via callback
 
 ### Uncontrolled component
+
     maintain there own state
     data is controlled by DOM
     ref are used to get their current value
 
 ### props vs state
-Topics                                     | State  | Props
------------------------------------------  | ----   | ------
-Receive intial value from parent Component | yes    |   yes
-Parent component can change value          | no     |   yes
-Set default value inside component         | yes    |   yes
-Change inside component                    | yes    |   no
-Set intial value of child component        | yes    |   yes
-Change inside child component              | no     |   yes
+
+| Topics                                      | State | Props |
+| ------------------------------------------- | ----- | ----- |
+| Receive initial value from parent Component | yes   | yes   |
+| Parent component can change value           | no    | yes   |
+| Set default value inside component          | yes   | yes   |
+| Change inside component                     | yes   | no    |
+| Set initial value of child component        | yes   | yes   |
+| Change inside child component               | no    | yes   |
 
 ### create react app
+
     npx create-react-app my-app
     cd my-app
     npm start
 
 ### Real DOM vs Virtual dom
-Real DOM	                           |   Virtual  DOM
-----------------------------------  |   ---------------
-It updates slow.	                  |   It updates faster.
-Can directly update HTML.           |   Can’t directly update HTML.
-Creates a new DOM if element updates|	  Updates the JSX if element updates.
-DOM manipulation is very expensive. |   DOM manipulation is very easy.
-Too much of memory wastage.	      |   No memory wastage.
+
+| Real DOM                             | Virtual DOM                         |
+| ------------------------------------ | ----------------------------------- |
+| It updates slow.                     | It updates faster.                  |
+| Can directly update HTML.            | Can’t directly update HTML.         |
+| Creates a new DOM if element updates | Updates the JSX if element updates. |
+| DOM manipulation is very expensive.  | DOM manipulation is very easy.      |
+| Too much of memory wastage.          | No memory wastage.                  |
 
 ### angular vs react
 
 ### jsx
+
     This funny tag syntax is neither a string nor HTML.
     It is called JSX, and it is a syntax extension to JavaScript
     Embedding Expressions in JSX
@@ -120,8 +135,8 @@ Too much of memory wastage.	      |   No memory wastage.
     JSX Prevents Injection Attacks
     JSX Represents Objects
 
-
 ### life cycle
+
     Four phases of a React component
     Initialization
     Mounting : componentWillMount(), componentDidMount()
@@ -129,21 +144,24 @@ Too much of memory wastage.	      |   No memory wastage.
     Unmounting :componentWillUnmount()
 
 ### setState
+
     It will use this.setState() to schedule updates to the component local state:
 
 ### forceUpdate
 
 ### refs
 
-### imutable 
+### imutable
 
     cannot change
 
-### mutable 
-   that can be change
-   only objects and arrays are mutable, not primitive values.
+### mutable
+
+that can be change
+only objects and arrays are mutable, not primitive values.
 
 ### webpack
+
     webpack is a module bundler. Its main purpose is to bundle JavaScript files for usage in a browser, yet it is also capable
      of transforming, bundling, or packaging just about any resource or asset.
 
@@ -153,11 +171,12 @@ Too much of memory wastage.	      |   No memory wastage.
 ### lazy loading
 
 ### HOC higer order component
+
     Are pure function
-    custome component  which wraps another component
+    custom component  which wraps another component
     They accept dynamically provided child component
     Do not modify input component
-    Do not copy any behaviour from input component
+    Do not copy any behavior from input component
 
 ### redux saga vs thunk
 
