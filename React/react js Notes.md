@@ -32,7 +32,7 @@ function Hello(props){
 
 ### Pure function
 
-    The function always returns the same result if the same arguments are passed in.It does not depend on any state,
+    The function always `returns the same result if the same arguments` are passed in.It does not depend on any state,
     or data, change during a program’s execution.
     The function does not produce any observable side effects such as network requests, input and output devices,
     or data mutation.
