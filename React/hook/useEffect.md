@@ -18,7 +18,7 @@ useEffect(() => {
 ```
 useEffect(() => {
     console.log('This runs once on first render');
-}, ]);
+});
 ```
 
 ## Runs On a Specified Dependency
