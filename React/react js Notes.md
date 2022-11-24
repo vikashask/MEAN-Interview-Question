@@ -151,7 +151,7 @@ constructor(props) {
 
 ### refs
 
-### imutable
+### immutable
 
     cannot change
 
@@ -170,7 +170,7 @@ only objects and arrays are mutable, not primitive values.
 
 ### lazy loading
 
-### HOC higer order component
+### HOC higher order component
 
     Are pure function
     custom component  which wraps another component

@@ -5,10 +5,11 @@
 ## useCallback is used to memoize functions, React memo is used to wrap React components to prevent re-renderings.
 
 ! example here : https://www.robinwieruch.de/react-usecallback-hook
+https://github.com/vikashask/react-basic/blob/master/src/components/hook/useCallback/example1/MainUseCallback1Com.js
 
 - React.memo to turn it into a memoized component.
 - This will force React to never re-render it, unless some of its properties change.
-- In other words useMemo caches a computed value. This is usefull when the computation requires significant resources and we don’t want to repeat it on every re-render, as in this example:
+- In other words useMemo caches a computed value. This is useful when the computation requires significant resources and we don’t want to repeat it on every re-render, as in this example:
 
   const [c, setC] = useState(0);
   // This value will not be recomputed between re-renders
