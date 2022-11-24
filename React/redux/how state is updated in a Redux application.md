@@ -11,3 +11,56 @@
 - subscribe(listener) :Every time a state is changed, it will be called and will return the updated state.
 
 ## Rule #2 — State is read-only
+
+Step to configure
+
+> index.js
+
+```
+ <Provider store={store}>
+ </Provider>
+```
+
+> Store.js
+
+```
+    export const store = createStore(
+    rootReducer,
+    initialState,
+    composeEnhancers(applyMiddleware(thunk)));
+```
+
+> card.reducer.js
+
+```
+import { cartActionTypes } from "../actions/cart.actions";
+
+export default function cartReducer(state = null, action) {
+switch (action.type) {
+    case cartActionTypes.FETCH_CART_DATA_SUCCESS:
+    return { items: [...action.data] };
+    default:
+    return state;
+    }
+}
+```
+
+> cart.action.js
+
+```
+export const increaseCartDataAction = (productInfo) => (dispatch, getState) => {
+    dispatch(loadingStart());
+    const latestState = getState();
+    const cartItemData = latestState.cart.items.find(
+        (item) => item.id === productInfo.id
+    );
+    if (!cartItemData) {
+        productInfo.count = parseInt(productInfo.count) + 1;
+        latestState.cart.items.push(productInfo);
+    } else {
+        cartItemData.count++;
+    }
+    dispatch(fetchCartDataSuccessAction(latestState.cart.items));
+    dispatch(loadingEnd());
+};
+```
