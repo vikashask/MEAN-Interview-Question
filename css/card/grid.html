@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sample HTML</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .container {
+            display: grid;
+            row-gap: 20px;
+            column-gap: 5px;
+            border: 2px solid black;
+           /* grid-template-columns: 30% 70% */
+           /* grid-template-columns: 2fr 1fr 1fr 1fr; */
+           /* grid-template-columns: repeat(2, 1fr); */
+           /* grid-template-columns: repeat(auto-fill, 100px); */
+           grid-template-columns: 200px 200px;
+           grid-template-rows: 200px 80px;
+            grid-auto-rows: 150px;
+            justify-content: center;
+            align-content: center;
+            align-items: stretch;
+
+        }
+        .box {
+            background-color: aqua;
+            border: 3px solid black;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+    <div class="box" id="box-1">box-1</div>
+    <div class="box" id="box-2">box-2</div>
+    <div class="box" id="box-3">box-3</div>
+    <div class="box" id="box-4">box-4</div>
+    <div class="box" id="box-5">box-5</div>
+    <div class="box" id="box-6">box-6</div>
+    <div class="box" id="box-7">box-7</div>
+    <div class="box" id="box-8">box-8</div>
+    <div class="box" id="box-9">box-9</div>
+    <div class="box" id="box-10">box-10</div>
+    </div>
+
+</body>
+</html>
