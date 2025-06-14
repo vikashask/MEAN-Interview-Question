@@ -1,0 +1,30 @@
+## How to unmount component in react hook
+
+```
+useEffect(() => {
+	//your code goes here
+    return () => {
+      //your cleanup code codes here
+    };
+},[]);
+
+useEffect(() => {
+  window.addEventListener('mousemove', () => {});
+
+  // returned function will be called on component unmount
+  return () => {
+    window.removeEventListener('mousemove', () => {})
+  }
+}, [])
+
+```
+
+1. React Core Concepts
+> Question: Explain the reconciliation process in React and how the Virtual DOM contributes to it.
+Hint: Focus on how React compares the Virtual DOM with the real DOM, the diffing algorithm, and how React minimizes DOM updates for performance.
+
+> Question: What are the differences between controlled and uncontrolled components? When would you use each?
+Hint: Discuss form inputs, state management, and scenarios where uncontrolled components (e.g., ref) might be preferred, like integrating with non-React libraries.
+
+>Question: How does React handle event delegation, and why is it beneficial?
+Hint: Explain how React attaches event listeners at the root level and the performance benefits of this approach.
