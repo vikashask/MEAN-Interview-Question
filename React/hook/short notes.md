@@ -4,28 +4,28 @@ Hooks are a new addition in React 16.8.
 useState
 
 ### Basic Hooks https://reactjs.org/docs/hooks-reference.html
-
-> useState
-
-> useEffect
-
-> useContext
-
-### Additional Hooks
-
-> useReducer
-
-> useCallback
-
-> useMemo
-
-> useRef
-
-> useImperativeHandle
-
-> useLayoutEffect
-
-> useDebugValue
+- State Hooks:
+    - useState
+    - useReducer
+- Effect Hooks:
+    - useEffect
+    - useLayoutEffect
+    - useInsertionEffect
+- Context Hook:
+    - useContext
+- Ref Hooks:
+    - useRef
+    - useImperativeHandle
+- Performance Hooks:
+    - useMemo
+    - useCallback
+- Transition Hooks (React 18):
+    - useTransition
+    - useDeferredValue
+- Other Hooks:
+    - useId
+    - useSyncExternalStore
+    - useDebugValue
 
 ## 📌 State Hook
 
