@@ -17,8 +17,15 @@ Resources:
 ✅ Phase 2: Spring Boot Basics (7–10 days)
 
 🔹 Setup & First App
-	•	Install Spring Boot CLI or use Spring Initializr
-	•	Create first REST API with Spring Boot
+	•	Install Spring Boot CLI or use Spring Initializr  
+		→ Use https://start.spring.io to generate a base project with required dependencies like Spring Web, DevTools, and Spring Boot Actuator.  
+		→ Import the generated project into your IDE (IntelliJ or Eclipse).  
+		→ Run the application using `mvn spring-boot:run` or by running the main class.
+
+	•	Create first REST API with Spring Boot  
+		→ Create a `@RestController` class.  
+		→ Define a `@GetMapping("/hello")` endpoint that returns a simple message like "Hello from Spring Boot!"  
+		→ Test it using Postman or curl.
 
 🔹 Key Concepts
 	•	@RestController, @RequestMapping, @GetMapping, @PostMapping
@@ -54,7 +61,10 @@ Practice:
 	•	Exception Handling with @ControllerAdvice
 	•	Validation with @Valid and Hibernate Validator
 	•	Logging with SLF4J and Logback
-	•	API Versioning
+	•	API Versioning  
+		→ Implement versioning using URL path (`/api/v1/resource`), request parameters (`?version=1`), or headers (`X-API-VERSION`).  
+		→ Structure your controllers accordingly (e.g., `UserControllerV1`, `UserControllerV2`).  
+		→ Use interface-based versioning if needed for large projects.
 	•	Rate Limiting (Bucket4j or similar)
 	•	File Upload/Download APIs
 
@@ -86,7 +96,10 @@ Practice:
 ✅ Phase 6: Documentation & Testing (5–7 days)
 
 🔹 Documentation
-	•	Swagger/OpenAPI (Springfox or springdoc-openapi)
+	•	Swagger/OpenAPI (Springfox or springdoc-openapi)  
+		→ Use `springdoc-openapi-ui` dependency to auto-generate API documentation.  
+		→ Access documentation UI at `/swagger-ui.html`.  
+		→ Annotate controllers and DTOs using `@Operation`, `@Parameter`, `@Schema` for detailed API docs.
 
 🔹 Unit & Integration Testing
 	•	JUnit 5, Mockito
@@ -104,7 +117,9 @@ Build a complete end-to-end project such as:
 Project Idea: Booking System, Task Manager, E-commerce API, Travel Itinerary Manager
 
 Include:
-	•	CRUD + filtering/searching
+	•	CRUD + filtering/searching  
+		→ Add endpoints with query parameters for filtering (e.g., /products?category=books).  
+		→ Use Spring Data JPA Specifications or Criteria API for dynamic queries.
 	•	Pagination, Sorting
 	•	JWT Security
 	•	Swagger documentation
