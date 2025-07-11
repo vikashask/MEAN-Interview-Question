@@ -1,39 +1,40 @@
-## pepsico interview question
+# PepsiCo Interview Questions
 
->which is best angular react and vue js and why
+## Frontend Framework Comparison
+1. **Angular vs React vs Vue.js**
+   - Which is best and why?
+   - Which one would you choose for a new project?
+   - How do Angular and React work?
 
->which one you will use for new project and how angular, react and vue js
+## Backend Technologies
+1. **Backend Technology Choice**
+   - Node.js vs Java vs .NET
+   - Why would you choose one over others?
 
->what you will use in backend node java and dotnet and why explain
+## Database
+1. **MongoDB**
+   - Use cases for MongoDB
+   - MongoDB vs Oracle comparison
 
->how angular and react work
+## Web Application
+1. **Performance Optimization**
+   - How to increase web application performance?
 
->where mongo should use
+2. **Security**
+   - How to secure web applications and APIs?
 
->compair mongoDB and oracle
+3. **API Architecture**
+   - REST API vs GraphQL comparison
 
->how do increase performance of web application
- 
->how to secure your web application and api
+## JavaScript Concepts
+1. **Core Concepts**
+   - Event Loop
+   - Hoisting
+   - Sets
 
->compair node api and graphql
-
->event loop
-
->array methods 
-
->string methods
-
->hosting in javascript
-
->Sets in javascript
-
->call
-
->bind
-
->apply
-
->arrow functions
-
->await
+2. **Methods and Functions**
+   - Array Methods
+   - String Methods
+   - Call, Bind, Apply
+   - Arrow Functions
+   - Async/Await

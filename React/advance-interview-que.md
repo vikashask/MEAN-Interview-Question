@@ -1,147 +1,241 @@
-## Type checking With PropTypes
+# React Advanced Interview Questions
 
-As your app grows, you can catch a lot of bugs with type checking.
-PropTypes exports a range of validators that can be used to make sure the data you receive is valid
+## Core Concepts
 
+### 1. What is Virtual DOM?
+Virtual DOM is a lightweight copy of the actual DOM. React uses it to improve performance by:
+- Creating a virtual representation of UI
+- Comparing it with previous version
+- Only updating what has changed in the real DOM
+
+```javascript
+// Example of how Virtual DOM works conceptually
+const virtualElement = React.createElement(
+    'div',
+    { className: 'container' },
+    'Hello World'
+);
 ```
-    import PropTypes from 'prop-types';
 
-    class Greeting extends React.Component {
+### 2. Explain React Fiber
+React Fiber is the new reconciliation engine in React 16. It enables:
+- Incremental rendering
+- Better error handling
+- Priority-based rendering
+- Improved performance
+
+### 3. What are Higher-Order Components (HOC)?
+HOCs are functions that take a component and return a new component with enhanced functionality.
+
+```javascript
+// HOC Example
+const withLogger = (WrappedComponent) => {
+    return class extends React.Component {
+        componentDidMount() {
+            console.log('Component is mounted');
+        }
+        
+        render() {
+            return <WrappedComponent {...this.props} />;
+        }
+    };
+};
+
+// Usage
+const EnhancedComponent = withLogger(BaseComponent);
+```
+
+## Advanced Patterns
+
+### 1. Render Props Pattern
+```javascript
+class MouseTracker extends React.Component {
+    state = { x: 0, y: 0 };
+    
+    handleMouseMove = (event) => {
+        this.setState({
+            x: event.clientX,
+            y: event.clientY
+        });
+    };
+    
     render() {
         return (
-        <h1>Hello, {this.props.name}</h1>
+            <div onMouseMove={this.handleMouseMove}>
+                {this.props.render(this.state)}
+            </div>
         );
     }
-    }
+}
 
-    Greeting.propTypes = {
-    name: PropTypes.string
-    };
+// Usage
+<MouseTracker 
+    render={({ x, y }) => (
+        <h1>Mouse position: {x}, {y}</h1>
+    )}
+/>
 ```
 
-## Static Type Checking
+### 2. Compound Components
+```javascript
+const Toggle = {
+    On: ({ children }) => children,
+    Off: ({ children }) => children,
+    Button: ({ toggle, ...props }) => (
+        <button onClick={toggle} {...props} />
+    )
+};
 
-Static type checkers like `Flow and TypeScript` identify certain types of problems before you even run your code
-we recommend using Flow or TypeScript instead of PropTypes
-
-npm install --save-dev flow
-npm install --save-dev typescript
-
-## what is Refs and the DOM
-
-Refs provide a way to access DOM nodes or React elements created in the render method.
-When to Use Refs
-
+// Usage
+<Toggle>
+    <Toggle.On>The button is on</Toggle.On>
+    <Toggle.Off>The button is off</Toggle.Off>
+    <Toggle.Button />
+</Toggle>
 ```
-Managing focus, text selection, or media playback.
-Triggering imperative animations.
-Integrating with third-party DOM libraries.
-```
 
-Creating Refs
+## Performance Optimization
 
-```
-class MyComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.myRef = React.createRef();
-  }
-  render() {
-    return <div ref={this.myRef} />;
-  }
+### 1. React.memo vs useMemo
+```javascript
+// React.memo for functional components
+const MyComponent = React.memo(function MyComponent(props) {
+    return <div>{props.value}</div>;
+});
+
+// useMemo for expensive calculations
+function Calculator() {
+    const [value, setValue] = useState(0);
+    const expensiveResult = useMemo(() => {
+        return computeExpensiveValue(value);
+    }, [value]);
+    
+    return <div>{expensiveResult}</div>;
 }
 ```
 
-Accessing Refs
-const node = this.myRef.current;
-
-## what is Uncontrolled Components
-
-In most cases, we recommend using controlled components to implement forms. In a controlled component, `form data is handled by a React component`. The alternative is uncontrolled components, where form data is handled by the DOM itself.
-
-## Optimizing Performance
-
-Internally, React uses several clever techniques to minimise the number of costly DOM operations required to update the UI. For many applications, using React will lead to a fast user interface without doing much work to specifically optimise for performance
-
-## can React work Without ES6
-
-Normally you would define a React component as a plain JavaScript class:
-
+### 2. useCallback
+```javascript
+function ParentComponent() {
+    const [count, setCount] = useState(0);
+    
+    const handleClick = useCallback(() => {
+        setCount(c => c + 1);
+    }, []); // Empty deps array = function reference never changes
+    
+    return <ChildComponent onClick={handleClick} />;
+}
 ```
-If you don’t use ES6 yet, you may use the create-react-class module instead:
-var createReactClass = require('create-react-class');
-var Greeting = createReactClass({
-  render: function() {
-    return <h1>Hello, {this.props.name}</h1>;
-  }
+
+## State Management
+
+### 1. Context API vs Redux
+```javascript
+// Context API
+const ThemeContext = React.createContext('light');
+
+function App() {
+    return (
+        <ThemeContext.Provider value="dark">
+            <ThemedButton />
+        </ThemeContext.Provider>
+    );
+}
+
+// Redux
+const store = createStore(reducer);
+
+function App() {
+    return (
+        <Provider store={store}>
+            <ConnectedComponent />
+        </Provider>
+    );
+}
+```
+
+### 2. Custom Hooks
+```javascript
+function useWindowSize() {
+    const [size, setSize] = useState({
+        width: window.innerWidth,
+        height: window.innerHeight
+    });
+    
+    useEffect(() => {
+        const handleResize = () => {
+            setSize({
+                width: window.innerWidth,
+                height: window.innerHeight
+            });
+        };
+        
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    
+    return size;
+}
+```
+
+## Error Handling
+
+### 1. Error Boundaries
+```javascript
+class ErrorBoundary extends React.Component {
+    state = { hasError: false };
+    
+    static getDerivedStateFromError(error) {
+        return { hasError: true };
+    }
+    
+    componentDidCatch(error, errorInfo) {
+        logErrorToService(error, errorInfo);
+    }
+    
+    render() {
+        if (this.state.hasError) {
+            return <h1>Something went wrong.</h1>;
+        }
+        return this.props.children;
+    }
+}
+```
+
+## Testing
+
+### 1. Unit Testing with Jest and React Testing Library
+```javascript
+import { render, fireEvent } from '@testing-library/react';
+
+test('button click increments counter', () => {
+    const { getByText } = render(<Counter />);
+    const button = getByText('Increment');
+    
+    fireEvent.click(button);
+    
+    expect(getByText('Count: 1')).toBeInTheDocument();
 });
 ```
 
-## React Without JSX
+## Best Practices
 
-`JSX is not a requirement for using React`. Using React without JSX is especially convenient when you don’t want to set up compilation in your build environment.
+1. Component Organization
+   - Keep components small and focused
+   - Use meaningful names
+   - Separate concerns
 
-```
- this code written with JSX:
-class Hello extends React.Component {
-  render() {
-    return <div>Hello {this.props.toWhat}</div>;
-  }
-}
+2. State Management
+   - Keep state as local as possible
+   - Use Context API for global state
+   - Consider Redux for complex state
 
-ReactDOM.render(
-  <Hello toWhat="World" />,
-  document.getElementById('root')
-);
-```
+3. Performance
+   - Use React.memo for pure components
+   - Implement lazy loading
+   - Optimize re-renders
 
-can be compiled to this code that does not use JSX:
-
-```
-class Hello extends React.Component {
-  render() {
-    return React.createElement('div', null, `Hello ${this.props.toWhat}`);
-  }
-}
-
-ReactDOM.render(
-  React.createElement(Hello, {toWhat: 'World'}, null),
-  document.getElementById('root')
-);
-```
-
-## Context
-
-Context provides a way to pass data through the component tree without having to pass props down manually at every level.
-
-## Fragments
-
-A common pattern in React is for a component to `return multiple elements`. Fragments let you group a list of children without adding extra nodes to the DOM.
-render() {
-return (
-
-````<React.Fragment>
-  <ChildA />
-  <ChildB />
-  <ChildC />
-</React.Fragment>```
-);
-}
-
-## Higher-Order Components
-
-A higher-order component (HOC) is an advanced technique in React for reusing component logic. HOCs are not part of the React API, per se. They are a pattern that emerges from React compositional nature.
-
-` a higher-order component is a function that takes a component and returns a new component.`
-
-## Render Props
-
-The term “render prop” refers to a simple technique for sharing code between React components using a prop whose value is a function.
-
-````
-
-<DataProvider render={data => (
-
-  <h1>Hello {data.target}</h1>
-)}/>
-```
+4. Code Style
+   - Use functional components
+   - Implement proper PropTypes
+   - Follow ESLint rules

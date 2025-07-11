@@ -1,168 +1,312 @@
+# MongoDB Crash Course
 
-## select database
-    use DATABASE_NAME
-## selected database, use the command db
-    db
-    show dbs
-    show databases
+## Basic Concepts
 
-## drop database
-    db.dropDatabase()
-
-## create collection
-    db.createCollection(name, options)
-    db.createCollection(‘tutorialspoint’)
-
-## collection
-    show collections
-
-## Insert
-    db.COLLECTION_NAME.insert(document)
-    db.movie.insert({"name":"monog tutorials"})
-
-db.post.insert([
-   {
-      title: 'MongoDB Overview 2', 
-      description: 'MongoDB 2 is no sql database',
-      by: 'vikask',
-      url: 'http://www.vikask.com',
-      tags: ['react', 'NoSQL'],
-      likes: 100
-   },
-   {
-      title: 'React', 
-      description: "NoSQL database doesn't have tables",
-      by: 'tutorials point',
-      url: 'http://www.mongotutorialstest.com',
-      tags: ['mongodb', 'database', 'NoSQL'],
-      likes: 20, 
-      comments: [	
-         {
-            user:'user1',
-            message: 'My first comment',
-            dateCreated: new Date(2013,11,10,2,35),
-            like: 0 
-         }
-      ]
-   }
-])
-
-## drop collection
-    db.COLLECTION_NAME.drop()
-
-    db.COLLECTION_NAME.find()
-
-    db.post.find().pretty()
-
-=====================
-## Equality
-    db.post.find({"by":"tutorials point"}).pretty()
-
-## Less Than
-    db.post.find({"likes":{$lt:50}}).pretty()
-
-## Greater Than
-    db.post.find({"likes":{$gt:50}}).pretty()
-
-## Greater Than Equals
-    db.post.find({"likes":{$gte:50}}).pretty()
-
-## Not Equals 
-    db.post.find({"likes":{$ne:50}}).pretty()
-
-## AND in MongoDB
-    db.post.find(
-    {
-        $and: [
-            {key1: value1}, {key2:value2}
-        ]
+### Documents
+MongoDB stores data in flexible, JSON-like documents. Example:
+```json
+{
+    "name": "John Doe",
+    "age": 30,
+    "email": "john@example.com",
+    "address": {
+        "street": "123 Main St",
+        "city": "Boston",
+        "state": "MA"
     }
-    ).pretty()
+}
+```
 
-## Find
-    db.post.find({$and:[{"by":"tutorials point"},{"title": "MongoDB Overview"}]}).pretty() {
+### Collections
+Collections are groups of documents. Similar to tables in relational databases.
 
-    db.COLLECTION_NAME.remove(DELLETION_CRITTERIA)
+## Basic Operations (CRUD)
 
-## remove only one
-    db.COLLECTION_NAME.remove(DELETION_CRITERIA,1)
-## remove all documents
-    db.post.remove()
+### Create Operations
 
-## MongoDB - Projection
+#### Insert One Document
+```javascript
+db.users.insertOne({
+    name: "John Doe",
+    age: 30,
+    email: "john@example.com"
+})
+```
 
-## The find() Method
+#### Insert Multiple Documents
+```javascript
+db.users.insertMany([
+    { name: "Jane Smith", age: 25 },
+    { name: "Bob Wilson", age: 35 }
+])
+```
 
-    db.COLLECTION_NAME.find({},{KEY:1})
+### Read Operations
 
-    db.post.find({},{"title":1,_id:0})
+#### Find Documents
+```javascript
+// Find all documents
+db.users.find()
 
-## Limit
-    db.COLLECTION_NAME.find().limit(NUMBER)
-    db.post.find({},{"title":1,_id:0}).limit(2)
+// Find with conditions
+db.users.find({ age: { $gt: 25 } })
 
-## Skip number of documents
-    db.COLLECTION_NAME.find().limit(NUMBER).skip(NUMBER)
+// Find one document
+db.users.findOne({ name: "John Doe" })
+```
 
-## The sort() Method
-    db.COLLECTION_NAME.find().sort({KEY:1})
+#### Query Operators
+```javascript
+// Greater than
+db.users.find({ age: { $gt: 25 } })
 
-## MongoDB - Indexing
-    db.COLLECTION_NAME.ensureIndex({KEY:1})
-    db.post.ensureIndex({"title":1})
+// Less than
+db.users.find({ age: { $lt: 30 } })
 
-## With multiple field
-    db.post.ensureIndex({"title":1,"description":-1})
+// In array
+db.users.find({ status: { $in: ["active", "pending"] } })
 
-db.post.getIndexes();
-db.post.dropIndex( { "title": 1 } );
+// And condition
+db.users.find({
+    $and: [
+        { age: { $gt: 25 } },
+        { status: "active" }
+    ]
+})
+```
 
-# Aggregation
-db.COLLECTION_NAME.aggregate(AGGREGATE_OPERATION)
-## Sum
-db.post.aggregate([{$group : {_id : "$by", sum_of_tutorial : {$sum : 1}}}])
-## Avg
-db.post.aggregate([{$group : {_id : "$by", avg_tutorial : {$avg : "$likes"}}}])
-## Min
-db.post.aggregate([{$group : {_id : "$by", min_tutorial : {$min : "$likes"}}}])
-## Max
-db.post.aggregate([{$group : {_id : "$by", max_tutorial : {$max : "$likes"}}}])
-## Push Inserts the value to an array in the resulting document.
-db.post.aggregate([{$group : {_id : "$by", url : {$push: "$url"}}}])
-## AddToSet but does not create duplicates.
-db.post.aggregate([{$group : {_id : "$by", url : {$addToSet : "$url"}}}])
-## First Gets the first document from the source documents according to the grouping.
-db.post.aggregate([{$group : {_id : "$by", first_tutorial : {$first : "$likes"}}}])
-## Last Gets the first document from the source documents according to the grouping.
-db.post.aggregate([{$group : {_id : "$by", first_tutorial : {$last : "$likes"}}}])
+### Update Operations
 
-# Replication 
-    process of synchronizing data across multiple servers.
-    To keep your data safe
-    High (24*7) availability of data
-    Disaster recovery
-    No downtime for maintenance (like backups, index rebuilds, compaction)
-    Read scaling (extra copies to read from)
-    Replica set is transparent to the application
+#### Update One Document
+```javascript
+db.users.updateOne(
+    { name: "John Doe" },
+    { $set: { age: 31 } }
+)
+```
 
->mongod --port "PORT" --dbpath "YOUR_DB_DATA_PATH" --replSet "REPLICA_SET_INSTANCE_NAME"
->mongod --port 27017 --dbpath "D:\set up\mongodb\data" --replSet rs0
+#### Update Multiple Documents
+```javascript
+db.users.updateMany(
+    { status: "inactive" },
+    { $set: { status: "active" } }
+)
+```
 
-# Sharding: is the process of storing data records across multiple machines
-    Why Sharding?
-    In replication, all writes go to master node
-    Latency sensitive queries still go to master
-    Single replica set has limitation of 12 nodes
-    Memory can't be large enough when active dataset is big
-    Local disk is not big enough
-    Vertical scaling is too expensive
+#### Update Operators
+```javascript
+// Increment value
+db.users.updateOne(
+    { name: "John Doe" },
+    { $inc: { age: 1 } }
+)
 
-# Create Backup: create backup of database in MongoDB, you should use mongodump command
->mongodump
->mongodump --host HOST_NAME --port PORT_NUMBER
+// Add to array
+db.users.updateOne(
+    { name: "John Doe" },
+    { $push: { hobbies: "reading" } }
+)
+```
 
-Restore data
->mongorestore
+### Delete Operations
 
-# Deployment
->mongostat
+#### Delete One Document
+```javascript
+db.users.deleteOne({ name: "John Doe" })
+```
+
+#### Delete Multiple Documents
+```javascript
+db.users.deleteMany({ status: "inactive" })
+```
+
+## Indexing
+
+### Create Index
+```javascript
+// Single field index
+db.users.createIndex({ email: 1 })
+
+// Compound index
+db.users.createIndex({ 
+    email: 1, 
+    name: 1 
+})
+
+// Unique index
+db.users.createIndex(
+    { email: 1 },
+    { unique: true }
+)
+```
+
+### List Indexes
+```javascript
+db.users.getIndexes()
+```
+
+### Drop Index
+```javascript
+db.users.dropIndex("index_name")
+```
+
+## Aggregation Pipeline
+
+### Basic Aggregation
+```javascript
+db.orders.aggregate([
+    // Match stage
+    { $match: { status: "completed" } },
+    
+    // Group stage
+    { $group: {
+        _id: "$customerId",
+        totalAmount: { $sum: "$amount" }
+    }},
+    
+    // Sort stage
+    { $sort: { totalAmount: -1 } }
+])
+```
+
+### Common Aggregation Operators
+
+#### $match
+```javascript
+{ $match: { status: "active" } }
+```
+
+#### $group
+```javascript
+{ $group: {
+    _id: "$category",
+    count: { $sum: 1 },
+    avgPrice: { $avg: "$price" }
+}}
+```
+
+#### $sort
+```javascript
+{ $sort: { name: 1 } }
+```
+
+#### $project
+```javascript
+{ $project: {
+    name: 1,
+    email: 1,
+    _id: 0
+}}
+```
+
+## Data Modeling
+
+### One-to-One Relationship
+```javascript
+// User document
+{
+    _id: ObjectId("..."),
+    name: "John Doe",
+    profile: {
+        age: 30,
+        address: "123 Main St"
+    }
+}
+```
+
+### One-to-Many Relationship
+```javascript
+// User document
+{
+    _id: ObjectId("..."),
+    name: "John Doe",
+    orders: [
+        { orderId: "001", amount: 100 },
+        { orderId: "002", amount: 200 }
+    ]
+}
+```
+
+### Many-to-Many Relationship
+```javascript
+// Users collection
+{
+    _id: ObjectId("..."),
+    name: "John Doe"
+}
+
+// Groups collection
+{
+    _id: ObjectId("..."),
+    name: "Admins"
+}
+
+// UserGroups collection
+{
+    userId: ObjectId("..."),
+    groupId: ObjectId("...")
+}
+```
+
+## Best Practices
+
+1. Schema Design
+   - Design for how data is accessed
+   - Consider embedding vs referencing
+   - Plan for data growth
+
+2. Indexing
+   - Create indexes for frequent queries
+   - Avoid over-indexing
+   - Use compound indexes effectively
+
+3. Performance
+   - Use proper query operators
+   - Limit result sets
+   - Use projection to return only needed fields
+
+4. Security
+   - Use authentication
+   - Implement role-based access control
+   - Encrypt sensitive data
+
+## Common Commands
+
+### Database Commands
+```javascript
+// Show databases
+show dbs
+
+// Switch database
+use dbname
+
+// Show collections
+show collections
+
+// Drop database
+db.dropDatabase()
+```
+
+### Collection Commands
+```javascript
+// Create collection
+db.createCollection("users")
+
+// Drop collection
+db.users.drop()
+
+// Rename collection
+db.users.renameCollection("newUsers")
+```
+
+### Administrative Commands
+```javascript
+// Get server status
+db.serverStatus()
+
+// Current operations
+db.currentOp()
+
+// Kill operation
+db.killOp(opId)
+```

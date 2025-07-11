@@ -1,100 +1,157 @@
-## Constants
+# ES6 (ECMAScript 2015) Features
 
-## Scoping
+## Let and Const
+- Block-scoped declarations
+- `let` for variables that can be reassigned
+- `const` for constants (cannot be reassigned)
 
-    Block-Scoped Variables
-    Block-Scoped Functions
+```javascript
+let x = 10;
+const PI = 3.14;
+```
 
 ## Arrow Functions
+Shorter syntax for function expressions
+```javascript
+// Traditional function
+function add(a, b) {
+    return a + b;
+}
 
-    Expression Bodies
-    Statement Bodies
-    Lexical this
-
-## Extended Parameter Handling
-
-    Default Parameter Values
-    - Rest Parameter : The rest parameter syntax allows a function to accept an indefinite number of arguments as an array. It gathers all remaining arguments passed to a function into a single array.
-
-        var myName = ["vikash" , "jay" , "raju"] ;
-        const [firstName , ...familyName] = myName ;
-        console.log(familyName); // [ "jay" , "raju"] ;
-
-        function myData(...args){
-        console.log(args) ; // ["vikash",24,"Front-End Developer"]
-        }
-        // myData("vikash",24,"Front-End Developer") ;
-    - Spread Operator : It’s the opposite to rest parameter , where rest parameter collects items into an array, the spread operator unpacks
-        the collected elements into single elements.
-        var myName = ["vikash" , "jay" , "raju"];
-        var newArr = [...myName ,"FrontEnd" , 24];
-        console.log(newArr) ; // ["vikash" , "jay" , "raju" , "FrontEnd" , 24 ] ;
+// Arrow function
+const add = (a, b) => a + b;
+```
 
 ## Template Literals
-
-    String Interpolation
-    Custom Interpolation
-    Raw String Access
-
-## Extended Literals
-
-    Binary & Octal Literal
-    Unicode String & RegExp Literal
-
-## Enhanced Regular Expression
-
-    Regular Expression Sticky Matching
-
-## Enhanced Object Properties
-
-    Property Shorthand
-    Computed Property Names
-    Method Properties
-
-## Promises
-
-[Promises](https://www.geeksforgeeks.org/javascript-promises/)
-A Promise has four states:
-fulfilled: Action related to the promise succeeded
-rejected: Action related to the promise failed
-pending: Promise is still pending i.e. not fulfilled or rejected yet
-settled: Promise has fulfilled or rejected
+String interpolation and multiline strings
+```javascript
+const name = 'John';
+const greeting = `Hello ${name}!
+This is a multiline
+string.`;
+```
 
 ## Destructuring
+### Array Destructuring
+```javascript
+const numbers = [1, 2, 3];
+const [first, second] = numbers;
+```
 
-## Symbols
+### Object Destructuring
+```javascript
+const person = { name: 'John', age: 30 };
+const { name, age } = person;
+```
 
-## JavaScript Modules and Using npm
+## Default Parameters
+```javascript
+function greet(name = 'Guest') {
+    return `Hello ${name}!`;
+}
+```
+
+## Rest and Spread Operators
+### Rest Parameters
+```javascript
+function sum(...numbers) {
+    return numbers.reduce((total, num) => total + num, 0);
+}
+```
+
+### Spread Operator
+```javascript
+const arr1 = [1, 2, 3];
+const arr2 = [...arr1, 4, 5];
+```
 
 ## Classes
-
-## Generators
-
-## Sets and WeakSets
-
-## Map and Weak Map
-
-## Async + Await Flow Control
-
-[Async Await example](https://www.geeksforgeeks.org/async-await-function-in-javascript/)
-It operates asynchronously via the event-loop. Async functions will always return a value
-
-const getData = async() =>{
-let data = "hello world";
-return data
+```javascript
+class Person {
+    constructor(name) {
+        this.name = name;
+    }
+    
+    greet() {
+        return `Hello, I'm ${this.name}`;
+    }
 }
-getData.then(da=>{
-console.log("---data",da)
-})
-o/p
-Hello world
-const awaitExample = async () =>{
-let a = await "hello world";
-console.log(a)
+```
+
+## Modules
+```javascript
+// export
+export const PI = 3.14;
+export class Calculator { }
+
+// import
+import { PI, Calculator } from './math';
+```
+
+## Promises
+```javascript
+const promise = new Promise((resolve, reject) => {
+    // async operation
+    if (success) {
+        resolve(result);
+    } else {
+        reject(error);
+    }
+});
+```
+
+## Map and Set
+### Map
+```javascript
+const map = new Map();
+map.set('key', 'value');
+```
+
+### Set
+```javascript
+const set = new Set([1, 2, 3]);
+set.add(4);
+```
+
+## Enhanced Object Literals
+```javascript
+const name = 'John';
+const person = {
+    name,
+    greet() {
+        return `Hello ${this.name}`;
+    }
+};
+```
+
+## Array Methods
+- `Array.from()`
+- `Array.of()`
+- `Array.prototype.find()`
+- `Array.prototype.findIndex()`
+- `Array.prototype.includes()`
+
+## Symbol
+```javascript
+const sym = Symbol('description');
+const obj = {
+    [sym]: 'value'
+};
+```
+
+## Iterators and Generators
+```javascript
+function* numberGenerator() {
+    yield 1;
+    yield 2;
+    yield 3;
 }
-console.log(1)
-awaitExample()
-console.log(1)
-o/p = 1
-2
-hello world
+```
+
+## Proxy and Reflect
+```javascript
+const handler = {
+    get: (target, prop) => `Property ${prop}`
+};
+const proxy = new Proxy({}, handler);
+```

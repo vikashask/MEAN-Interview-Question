@@ -1,47 +1,279 @@
-## 1. Auth Guards: What are they?
+# Angular Interview Questions and Answers
 
-Explain `CanDeactivate` and `CanLoad`. How do these help in routing and navigation?
+## Core Concepts
 
-## 2. Lifecycle Hooks:
+### 1. What is Angular?
+Angular is a TypeScript-based open-source web application framework led by the Angular Team at Google. It offers a complete rewrite from AngularJS (Angular 1.x).
 
-What are the different lifecycle hooks in Angular? Can you use both `ngOnChanges` and `ngDoCheck` together?
+Key features:
+- Component-based architecture
+- TypeScript support
+- Dependency Injection
+- CLI tooling
+- RxJS integration
 
-## 3.Content DOM vs. View DOM:
+### 2. What are Components?
+Components are the building blocks of Angular applications. They consist of:
 
-What’s the difference between these two types of DOM?
+```typescript
+@Component({
+    selector: 'app-example',
+    template: `
+        <h1>{{ title }}</h1>
+        <p>{{ description }}</p>
+    `,
+    styles: [`h1 { color: blue; }`]
+})
+export class ExampleComponent {
+    title = 'Example Component';
+    description = 'This is an example component';
+}
+```
 
-## 4.Spread vs. Rest Operators:
+### 3. What is Dependency Injection?
+DI is a design pattern where classes receive their dependencies from external sources rather than creating them.
 
-How do they differ? What are their use cases?
+Example:
+```typescript
+@Injectable({
+    providedIn: 'root'
+})
+export class UserService {
+    getUsers() { /* ... */ }
+}
 
-## 5. Shallow Copy vs. Deep Copy:
+@Component({
+    selector: 'app-users'
+})
+export class UsersComponent {
+    constructor(private userService: UserService) {}
+}
+```
 
-What are these concepts? How can you achieve each type of copy in JavaScript?
+## Data Binding
 
-## 6.Custom Directives:
+### 1. What are the different types of data binding?
 
-How would you create a custom directive to change the color of a `div` using `HostListener`?
+#### One-way Data Binding
+- Interpolation: `{{ value }}`
+- Property Binding: `[property]="value"`
+- Event Binding: `(event)="handler()"`
 
-## 7.Why use Renderer2 in Angular?
+#### Two-way Data Binding
+```typescript
+[(ngModel)]="value"
+```
 
-What are the benefits of using `Renderer2` over direct DOM manipulation?
+Example:
+```html
+<!-- Interpolation -->
+<h1>{{ title }}</h1>
 
-## 8.Reusable Components:
+<!-- Property Binding -->
+<img [src]="imageUrl">
 
-How would you go about creating reusable components in Angular?
+<!-- Event Binding -->
+<button (click)="onClick()">Click me</button>
 
-## 9.Host Binding and Host Listener:
+<!-- Two-way Binding -->
+<input [(ngModel)]="name">
+```
 
-What are `HostBinding` and `HostListener` in Angular, and how are they used?
+## Directives
 
-## 10.Registering Reducers in Angular 18:
+### 1. What are the types of directives?
 
-How do you register reducers in the app configuration with Angular 18?
+#### Component Directives
+- Regular Angular components with template
 
-## 11.Recent Updates in Angular 18:
+#### Structural Directives
+- `*ngIf`
+- `*ngFor`
+- `*ngSwitch`
 
-What are the latest features or updates in Angular 18?
+```html
+<div *ngIf="condition">Shown if true</div>
 
-## 12.Higher-Order Functions (HOF):
+<ul>
+    <li *ngFor="let item of items">{{ item }}</li>
+</ul>
+```
 
-What is an HOF? Explain the use of `debounce` and `switchMap` in the context of observables.
+#### Attribute Directives
+- `ngClass`
+- `ngStyle`
+
+```html
+<div [ngClass]="{'active': isActive}">
+<div [ngStyle]="{'color': textColor}">
+```
+
+## Services
+
+### 1. What is a Service?
+Services are singleton objects used for:
+- Sharing data between components
+- Implementing application logic
+- External interactions (e.g., API calls)
+
+```typescript
+@Injectable({
+    providedIn: 'root'
+})
+export class DataService {
+    private data: any[] = [];
+
+    getData() {
+        return this.data;
+    }
+
+    addData(item: any) {
+        this.data.push(item);
+    }
+}
+```
+
+## Routing
+
+### 1. How do you implement routing?
+
+```typescript
+// app-routing.module.ts
+const routes: Routes = [
+    { path: '', component: HomeComponent },
+    { path: 'users', component: UsersComponent },
+    { path: 'users/:id', component: UserDetailComponent },
+    { path: '**', component: NotFoundComponent }
+];
+
+// Template usage
+<router-outlet></router-outlet>
+<a routerLink="/users">Users</a>
+```
+
+## Forms
+
+### 1. What are the two types of forms?
+
+#### Template-Driven Forms
+```html
+<form #userForm="ngForm" (ngSubmit)="onSubmit(userForm.value)">
+    <input name="username" [(ngModel)]="user.name">
+    <button type="submit">Submit</button>
+</form>
+```
+
+#### Reactive Forms
+```typescript
+// Component
+form = new FormGroup({
+    username: new FormControl(''),
+    password: new FormControl('')
+});
+
+// Template
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <input formControlName="username">
+    <input formControlName="password">
+</form>
+```
+
+## Lifecycle Hooks
+
+### 1. What are the main lifecycle hooks?
+
+```typescript
+export class LifecycleComponent implements OnInit, OnDestroy {
+    ngOnInit() {
+        // Called after component is initialized
+    }
+
+    ngOnDestroy() {
+        // Called just before component is destroyed
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        // Called when input property changes
+    }
+
+    ngDoCheck() {
+        // Called during every change detection run
+    }
+}
+```
+
+## RxJS and Observables
+
+### 1. What is RxJS used for in Angular?
+
+```typescript
+import { Observable } from 'rxjs';
+
+@Component({
+    // ...
+})
+export class ExampleComponent {
+    data$: Observable<any>;
+
+    constructor(private http: HttpClient) {
+        this.data$ = this.http.get('/api/data').pipe(
+            map(response => response.data),
+            catchError(error => {
+                console.error(error);
+                return of([]);
+            })
+        );
+    }
+}
+```
+
+## Testing
+
+### 1. How do you test Angular applications?
+
+```typescript
+describe('ExampleComponent', () => {
+    let component: ExampleComponent;
+    let fixture: ComponentFixture<ExampleComponent>;
+
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            declarations: [ ExampleComponent ]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(ExampleComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
+});
+```
+
+## Best Practices
+
+1. Follow Angular Style Guide
+2. Use proper component organization
+3. Implement lazy loading for modules
+4. Use TypeScript features effectively
+5. Handle subscriptions properly
+6. Write comprehensive tests
+7. Use Angular CLI for development
+8. Implement proper error handling
+9. Follow proper naming conventions
+10. Use Angular's built-in security features
+
+## Performance Tips
+
+1. Use OnPush change detection strategy
+2. Implement trackBy function with ngFor
+3. Lazy load modules
+4. Use pure pipes
+5. Optimize change detection
+6. Minimize DOM manipulation
+7. Use web workers for CPU-intensive tasks
+8. Implement proper caching strategies
+9. Use AOT compilation
+10. Bundle size optimization

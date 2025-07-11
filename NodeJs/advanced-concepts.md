@@ -2,8 +2,11 @@
 
 ## EventEmitter
 
-### 1. What is EventEmitter in Node.js and how does it work?
+### What is EventEmitter in Node.js and how does it work?
+
 EventEmitter is a core module in Node.js that facilitates communication between objects in Node. It's the foundation of Node's asynchronous event-driven architecture.
+
+Example:
 
 ```javascript
 const EventEmitter = require('events');
@@ -20,9 +23,14 @@ myEmitter.on('event', (data) => {
 myEmitter.emit('event', 'Hello World');
 ```
 
-### 2. What's the difference between `on()` and `once()`?
-- `on()`: Adds a listener that will be called every time the event is emitted
-- `once()`: Adds a one-time listener that will be removed after it's called once
+### What's the difference between `on()` and `once()`?
+
+Two key event listener methods:
+
+- **on()**: Adds a listener that will be called every time the event is emitted
+- **once()**: Adds a one-time listener that will be removed after it's called once
+
+Example:
 
 ```javascript
 const emitter = new EventEmitter();
@@ -39,11 +47,15 @@ emitter.emit('message'); // Logs only 'on called'
 
 ## Buffers
 
-### 1. What are Buffers in Node.js and when should you use them?
+### What are Buffers in Node.js and when should you use them?
+
 Buffers are used to handle binary data in Node.js. They represent a fixed-length sequence of bytes and are particularly useful when dealing with:
+
 - File system operations
 - Network protocols
 - Binary data manipulation
+
+Example:
 
 ```javascript
 // Creating buffers
@@ -57,7 +69,8 @@ console.log(buf2.length);     // Get buffer length
 console.log(buf2[0]);         // Access individual bytes
 ```
 
-### 2. How do you handle large binary files in Node.js?
+### How do you handle large binary files in Node.js?
+
 Using streams with buffers is the best approach for large files:
 
 ```javascript
@@ -75,7 +88,7 @@ readStream.on('data', (chunk) => {
 
 ## File System
 
-### 1. What are the different ways to handle files in Node.js?
+### What are the different ways to handle files in Node.js?
 
 1. Synchronous (blocking):
 ```javascript
@@ -116,7 +129,7 @@ async function readFile() {
 }
 ```
 
-### 2. How do you watch for file changes in Node.js?
+### How do you watch for file changes in Node.js?
 ```javascript
 const fs = require('fs');
 
@@ -127,7 +140,7 @@ fs.watch('file.txt', (eventType, filename) => {
 
 ## Streams
 
-### 1. What are Streams in Node.js and what are their types?
+### What are Streams in Node.js and what are their types?
 
 Streams are objects that let you read data from a source or write data to a destination continuously. There are four types of streams:
 
@@ -173,7 +186,7 @@ const upperCaseTransform = new Transform({
 });
 ```
 
-### 2. How do you handle backpressure in Node.js streams?
+### How do you handle backpressure in Node.js streams?
 
 Backpressure is handled automatically when using pipe():
 ```javascript
@@ -206,7 +219,7 @@ writeStream.on('drain', () => {
 
 ## Networking
 
-### 1. How do you create a TCP server in Node.js?
+### How do you create a TCP server in Node.js?
 ```javascript
 const net = require('net');
 
@@ -228,7 +241,7 @@ server.listen(3000, () => {
 });
 ```
 
-### 2. How do you implement a WebSocket server?
+### How do you implement a WebSocket server?
 Using the `ws` package:
 ```javascript
 const WebSocket = require('ws');
@@ -251,7 +264,7 @@ wss.on('connection', (ws) => {
 
 ## HTTP
 
-### 1. How do you create an HTTP server in Node.js?
+### How do you create an HTTP server in Node.js?
 ```javascript
 const http = require('http');
 
@@ -273,7 +286,7 @@ server.listen(3000, () => {
 });
 ```
 
-### 2. How do you handle file uploads in Node.js?
+### How do you handle file uploads in Node.js?
 Using Express and Multer:
 ```javascript
 const express = require('express');
@@ -298,7 +311,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
 ## Multi-Threading
 
-### 1. How does Node.js handle multi-threading with Worker Threads?
+### How does Node.js handle multi-threading with Worker Threads?
 ```javascript
 const { Worker, isMainThread, parentPort } = require('worker_threads');
 
@@ -320,7 +333,7 @@ if (isMainThread) {
 }
 ```
 
-### 2. What's the difference between Worker Threads and Child Processes?
+### What's the difference between Worker Threads and Child Processes?
 Example using Child Process:
 ```javascript
 const { fork } = require('child_process');
@@ -342,7 +355,7 @@ process.on('message', (message) => {
 
 ## Security
 
-### 1. How do you implement authentication in Node.js?
+### How do you implement authentication in Node.js?
 Using JWT (JSON Web Tokens):
 ```javascript
 const jwt = require('jsonwebtoken');
@@ -380,7 +393,7 @@ app.get('/protected', authenticate, (req, res) => {
 });
 ```
 
-### 2. How do you handle input validation and sanitization?
+### How do you handle input validation and sanitization?
 Using Express-Validator:
 ```javascript
 const { body, validationResult } = require('express-validator');
@@ -407,7 +420,7 @@ app.post('/user',
 
 ## Cryptography
 
-### 1. How do you implement encryption and hashing in Node.js?
+### How do you implement encryption and hashing in Node.js?
 ```javascript
 const crypto = require('crypto');
 
@@ -434,7 +447,7 @@ function decrypt(encrypted, key) {
 }
 ```
 
-### 2. How do you generate secure random values?
+### How do you generate secure random values?
 ```javascript
 const crypto = require('crypto');
 
@@ -457,7 +470,7 @@ function secureRandom(min, max) {
 
 ## Performance Optimization
 
-### 1. How do you profile a Node.js application?
+### How do you profile a Node.js application?
 ```javascript
 const profiler = require('v8-profiler-next');
 const fs = require('fs');
@@ -478,7 +491,7 @@ profiler.takeSnapshot()
     .pipe(fs.createWriteStream('snapshot.heapsnapshot'));
 ```
 
-### 2. How do you implement caching in Node.js?
+### How do you implement caching in Node.js?
 Using Node-Cache:
 ```javascript
 const NodeCache = require('node-cache');
@@ -500,7 +513,7 @@ async function getCachedData(key) {
 
 ## Best Practices
 
-### 1. How do you handle errors in Node.js?
+### How do you handle errors in Node.js?
 ```javascript
 // Custom error class
 class ValidationError extends Error {
@@ -532,7 +545,7 @@ async function handleRequest(req, res, next) {
 }
 ```
 
-### 2. How do you implement graceful shutdown?
+### How do you implement graceful shutdown?
 ```javascript
 const server = app.listen(3000);
 
