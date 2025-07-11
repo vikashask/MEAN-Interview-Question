@@ -14,7 +14,8 @@
 ## Extended Parameter Handling
 
     Default Parameter Values
-    - Rest Parameter : It is a collection of all remaining elements into an array
+    - Rest Parameter : The rest parameter syntax allows a function to accept an indefinite number of arguments as an array. It gathers all remaining arguments passed to a function into a single array.
+
         var myName = ["vikash" , "jay" , "raju"] ;
         const [firstName , ...familyName] = myName ;
         console.log(familyName); // [ "jay" , "raju"] ;
