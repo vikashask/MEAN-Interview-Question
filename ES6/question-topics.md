@@ -1,157 +1,286 @@
-# ES6 (ECMAScript 2015) Features
+# ES6 (ECMAScript 2015) Features and Concepts
 
-## Let and Const
-- Block-scoped declarations
-- `let` for variables that can be reassigned
-- `const` for constants (cannot be reassigned)
+## Core Features
 
+### 1. let and const
 ```javascript
-let x = 10;
-const PI = 3.14;
-```
-
-## Arrow Functions
-Shorter syntax for function expressions
-```javascript
-// Traditional function
-function add(a, b) {
-    return a + b;
+// Block scoping with let
+{
+    let x = 1;
+    // x is only accessible here
 }
 
-// Arrow function
-const add = (a, b) => a + b;
+// Constants
+const PI = 3.14159;
+const CONFIG = {
+    api: 'https://api.example.com'
+};
+
+// Object freezing for true immutability
+Object.freeze(CONFIG);
 ```
 
-## Template Literals
-String interpolation and multiline strings
+### 2. Arrow Functions
+```javascript
+// Basic syntax
+const add = (a, b) => a + b;
+
+// With block body
+const multiply = (a, b) => {
+    const result = a * b;
+    return result;
+};
+
+// Lexical this
+class Timer {
+    constructor() {
+        this.seconds = 0;
+        setInterval(() => this.seconds++, 1000);
+    }
+}
+```
+
+### 3. Template Literals
 ```javascript
 const name = 'John';
-const greeting = `Hello ${name}!
-This is a multiline
-string.`;
-```
+const greeting = `Hello ${name}!`;
 
-## Destructuring
-### Array Destructuring
-```javascript
-const numbers = [1, 2, 3];
-const [first, second] = numbers;
-```
+// Multi-line strings
+const html = `
+    <div>
+        <h1>${title}</h1>
+        <p>${content}</p>
+    </div>
+`;
 
-### Object Destructuring
-```javascript
-const person = { name: 'John', age: 30 };
-const { name, age } = person;
-```
-
-## Default Parameters
-```javascript
-function greet(name = 'Guest') {
-    return `Hello ${name}!`;
+// Tagged templates
+function highlight(strings, ...values) {
+    return strings.reduce((acc, str, i) => 
+        acc + str + (values[i] ? `<span>${values[i]}</span>` : ''), '');
 }
 ```
 
-## Rest and Spread Operators
-### Rest Parameters
-```javascript
-function sum(...numbers) {
-    return numbers.reduce((total, num) => total + num, 0);
-}
-```
+## Classes and Modules
 
-### Spread Operator
-```javascript
-const arr1 = [1, 2, 3];
-const arr2 = [...arr1, 4, 5];
-```
-
-## Classes
+### 1. Class Syntax
 ```javascript
 class Person {
     constructor(name) {
         this.name = name;
     }
-    
-    greet() {
+
+    sayHello() {
         return `Hello, I'm ${this.name}`;
     }
+
+    static create(name) {
+        return new Person(name);
+    }
+}
+
+// Inheritance
+class Employee extends Person {
+    constructor(name, role) {
+        super(name);
+        this.role = role;
+    }
 }
 ```
 
-## Modules
+### 2. Modules
 ```javascript
-// export
-export const PI = 3.14;
-export class Calculator { }
+// Named exports
+export const PI = 3.14159;
+export function square(x) {
+    return x * x;
+}
 
-// import
-import { PI, Calculator } from './math';
+// Default export
+export default class Calculator {
+    // ...
+}
+
+// Importing
+import Calculator, { PI, square } from './math';
+import * as MathUtils from './math';
 ```
 
-## Promises
-```javascript
-const promise = new Promise((resolve, reject) => {
-    // async operation
-    if (success) {
-        resolve(result);
-    } else {
-        reject(error);
-    }
-});
-```
+## Enhanced Object Features
 
-## Map and Set
-### Map
-```javascript
-const map = new Map();
-map.set('key', 'value');
-```
-
-### Set
-```javascript
-const set = new Set([1, 2, 3]);
-set.add(4);
-```
-
-## Enhanced Object Literals
+### 1. Object Property Shorthand
 ```javascript
 const name = 'John';
+const age = 30;
+
 const person = {
     name,
-    greet() {
-        return `Hello ${this.name}`;
+    age,
+    sayHi() {
+        return `Hi, I'm ${this.name}`;
     }
 };
 ```
 
-## Array Methods
-- `Array.from()`
-- `Array.of()`
-- `Array.prototype.find()`
-- `Array.prototype.findIndex()`
-- `Array.prototype.includes()`
-
-## Symbol
+### 2. Computed Property Names
 ```javascript
-const sym = Symbol('description');
-const obj = {
-    [sym]: 'value'
+const prefix = 'user';
+const userConfig = {
+    [`${prefix}_name`]: 'John',
+    [`${prefix}_age`]: 30
 };
 ```
 
-## Iterators and Generators
+### 3. Object Destructuring
 ```javascript
-function* numberGenerator() {
-    yield 1;
-    yield 2;
-    yield 3;
+const { name, age } = person;
+
+// With default values
+const { title = 'Untitled', body = '' } = post;
+
+// Nested destructuring
+const {
+    address: { city, country }
+} = user;
+```
+
+## Arrays and Iterables
+
+### 1. Array Destructuring
+```javascript
+const [first, second, ...rest] = numbers;
+
+// Skipping elements
+const [, , third] = numbers;
+
+// Swap variables
+let a = 1, b = 2;
+[a, b] = [b, a];
+```
+
+### 2. Spread Operator
+```javascript
+// Array spread
+const combined = [...arr1, ...arr2];
+const copy = [...original];
+
+// Object spread
+const enhanced = {
+    ...baseObject,
+    newProp: 'value'
+};
+```
+
+### 3. Iterators and for...of
+```javascript
+// Custom iterator
+const range = {
+    from: 1,
+    to: 5,
+    [Symbol.iterator]() {
+        return {
+            current: this.from,
+            last: this.to,
+            next() {
+                if (this.current <= this.last) {
+                    return { done: false, value: this.current++ };
+                }
+                return { done: true };
+            }
+        };
+    }
+};
+
+for (const num of range) {
+    console.log(num);
 }
 ```
 
-## Proxy and Reflect
+## Promises and Async
+
+### 1. Promises
 ```javascript
-const handler = {
-    get: (target, prop) => `Property ${prop}`
-};
-const proxy = new Proxy({}, handler);
+function fetchUser(id) {
+    return new Promise((resolve, reject) => {
+        // Async operation
+        if (user) {
+            resolve(user);
+        } else {
+            reject(new Error('User not found'));
+        }
+    });
+}
+
+// Promise chaining
+fetchUser(1)
+    .then(user => fetchOrders(user))
+    .then(orders => processOrders(orders))
+    .catch(error => console.error(error));
 ```
+
+### 2. Async/Await
+```javascript
+async function getUserData() {
+    try {
+        const user = await fetchUser(1);
+        const orders = await fetchOrders(user);
+        return processOrders(orders);
+    } catch (error) {
+        console.error(error);
+    }
+}
+```
+
+## Other Features
+
+### 1. Default Parameters
+```javascript
+function greet(name = 'Guest', greeting = 'Hello') {
+    return `${greeting}, ${name}!`;
+}
+```
+
+### 2. Rest Parameters
+```javascript
+function sum(...numbers) {
+    return numbers.reduce((total, n) => total + n, 0);
+}
+```
+
+### 3. Map and Set
+```javascript
+// Map
+const userRoles = new Map();
+userRoles.set(user1, 'admin');
+userRoles.set(user2, 'user');
+
+// Set
+const uniqueNumbers = new Set([1, 2, 2, 3, 3]);
+```
+
+### 4. Symbols
+```javascript
+const MY_KEY = Symbol('my_key');
+const obj = {
+    [MY_KEY]: 'value'
+};
+
+// Well-known symbols
+class CustomIterator {
+    [Symbol.iterator]() {
+        // ...
+    }
+}
+```
+
+## Best Practices
+
+1. Use const by default, let when needed
+2. Prefer arrow functions for callbacks
+3. Use template literals for string interpolation
+4. Use destructuring for cleaner code
+5. Use async/await for promise-based operations
+6. Use modules for better code organization
+7. Use class syntax for object-oriented code
+8. Use Map/Set when appropriate
+9. Use spread operator for immutable operations
+10. Use default parameters for better function definitions

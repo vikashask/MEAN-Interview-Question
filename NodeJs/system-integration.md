@@ -1,13 +1,32 @@
-# Node.js System Integration Interview Questions
+# Node.js System Integration Guide
 
-## Understanding Unix Integration
+## Child Processes
 
-### 1. How do you execute shell commands from Node.js?
+### spawn()
 ```javascript
-const { exec, spawn } = require('child_process');
+const { spawn } = require('child_process');
 
-// Using exec for simple commands
-exec('ls -la', (error, stdout, stderr) => {
+// Execute command with arguments
+const ls = spawn('ls', ['-lh', '/usr']);
+
+ls.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
+});
+
+ls.stderr.on('data', (data) => {
+    console.error(`stderr: ${data}`);
+});
+
+ls.on('close', (code) => {
+    console.log(`Child process exited with code ${code}`);
+});
+```
+
+### exec()
+```javascript
+const { exec } = require('child_process');
+
+exec('ls -lh /usr', (error, stdout, stderr) => {
     if (error) {
         console.error(`Error: ${error}`);
         return;
@@ -15,352 +34,281 @@ exec('ls -la', (error, stdout, stderr) => {
     console.log(`stdout: ${stdout}`);
     console.error(`stderr: ${stderr}`);
 });
+```
 
-// Using spawn for long-running processes
-const process = spawn('find', ['.', '-type', 'f']);
+### execFile()
+```javascript
+const { execFile } = require('child_process');
 
-process.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
-});
-
-process.stderr.on('data', (data) => {
-    console.error(`stderr: ${data}`);
-});
-
-process.on('close', (code) => {
-    console.log(`Child process exited with code ${code}`);
+execFile('node', ['--version'], (error, stdout, stderr) => {
+    if (error) {
+        console.error(`Error: ${error}`);
+        return;
+    }
+    console.log(`Node Version: ${stdout}`);
 });
 ```
 
-### 2. How do you handle environment variables in Node.js?
+### fork()
 ```javascript
-// Using dotenv for environment management
-require('dotenv').config();
+const { fork } = require('child_process');
 
-// Access environment variables
-const dbConnection = {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
-};
+// Fork a new Node.js process
+const child = fork('worker.js');
 
-// Setting environment variables programmatically
-process.env.NODE_ENV = 'production';
+// Send message to child
+child.send({ hello: 'world' });
 
-// Check environment
-const isDevelopment = process.env.NODE_ENV === 'development';
-```
-
-## Process Management
-
-### 1. How do you manage multiple Node.js processes?
-Using PM2:
-```javascript
-// ecosystem.config.js
-module.exports = {
-    apps: [{
-        name: "app",
-        script: "./app.js",
-        instances: "max",
-        exec_mode: "cluster",
-        env: {
-            NODE_ENV: "development",
-        },
-        env_production: {
-            NODE_ENV: "production",
-        }
-    }]
-};
-
-// Start with PM2
-// pm2 start ecosystem.config.js
-
-// Monitoring
-// pm2 monit
-```
-
-### 2. How do you handle process signals in Node.js?
-```javascript
-// Handle process signals
-process.on('SIGTERM', () => {
-    console.log('Received SIGTERM. Performing cleanup...');
-    cleanup();
-    process.exit(0);
+// Receive messages from child
+child.on('message', (message) => {
+    console.log('Message from child:', message);
 });
-
-process.on('SIGINT', () => {
-    console.log('Received SIGINT. Performing cleanup...');
-    cleanup();
-    process.exit(0);
-});
-
-process.on('uncaughtException', (error) => {
-    console.error('Uncaught Exception:', error);
-    cleanup();
-    process.exit(1);
-});
-
-function cleanup() {
-    // Close database connections
-    // Clear temporary files
-    // Save state
-    console.log('Cleanup completed');
-}
 ```
 
 ## File System Operations
 
-### 1. How do you handle file permissions in Node.js?
+### Asynchronous File Operations
+```javascript
+const fs = require('fs').promises;
+
+async function processFile() {
+    try {
+        // Read file
+        const content = await fs.readFile('input.txt', 'utf8');
+        
+        // Process content
+        const modified = content.toUpperCase();
+        
+        // Write back
+        await fs.writeFile('output.txt', modified);
+        
+        console.log('File processing complete');
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+```
+
+### File System Monitoring
 ```javascript
 const fs = require('fs');
 
-// Change file permissions
-fs.chmod('file.txt', 0o755, (err) => {
-    if (err) throw err;
-    console.log('Permissions changed');
+// Watch directory for changes
+fs.watch('directory', (eventType, filename) => {
+    console.log(`Event: ${eventType}`);
+    if (filename) {
+        console.log(`File changed: ${filename}`);
+    }
 });
+```
 
-// Check file permissions
-fs.access('file.txt', fs.constants.W_OK, (err) => {
-    if (err) {
-        console.error('File is not writable');
+### Directory Operations
+```javascript
+const fs = require('fs').promises;
+
+async function processDirectory() {
+    try {
+        // Create directory
+        await fs.mkdir('new-directory');
+        
+        // Read directory contents
+        const files = await fs.readdir('directory');
+        
+        // Process each file
+        for (const file of files) {
+            const stats = await fs.stat(`directory/${file}`);
+            console.log(`${file}: ${stats.size} bytes`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+```
+
+## Network Integration
+
+### HTTP Server
+```javascript
+const http = require('http');
+
+const server = http.createServer((req, res) => {
+    if (req.url === '/api/data') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: 'Hello World' }));
     } else {
-        console.log('File is writable');
+        res.writeHead(404);
+        res.end();
     }
 });
 
-// Set file owner
-fs.chown('file.txt', uid, gid, (err) => {
-    if (err) throw err;
-    console.log('Owner changed');
+server.listen(3000, () => {
+    console.log('Server running on port 3000');
 });
 ```
 
-### 2. How do you handle symbolic links?
+### TCP Server
 ```javascript
-const fs = require('fs');
+const net = require('net');
 
-// Create symbolic link
-fs.symlink('target.txt', 'link.txt', 'file', (err) => {
-    if (err) throw err;
-    console.log('Symbolic link created');
-});
-
-// Read symbolic link
-fs.readlink('link.txt', (err, linkString) => {
-    if (err) throw err;
-    console.log('Link points to:', linkString);
-});
-
-// Check if path is symbolic link
-fs.lstat('link.txt', (err, stats) => {
-    if (err) throw err;
-    console.log('Is symbolic link:', stats.isSymbolicLink());
-});
-```
-
-## System Resources
-
-### 1. How do you monitor system resources in Node.js?
-```javascript
-const os = require('os');
-
-// Memory usage
-function getMemoryUsage() {
-    const total = os.totalmem();
-    const free = os.freemem();
-    const used = total - free;
-    const usedPercentage = (used / total) * 100;
+const server = net.createServer((socket) => {
+    console.log('Client connected');
     
-    return {
-        total: formatBytes(total),
-        free: formatBytes(free),
-        used: formatBytes(used),
-        usedPercentage: `${usedPercentage.toFixed(2)}%`
-    };
-}
-
-// CPU usage
-function getCPUUsage() {
-    const cpus = os.cpus();
-    return cpus.map(cpu => {
-        const total = Object.values(cpu.times).reduce((acc, tv) => acc + tv, 0);
-        const idle = cpu.times.idle;
-        const usage = ((total - idle) / total) * 100;
-        return `${usage.toFixed(2)}%`;
+    socket.on('data', (data) => {
+        console.log(`Received: ${data}`);
+        socket.write(`Server received: ${data}`);
     });
-}
-
-function formatBytes(bytes) {
-    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
-}
-```
-
-### 2. How do you implement resource limits?
-```javascript
-// Memory limits
-const v8 = require('v8');
-
-// Set heap size limits
-v8.setFlagsFromString('--max_old_space_size=4096'); // 4GB
-
-// Monitor heap usage
-const heapStats = v8.getHeapStatistics();
-console.log('Heap size limit:', formatBytes(heapStats.heap_size_limit));
-
-// Process resource limits
-process.setMaxListeners(15); // Set max event listeners
-
-// Rate limiting example (using express-rate-limit)
-const rateLimit = require('express-rate-limit');
-
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100 // limit each IP to 100 requests per windowMs
+    
+    socket.on('end', () => {
+        console.log('Client disconnected');
+    });
 });
 
-app.use(limiter);
+server.listen(8080, () => {
+    console.log('TCP Server listening on port 8080');
+});
 ```
 
-## Inter-Process Communication
-
-### 1. How do you implement IPC in Node.js?
+### WebSocket Integration
 ```javascript
-// Parent process
-const { fork } = require('child_process');
-const child = fork('worker.js');
+const WebSocket = require('ws');
 
-// Send message to child
-child.send({ type: 'START', data: { x: 1, y: 2 } });
+const wss = new WebSocket.Server({ port: 8080 });
 
-// Receive message from child
-child.on('message', (message) => {
-    console.log('From child:', message);
+wss.on('connection', (ws) => {
+    console.log('New client connected');
+    
+    ws.on('message', (message) => {
+        console.log('Received:', message);
+        ws.send(`Server received: ${message}`);
+    });
+    
+    ws.on('close', () => {
+        console.log('Client disconnected');
+    });
 });
+```
 
-// In worker.js
-process.on('message', (message) => {
-    if (message.type === 'START') {
-        // Process data
-        const result = message.data.x + message.data.y;
-        // Send result back to parent
-        process.send({ type: 'RESULT', data: result });
+## Database Integration
+
+### MongoDB Connection
+```javascript
+const { MongoClient } = require('mongodb');
+
+async function connectDB() {
+    const client = new MongoClient('mongodb://localhost:27017');
+    
+    try {
+        await client.connect();
+        const db = client.db('mydb');
+        
+        // Perform operations
+        const users = await db.collection('users').find().toArray();
+        console.log('Users:', users);
+    } finally {
+        await client.close();
     }
-});
+}
 ```
 
-### 2. How do you implement shared memory?
+### Redis Integration
 ```javascript
-const { Worker, SharedArrayBuffer } = require('worker_threads');
+const Redis = require('ioredis');
+const redis = new Redis();
 
-// Create shared buffer
-const sharedBuffer = new SharedArrayBuffer(4);
-const sharedArray = new Int32Array(sharedBuffer);
+// Set value
+await redis.set('key', 'value');
 
-// Create worker
-const worker = new Worker(`
-    const { parentPort } = require('worker_threads');
-    
-    parentPort.on('message', ({ buffer }) => {
-        const array = new Int32Array(buffer);
-        array[0] = 42;
-        parentPort.postMessage('Done');
-    });
-`);
+// Get value
+const value = await redis.get('key');
 
-// Send shared buffer to worker
-worker.postMessage({ buffer: sharedBuffer });
+// Set with expiration
+await redis.set('session', 'data', 'EX', 3600);
 
-// Wait for worker to finish
-worker.on('message', (message) => {
-    console.log('Worker says:', message);
-    console.log('Shared array value:', sharedArray[0]); // 42
+// Pub/Sub
+const subscriber = new Redis();
+const publisher = new Redis();
+
+subscriber.subscribe('channel', (err, count) => {
+    if (err) console.error(err);
+    console.log(`Subscribed to ${count} channels`);
 });
+
+subscriber.on('message', (channel, message) => {
+    console.log(`Received ${message} from ${channel}`);
+});
+
+publisher.publish('channel', 'Hello World');
 ```
 
 ## System Integration Best Practices
 
-### 1. How do you implement logging in a production environment?
+1. Error Handling
+```javascript
+process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception:', error);
+    // Graceful shutdown
+    process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection:', reason);
+});
+```
+
+2. Graceful Shutdown
+```javascript
+function gracefulShutdown() {
+    console.log('Starting graceful shutdown...');
+    
+    // Close server
+    server.close(() => {
+        console.log('Server closed');
+        
+        // Close database connections
+        mongoose.connection.close(false, () => {
+            console.log('Database connections closed');
+            process.exit(0);
+        });
+    });
+    
+    // Force close if graceful shutdown fails
+    setTimeout(() => {
+        console.error('Could not close connections in time, forcefully shutting down');
+        process.exit(1);
+    }, 10000);
+}
+
+process.on('SIGTERM', gracefulShutdown);
+process.on('SIGINT', gracefulShutdown);
+```
+
+3. Configuration Management
+```javascript
+const config = {
+    port: process.env.PORT || 3000,
+    dbUrl: process.env.DB_URL || 'mongodb://localhost:27017',
+    environment: process.env.NODE_ENV || 'development'
+};
+
+module.exports = config;
+```
+
+4. Logging
 ```javascript
 const winston = require('winston');
-require('winston-daily-rotate-file');
 
 const logger = winston.createLogger({
     level: 'info',
-    format: winston.format.combine(
-        winston.format.timestamp(),
-        winston.format.json()
-    ),
+    format: winston.format.json(),
     transports: [
-        // Rotate log files daily
-        new winston.transports.DailyRotateFile({
-            filename: 'logs/application-%DATE%.log',
-            datePattern: 'YYYY-MM-DD',
-            maxSize: '20m',
-            maxFiles: '14d'
-        }),
-        // Send errors to separate file
-        new winston.transports.File({
-            filename: 'logs/error.log',
-            level: 'error'
-        })
+        new winston.transports.File({ filename: 'error.log', level: 'error' }),
+        new winston.transports.File({ filename: 'combined.log' })
     ]
 });
 
-// In development, log to console
 if (process.env.NODE_ENV !== 'production') {
     logger.add(new winston.transports.Console({
         format: winston.format.simple()
     }));
 }
-```
-
-### 2. How do you implement health checks?
-```javascript
-const express = require('express');
-const app = express();
-
-// Basic health check
-app.get('/health', (req, res) => {
-    res.json({
-        status: 'UP',
-        timestamp: new Date(),
-        uptime: process.uptime(),
-        memoryUsage: process.memoryUsage()
-    });
-});
-
-// Detailed health check with dependencies
-async function checkHealth() {
-    try {
-        // Check database connection
-        await mongoose.connection.db.admin().ping();
-        
-        // Check Redis connection
-        await redisClient.ping();
-        
-        // Check external API
-        await axios.get('https://api.example.com/health');
-        
-        return {
-            status: 'UP',
-            checks: {
-                database: 'UP',
-                redis: 'UP',
-                api: 'UP'
-            }
-        };
-    } catch (error) {
-        return {
-            status: 'DOWN',
-            error: error.message
-        };
-    }
-}
-
-app.get('/health/detailed', async (req, res) => {
-    const health = await checkHealth();
-    res.status(health.status === 'UP' ? 200 : 503).json(health);
-});
 ```

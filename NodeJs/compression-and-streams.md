@@ -1,17 +1,143 @@
-# Node.js Compression and Advanced Streams
+# Node.js Compression and Streams
 
-## Compression
+## Streams
 
-### 1. How do you implement file compression in Node.js?
+### Stream Types
+
+#### Readable Streams
+```javascript
+const fs = require('fs');
+
+// Create readable stream
+const readStream = fs.createReadStream('input.txt', {
+    encoding: 'utf8',
+    highWaterMark: 64 * 1024 // 64KB chunks
+});
+
+// Handle data
+readStream.on('data', (chunk) => {
+    console.log('Received chunk:', chunk.length);
+});
+
+readStream.on('end', () => {
+    console.log('Finished reading');
+});
+
+readStream.on('error', (error) => {
+    console.error('Error:', error);
+});
+```
+
+#### Writable Streams
+```javascript
+const writeStream = fs.createWriteStream('output.txt');
+
+// Write data
+writeStream.write('Hello ');
+writeStream.write('World!');
+writeStream.end();
+
+// Handle events
+writeStream.on('finish', () => {
+    console.log('Finished writing');
+});
+
+writeStream.on('error', (error) => {
+    console.error('Error:', error);
+});
+```
+
+#### Duplex Streams
+```javascript
+const { Duplex } = require('stream');
+
+class MyDuplex extends Duplex {
+    constructor(options) {
+        super(options);
+        this.data = ['Hello', 'World', '!'];
+    }
+    
+    _read() {
+        const data = this.data.shift();
+        if (data) {
+            this.push(data);
+        } else {
+            this.push(null);
+        }
+    }
+    
+    _write(chunk, encoding, callback) {
+        console.log('Received:', chunk.toString());
+        callback();
+    }
+}
+```
+
+#### Transform Streams
+```javascript
+const { Transform } = require('stream');
+
+class UppercaseTransform extends Transform {
+    _transform(chunk, encoding, callback) {
+        this.push(chunk.toString().toUpperCase());
+        callback();
+    }
+}
+
+const upperCaseStream = new UppercaseTransform();
+process.stdin
+    .pipe(upperCaseStream)
+    .pipe(process.stdout);
+```
+
+### Stream Operations
+
+#### Piping Streams
 ```javascript
 const fs = require('fs');
 const zlib = require('zlib');
 
-// Compress a file
-function compressFile(inputFile, outputFile) {
+// Chain multiple streams
+fs.createReadStream('input.txt')
+    .pipe(zlib.createGzip())
+    .pipe(fs.createWriteStream('input.txt.gz'));
+
+// Handle pipe errors
+source.pipe(destination)
+    .on('error', (error) => {
+        console.error('Pipe error:', error);
+    });
+```
+
+#### Stream Events
+```javascript
+readStream
+    .on('data', (chunk) => {
+        console.log('Data:', chunk);
+    })
+    .on('end', () => {
+        console.log('End of stream');
+    })
+    .on('error', (error) => {
+        console.error('Error:', error);
+    })
+    .on('close', () => {
+        console.log('Stream closed');
+    });
+```
+
+## Compression
+
+### Gzip Compression
+```javascript
+const zlib = require('zlib');
+const fs = require('fs');
+
+// Compress file
+function compressFile(input, output) {
     const gzip = zlib.createGzip();
-    const source = fs.createReadStream(inputFile);
-    const destination = fs.createWriteStream(outputFile);
+    const source = fs.createReadStream(input);
+    const destination = fs.createWriteStream(output);
     
     return new Promise((resolve, reject) => {
         source
@@ -22,11 +148,11 @@ function compressFile(inputFile, outputFile) {
     });
 }
 
-// Decompress a file
-function decompressFile(inputFile, outputFile) {
+// Decompress file
+function decompressFile(input, output) {
     const gunzip = zlib.createGunzip();
-    const source = fs.createReadStream(inputFile);
-    const destination = fs.createWriteStream(outputFile);
+    const source = fs.createReadStream(input);
+    const destination = fs.createWriteStream(output);
     
     return new Promise((resolve, reject) => {
         source
@@ -36,280 +162,189 @@ function decompressFile(inputFile, outputFile) {
             .on('error', reject);
     });
 }
-
-// Usage
-async function example() {
-    try {
-        await compressFile('large.txt', 'large.txt.gz');
-        console.log('File compressed');
-        
-        await decompressFile('large.txt.gz', 'large_restored.txt');
-        console.log('File decompressed');
-    } catch (err) {
-        console.error('Error:', err);
-    }
-}
 ```
 
-### 2. How do you implement HTTP compression?
+### HTTP Compression
 ```javascript
 const express = require('express');
 const compression = require('compression');
 const app = express();
 
-// Enable compression for all routes
+// Enable compression
 app.use(compression({
-    // Custom compression filter
+    level: 6, // compression level
+    threshold: 100 * 1024 // min size to compress (100KB)
+}));
+
+// Custom compression filter
+app.use(compression({
     filter: (req, res) => {
         if (req.headers['x-no-compression']) {
             return false;
         }
-        // Use compression for text files
         return compression.filter(req, res);
-    },
-    // Compression level (0-9)
-    level: 6
+    }
 }));
-
-// Route handler
-app.get('/api/data', (req, res) => {
-    const largeData = { /* ... */ };
-    res.json(largeData); // Will be automatically compressed
-});
 ```
 
-## Advanced Stream Concepts
-
-### 1. How do you implement custom streams?
-
-1. Custom Readable Stream:
+### Memory-Efficient Processing
 ```javascript
-const { Readable } = require('stream');
+const csv = require('csv-parser');
+const fs = require('fs');
 
-class NumberStream extends Readable {
-    constructor(max) {
-        super();
-        this.max = max;
-        this.current = 1;
+// Process large CSV file
+fs.createReadStream('large-file.csv')
+    .pipe(csv())
+    .on('data', (row) => {
+        // Process each row
+        processRow(row);
+    })
+    .on('end', () => {
+        console.log('CSV processing complete');
+    });
+
+// Custom transform for data processing
+const { Transform } = require('stream');
+
+class DataProcessor extends Transform {
+    constructor(options = {}) {
+        super({ ...options, objectMode: true });
     }
     
-    _read() {
-        if (this.current <= this.max) {
-            const buf = Buffer.from(String(this.current));
-            this.push(buf);
-            this.current++;
-        } else {
-            this.push(null);
-        }
-    }
-}
-
-// Usage
-const numberStream = new NumberStream(5);
-numberStream.on('data', (chunk) => {
-    console.log(chunk.toString());
-});
-```
-
-2. Custom Writable Stream:
-```javascript
-const { Writable } = require('stream');
-
-class ConsoleStream extends Writable {
-    _write(chunk, encoding, callback) {
-        console.log('Received:', chunk.toString());
+    _transform(chunk, encoding, callback) {
+        // Process data in chunks
+        const processed = processData(chunk);
+        this.push(processed);
         callback();
     }
 }
-
-// Usage
-const consoleStream = new ConsoleStream();
-consoleStream.write('Hello');
-consoleStream.end('World');
 ```
 
-3. Custom Transform Stream:
+## Best Practices
+
+### 1. Error Handling
+```javascript
+function handleStream(stream) {
+    return new Promise((resolve, reject) => {
+        stream
+            .on('error', reject)
+            .on('end', resolve)
+            .on('finish', resolve);
+    });
+}
+
+// Usage
+async function processFile() {
+    try {
+        const stream = fs.createReadStream('input.txt');
+        await handleStream(stream);
+        console.log('Processing complete');
+    } catch (error) {
+        console.error('Stream error:', error);
+    }
+}
+```
+
+### 2. Memory Management
 ```javascript
 const { Transform } = require('stream');
 
-class ReverseStream extends Transform {
+class BatchProcessor extends Transform {
+    constructor(options = {}) {
+        super({ ...options, objectMode: true });
+        this.batch = [];
+        this.batchSize = options.batchSize || 1000;
+    }
+    
     _transform(chunk, encoding, callback) {
-        const reversed = chunk.toString()
-            .split('')
-            .reverse()
-            .join('');
+        this.batch.push(chunk);
         
-        this.push(reversed);
+        if (this.batch.length >= this.batchSize) {
+            this._processBatch();
+        }
+        
         callback();
     }
+    
+    _flush(callback) {
+        if (this.batch.length > 0) {
+            this._processBatch();
+        }
+        callback();
+    }
+    
+    _processBatch() {
+        const result = processBatch(this.batch);
+        this.push(result);
+        this.batch = [];
+    }
 }
-
-// Usage
-const reverser = new ReverseStream();
-process.stdin
-    .pipe(reverser)
-    .pipe(process.stdout);
 ```
 
-### 2. How do you handle stream errors and backpressure?
-
-1. Error Handling:
+### 3. Performance Optimization
 ```javascript
 const fs = require('fs');
 const { pipeline } = require('stream');
+const zlib = require('zlib');
 
-function handleStreams(inputFile, outputFile) {
-    const readStream = fs.createReadStream(inputFile);
-    const writeStream = fs.createWriteStream(outputFile);
+// Use pipeline for better error handling
+async function compressFile(input, output) {
+    const gzip = zlib.createGzip({
+        level: zlib.constants.Z_BEST_COMPRESSION,
+        memLevel: 9
+    });
     
-    // Using pipeline for better error handling
-    pipeline(
-        readStream,
-        writeStream,
-        (err) => {
-            if (err) {
-                console.error('Pipeline failed:', err);
-            } else {
-                console.log('Pipeline succeeded');
-            }
-        }
+    await pipeline(
+        fs.createReadStream(input),
+        gzip,
+        fs.createWriteStream(output)
     );
-    
-    // Individual error handlers
-    readStream.on('error', (err) => {
-        console.error('Read error:', err);
-    });
-    
-    writeStream.on('error', (err) => {
-        console.error('Write error:', err);
-    });
 }
-```
 
-2. Backpressure Management:
-```javascript
-const fs = require('fs');
-
-class ThrottledStream extends Writable {
-    constructor(options) {
-        super(options);
-        this.delay = options.delay || 100;
-    }
-    
-    _write(chunk, encoding, callback) {
-        // Simulate processing delay
-        setTimeout(() => {
-            console.log(chunk.toString());
+// Implement backpressure handling
+class ThrottledStream extends Transform {
+    _transform(chunk, encoding, callback) {
+        if (this._isBackpressured()) {
+            setTimeout(() => {
+                this.push(chunk);
+                callback();
+            }, 100);
+        } else {
+            this.push(chunk);
             callback();
-        }, this.delay);
-    }
-}
-
-// Usage with backpressure handling
-const readable = fs.createReadStream('large.txt');
-const throttled = new ThrottledStream({ delay: 100 });
-
-readable.pipe(throttled);
-
-// Monitor backpressure
-readable.on('data', () => {
-    const readableBuffered = readable.readableLength;
-    const writableBuffered = throttled.writableLength;
-    
-    console.log(`Buffered: Read=${readableBuffered}, Write=${writableBuffered}`);
-});
-```
-
-### 3. How do you implement stream multiplexing?
-
-```javascript
-const { PassThrough } = require('stream');
-
-class Multiplexer {
-    constructor() {
-        this.streams = new Map();
-    }
-    
-    createStream(id) {
-        const stream = new PassThrough();
-        this.streams.set(id, stream);
-        return stream;
-    }
-    
-    removeStream(id) {
-        const stream = this.streams.get(id);
-        if (stream) {
-            stream.end();
-            this.streams.delete(id);
         }
     }
     
-    broadcast(data) {
-        for (const stream of this.streams.values()) {
-            stream.write(data);
-        }
+    _isBackpressured() {
+        return !this._readableState.needDrain;
     }
 }
-
-// Usage example
-const mux = new Multiplexer();
-
-// Create multiple streams
-const stream1 = mux.createStream(1);
-const stream2 = mux.createStream(2);
-
-// Handle data on individual streams
-stream1.on('data', (data) => {
-    console.log('Stream 1:', data.toString());
-});
-
-stream2.on('data', (data) => {
-    console.log('Stream 2:', data.toString());
-});
-
-// Broadcast data to all streams
-mux.broadcast('Hello to all streams!');
 ```
 
-### 4. How do you implement stream chaining with promises?
-
+### 4. Resource Cleanup
 ```javascript
-const { Transform } = require('stream');
-const { promisify } = require('util');
-const pipeline = promisify(require('stream').pipeline);
+const { finished } = require('stream');
 
-// Transform streams
-class UppercaseTransform extends Transform {
-    _transform(chunk, encoding, callback) {
-        this.push(chunk.toString().toUpperCase());
-        callback();
-    }
+function cleanup(stream) {
+    finished(stream, (error) => {
+        if (error) {
+            console.error('Stream failed:', error);
+        }
+        // Cleanup resources
+        stream.destroy();
+    });
 }
 
-class ReverseTransform extends Transform {
-    _transform(chunk, encoding, callback) {
-        this.push(chunk.toString().split('').reverse().join(''));
-        callback();
-    }
+// Usage with multiple streams
+function processStreams(input, output) {
+    const readStream = fs.createReadStream(input);
+    const writeStream = fs.createWriteStream(output);
+    
+    cleanup(readStream);
+    cleanup(writeStream);
+    
+    readStream
+        .pipe(transform)
+        .pipe(writeStream);
 }
-
-// Promise-based stream processing
-async function processStream(inputStream) {
-    try {
-        await pipeline(
-            inputStream,
-            new UppercaseTransform(),
-            new ReverseTransform(),
-            process.stdout
-        );
-        console.log('Processing completed');
-    } catch (err) {
-        console.error('Processing failed:', err);
-    }
-}
-
-// Usage
-const { Readable } = require('stream');
-const source = Readable.from(['hello', 'world']);
-processStream(source);
 ```
