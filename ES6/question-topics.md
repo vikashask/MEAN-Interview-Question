@@ -3,17 +3,18 @@
 ## Core Features
 
 ### 1. let and const
+
 ```javascript
 // Block scoping with let
 {
-    let x = 1;
-    // x is only accessible here
+  let x = 1;
+  // x is only accessible here
 }
 
 // Constants
 const PI = 3.14159;
 const CONFIG = {
-    api: 'https://api.example.com'
+  api: "https://api.example.com",
 };
 
 // Object freezing for true immutability
@@ -21,28 +22,30 @@ Object.freeze(CONFIG);
 ```
 
 ### 2. Arrow Functions
+
 ```javascript
 // Basic syntax
 const add = (a, b) => a + b;
 
 // With block body
 const multiply = (a, b) => {
-    const result = a * b;
-    return result;
+  const result = a * b;
+  return result;
 };
 
 // Lexical this
 class Timer {
-    constructor() {
-        this.seconds = 0;
-        setInterval(() => this.seconds++, 1000);
-    }
+  constructor() {
+    this.seconds = 0;
+    setInterval(() => this.seconds++, 1000);
+  }
 }
 ```
 
 ### 3. Template Literals
+
 ```javascript
-const name = 'John';
+const name = "John";
 const greeting = `Hello ${name}!`;
 
 // Multi-line strings
@@ -55,97 +58,105 @@ const html = `
 
 // Tagged templates
 function highlight(strings, ...values) {
-    return strings.reduce((acc, str, i) => 
-        acc + str + (values[i] ? `<span>${values[i]}</span>` : ''), '');
+  return strings.reduce(
+    (acc, str, i) => acc + str + (values[i] ? `<span>${values[i]}</span>` : ""),
+    ""
+  );
 }
 ```
 
 ## Classes and Modules
 
 ### 1. Class Syntax
+
 ```javascript
 class Person {
-    constructor(name) {
-        this.name = name;
-    }
+  constructor(name) {
+    this.name = name;
+  }
 
-    sayHello() {
-        return `Hello, I'm ${this.name}`;
-    }
+  sayHello() {
+    return `Hello, I'm ${this.name}`;
+  }
 
-    static create(name) {
-        return new Person(name);
-    }
+  static create(name) {
+    return new Person(name);
+  }
 }
 
 // Inheritance
 class Employee extends Person {
-    constructor(name, role) {
-        super(name);
-        this.role = role;
-    }
+  constructor(name, role) {
+    super(name);
+    this.role = role;
+  }
 }
 ```
 
 ### 2. Modules
+
 ```javascript
 // Named exports
 export const PI = 3.14159;
 export function square(x) {
-    return x * x;
+  return x * x;
 }
 
 // Default export
 export default class Calculator {
-    // ...
+  // ...
 }
 
 // Importing
-import Calculator, { PI, square } from './math';
-import * as MathUtils from './math';
+import Calculator, { PI, square } from "./math";
+import * as MathUtils from "./math";
 ```
 
 ## Enhanced Object Features
 
 ### 1. Object Property Shorthand
+
 ```javascript
-const name = 'John';
+const name = "John";
 const age = 30;
 
 const person = {
-    name,
-    age,
-    sayHi() {
-        return `Hi, I'm ${this.name}`;
-    }
+  name,
+  age,
+  sayHi() {
+    return `Hi, I'm ${this.name}`;
+  },
 };
 ```
 
 ### 2. Computed Property Names
+
 ```javascript
-const prefix = 'user';
+const prefix = "user";
 const userConfig = {
-    [`${prefix}_name`]: 'John',
-    [`${prefix}_age`]: 30
+  [`${prefix}_name`]: "John",
+  [`${prefix}_age`]: 30,
 };
 ```
 
 ### 3. Object Destructuring
+
 ```javascript
 const { name, age } = person;
 
 // With default values
-const { title = 'Untitled', body = '' } = post;
+const { title = "Untitled", body = "" } = post;
 
 // Nested destructuring
 const {
-    address: { city, country }
+  address: { city, country },
 } = user;
 ```
 
 ## Arrays and Iterables
 
 ### 1. Array Destructuring
+
 ```javascript
 const [first, second, ...rest] = numbers;
 
@@ -153,11 +164,13 @@ const [first, second, ...rest] = numbers;
 const [, , third] = numbers;
 
 // Swap variables
-let a = 1, b = 2;
+let a = 1,
+  b = 2;
 [a, b] = [b, a];
 ```
 
 ### 2. Spread Operator
+
 ```javascript
 // Array spread
 const combined = [...arr1, ...arr2];
@@ -165,110 +178,117 @@ const copy = [...original];
 
 // Object spread
 const enhanced = {
-    ...baseObject,
-    newProp: 'value'
+  ...baseObject,
+  newProp: "value",
 };
 ```
 
 ### 3. Iterators and for...of
+
 ```javascript
 // Custom iterator
 const range = {
-    from: 1,
-    to: 5,
-    [Symbol.iterator]() {
-        return {
-            current: this.from,
-            last: this.to,
-            next() {
-                if (this.current <= this.last) {
-                    return { done: false, value: this.current++ };
-                }
-                return { done: true };
-            }
-        };
-    }
+  from: 1,
+  to: 5,
+  [Symbol.iterator]() {
+    return {
+      current: this.from,
+      last: this.to,
+      next() {
+        if (this.current <= this.last) {
+          return { done: false, value: this.current++ };
+        }
+        return { done: true };
+      },
+    };
+  },
 };
 
 for (const num of range) {
-    console.log(num);
+  console.log(num);
 }
 ```
 
 ## Promises and Async
 
 ### 1. Promises
+
 ```javascript
 function fetchUser(id) {
-    return new Promise((resolve, reject) => {
-        // Async operation
-        if (user) {
-            resolve(user);
-        } else {
-            reject(new Error('User not found'));
-        }
-    });
+  return new Promise((resolve, reject) => {
+    // Async operation
+    if (user) {
+      resolve(user);
+    } else {
+      reject(new Error("User not found"));
+    }
+  });
 }
 
 // Promise chaining
 fetchUser(1)
-    .then(user => fetchOrders(user))
-    .then(orders => processOrders(orders))
-    .catch(error => console.error(error));
+  .then((user) => fetchOrders(user))
+  .then((orders) => processOrders(orders))
+  .catch((error) => console.error(error));
 ```
 
 ### 2. Async/Await
+
 ```javascript
 async function getUserData() {
-    try {
-        const user = await fetchUser(1);
-        const orders = await fetchOrders(user);
-        return processOrders(orders);
-    } catch (error) {
-        console.error(error);
-    }
+  try {
+    const user = await fetchUser(1);
+    const orders = await fetchOrders(user);
+    return processOrders(orders);
+  } catch (error) {
+    console.error(error);
+  }
 }
 ```
 
 ## Other Features
 
 ### 1. Default Parameters
+
 ```javascript
-function greet(name = 'Guest', greeting = 'Hello') {
-    return `${greeting}, ${name}!`;
+function greet(name = "Guest", greeting = "Hello") {
+  return `${greeting}, ${name}!`;
 }
 ```
 
 ### 2. Rest Parameters
+
 ```javascript
 function sum(...numbers) {
-    return numbers.reduce((total, n) => total + n, 0);
+  return numbers.reduce((total, n) => total + n, 0);
 }
 ```
 
 ### 3. Map and Set
+
 ```javascript
 // Map
 const userRoles = new Map();
-userRoles.set(user1, 'admin');
-userRoles.set(user2, 'user');
+userRoles.set(user1, "admin");
+userRoles.set(user2, "user");
 
 // Set
 const uniqueNumbers = new Set([1, 2, 2, 3, 3]);
 ```
 
 ### 4. Symbols
+
 ```javascript
-const MY_KEY = Symbol('my_key');
+const MY_KEY = Symbol("my_key");
 const obj = {
-    [MY_KEY]: 'value'
+  [MY_KEY]: "value",
 };
 
 // Well-known symbols
 class CustomIterator {
-    [Symbol.iterator]() {
-        // ...
-    }
+  [Symbol.iterator]() {
+    // ...
+  }
 }
 ```
 
