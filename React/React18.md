@@ -1,87 +1,711 @@
-### React 18 features
+# React 18 New Features
 
-> • Automatic Batching
-> • Concurrent Rendering
-> • Root API
-> • Suspense API
+React 18 introduced several significant improvements and new features to enhance React applications. Here are the key additions:
+
+## Concurrent Rendering
+
+React 18 introduces a new concurrent renderer that enables several new features:
+
+- **Automatic Batching**: Multiple state updates in the same synchronous event are batched together, reducing re-renders and improving performance
+- **Transitions**: New API for marking UI updates as non-urgent, allowing more important updates to interrupt them
+- **Suspense on the Server**: Server-side rendering improvements with streaming and selective hydration
+
+### Understanding Concurrent Rendering
+
+Concurrent rendering allows React to prepare multiple versions of your UI at the same time, making your app more responsive. Unlike the previous synchronous rendering model where once React started rendering, it couldn't be interrupted, concurrent rendering can:
+
+- Pause rendering to handle more urgent updates
+- Abandon in-progress renders that are no longer needed
+- Reuse previous work that was done but not committed
+
+This leads to significantly smoother user interfaces, especially in complex applications with frequent updates or on devices with slower processing capabilities.
+
+```jsx
+// Example showing how concurrent rendering benefits user experience
+function ComplexDashboard() {
+  const [searchText, setSearchText] = useState("");
+  const [isPending, startTransition] = useTransition();
+
+  // Without concurrent mode, this would block the UI
+  const handleChange = (e) => {
+    // This update is processed immediately (high priority)
+    setSearchText(e.target.value);
+
+    // These updates are marked as transitions (lower priority)
+    startTransition(() => {
+      // Complex filtering and data processing
+      setFilteredResults(filterMillionsOfRecords(e.target.value));
+      setAnalytics(calculateAnalytics(e.target.value));
+      setRecommendations(generateRecommendations(e.target.value));
+    });
+  };
+
+  return (
+    <>
+      <input value={searchText} onChange={handleChange} />
+      {isPending ? (
+        <div>Processing your request...</div>
+      ) : (
+        <DashboardResults results={filteredResults} />
+      )}
+    </>
+  );
+}
+```
+
+## New APIs
+
+### Concurrent Mode APIs
+
+```jsx
+// startTransition - marks updates as non-urgent
+import { startTransition } from "react";
+
+// Urgent update (like typing in an input)
+setInputValue(input);
+
+// Non-urgent update (like filtering search results)
+startTransition(() => {
+  setSearchQuery(input);
+});
+
+// useTransition - hook version with isPending state
+import { useTransition } from "react";
+
+function SearchComponent() {
+  const [isPending, startTransition] = useTransition();
+
+  return (
+    <>
+      <input
+        onChange={(e) => {
+          // Urgent update
+          setInputValue(e.target.value);
+
+          // Non-urgent update
+          startTransition(() => {
+            setSearchResults(search(e.target.value));
+          });
+        }}
+      />
+
+      {isPending ? <Spinner /> : <SearchResults />}
+    </>
+  );
+}
+```
+
+#### When to Use Transitions
+
+Transitions are ideal for:
+
+1. **Search-as-you-type interfaces**: Keep the input field responsive while search results update asynchronously
+2. **Tab switching**: Make tab selection immediate while the tab content loads with a lower priority
+3. **Navigation**: Keep the current page interactive while preparing the next page
+4. **Data visualizations**: Update complex charts and graphs without freezing the UI
+
+```jsx
+// Real-world example: Responsive tab interface with transitions
+function TabContainer() {
+  const [activeTab, setActiveTab] = useState("home");
+  const [isPending, startTransition] = useTransition();
+
+  const selectTab = (tabId) => {
+    // This state update is processed immediately
+    setSelectedTabId(tabId);
+
+    // Tab content loading is deferred
+    startTransition(() => {
+      setActiveTab(tabId);
+    });
+  };
+
+  return (
+    <>
+      <TabList onTabSelect={selectTab} selectedId={selectedTabId} />
+      {isPending ? (
+        <div className="tab-transition-indicator">
+          <Spinner size="small" /> Loading content...
+        </div>
+      ) : (
+        <TabContent id={activeTab} />
+      )}
+    </>
+  );
+}
+```
+
+### Suspense Improvements
+
+```jsx
+// Suspense now works with data fetching in SSR
+<Suspense fallback={<Loading />}>
+  <Comments />
+</Suspense>
+```
+
+#### Enhanced Suspense Capabilities
+
+React 18 significantly improves Suspense, especially for server-side rendering:
+
+1. **Streaming Server Rendering**: Send HTML progressively from the server, allowing the browser to display content sooner
+2. **Selective Hydration**: Hydrate components as they become visible or are interacted with, rather than all at once
+3. **Nested Suspense Boundaries**: More granular control over loading states
+
+```jsx
+// Example of nested Suspense boundaries in a dashboard
+function Dashboard() {
+  return (
+    <div className="dashboard">
+      <Suspense fallback={<PageSkeleton />}>
+        <Header />
+
+        <div className="dashboard-content">
+          <Suspense fallback={<ChartSkeleton />}>
+            <AnalyticsChart />
+          </Suspense>
+
+          <div className="dashboard-panels">
+            <Suspense fallback={<PanelSkeleton />}>
+              <RecentActivities />
+            </Suspense>
+
+            <Suspense fallback={<PanelSkeleton />}>
+              <UserStats />
+            </Suspense>
+          </div>
+
+          <Suspense fallback={<TableSkeleton />}>
+            <DataTable />
+          </Suspense>
+        </div>
+
+        <Footer />
+      </Suspense>
+    </div>
+  );
+}
+```
+
+### New Hooks
+
+```jsx
+// useId - for generating unique IDs that work in SSR
+import { useId } from "react";
+
+function PasswordField() {
+  const id = useId();
+  return (
+    <>
+      <label htmlFor={id}>Password:</label>
+      <input id={id} type="password" />
+    </>
+  );
+}
+
+// useDeferredValue - defer updating less important parts of the UI
+import { useDeferredValue } from "react";
+
+function SearchResults({ query }) {
+  const deferredQuery = useDeferredValue(query);
+
+  // This component will re-render after more urgent updates
+  return <SearchResultsList query={deferredQuery} />;
+}
+
+// useSyncExternalStore - for subscribing to external stores
+import { useSyncExternalStore } from "react";
+
+function TodoList() {
+  const todos = useSyncExternalStore(
+    todoStore.subscribe,
+    todoStore.getSnapshot,
+    todoStore.getServerSnapshot
+  );
+
+  return (
+    <ul>
+      {todos.map((todo) => (
+        <li key={todo.id}>{todo.text}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+#### Detailed Hook Explanations
+
+##### useId
+
+The `useId` hook generates unique stable IDs that work across server and client, solving the hydration mismatch issues that previously occurred when generating IDs randomly.
+
+```jsx
+// Complex useId example with multiple related elements
+function FormField({ label }) {
+  const id = useId();
+  const errorMessageId = `${id}-error`;
+  const descriptionId = `${id}-description`;
+
+  return (
+    <div className="form-field">
+      <label htmlFor={id}>{label}</label>
+      <input
+        id={id}
+        aria-describedby={`${descriptionId} ${errorMessageId}`}
+        aria-invalid={hasError}
+      />
+      <p id={descriptionId} className="field-description">
+        {description}
+      </p>
+      {hasError && (
+        <p id={errorMessageId} className="error-message">
+          {errorMessage}
+        </p>
+      )}
+    </div>
+  );
+}
+```
+
+##### useDeferredValue
+
+Unlike `useTransition` which is triggered imperatively, `useDeferredValue` is declarative and works well when you don't have direct control over the state updates (e.g., props from a parent).
+
+```jsx
+// useDeferredValue for expensive list filtering
+function FilterableProductTable({ products, filterText }) {
+  // Defer the expensive filtering operation
+  const deferredFilterText = useDeferredValue(filterText);
+
+  // Indicate to the user if we're showing stale content
+  const isStale = deferredFilterText !== filterText;
+
+  // Memoize the filtered list to avoid recalculation
+  const filteredProducts = useMemo(() => {
+    console.log(`Filtering with query: ${deferredFilterText}`);
+    return products.filter((product) =>
+      product.name.toLowerCase().includes(deferredFilterText.toLowerCase())
+    );
+  }, [products, deferredFilterText]);
+
+  return (
+    <div className={isStale ? "stale-content" : ""}>
+      <ProductTable products={filteredProducts} />
+      {isStale && <div className="stale-indicator">Updating...</div>}
+    </div>
+  );
+}
+```
+
+##### useSyncExternalStore
+
+This hook provides a safe way to subscribe to external data sources in a way that's compatible with concurrent rendering. It's especially useful for integrating with third-party state management libraries.
+
+```jsx
+// Integration with Redux using useSyncExternalStore
+function useSelectorWithSyncExternalStore(selector) {
+  const store = useContext(ReduxStoreContext);
+
+  return useSyncExternalStore(
+    // Subscribe function
+    (callback) => {
+      const unsubscribe = store.subscribe(callback);
+      return unsubscribe;
+    },
+    // Get snapshot function
+    () => selector(store.getState()),
+    // Get server snapshot (for SSR)
+    () => selector(store.getState())
+  );
+}
+
+function ProductCounter() {
+  const productCount = useSelectorWithSyncExternalStore(
+    (state) => state.products.length
+  );
+
+  return <div>Total Products: {productCount}</div>;
+}
+```
+
+## Root API Changes
+
+React 18 introduces a new root API that enables concurrent features:
+
+```jsx
+// Old API (React 17 and earlier)
+import ReactDOM from "react-dom";
+ReactDOM.render(<App />, document.getElementById("root"));
+
+// New API (React 18)
+import ReactDOM from "react-dom/client";
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+```
+
+### Benefits of the New Root API
+
+The new root API unlocks several capabilities:
+
+1. **Better error handling** with `onRecoverableError`
+2. **Support for concurrent features**
+3. **Improved hydration API** with `hydrateRoot`
+4. **More consistent behavior** across different rendering scenarios
+
+```jsx
+// Creating a root with advanced options
+const root = ReactDOM.createRoot(document.getElementById("root"), {
+  // Called when React recovers from errors
+  onRecoverableError: (error, errorInfo) => {
+    logErrorToService(error, errorInfo);
+  },
+  identifierPrefix: "app-", // Prefix for useId-generated IDs
+});
+
+// Hydrating server-rendered content
+const hydratedRoot = ReactDOM.hydrateRoot(
+  document.getElementById("root"),
+  <App />,
+  {
+    onRecoverableError: handleError,
+    // Called when hydration is completed
+    onHydrated: () => {
+      console.log("Hydration completed");
+      performance.mark("hydration-complete");
+    },
+  }
+);
+```
+
+## Server Components (Experimental)
+
+React Server Components allow components to run on the server and stream the result to the client:
+
+- Zero bundle size for server components
+- Full access to the server environment
+- Automatic code-splitting
+- No client-server waterfalls
+
+### Server Component Architecture
+
+Server Components represent a fundamental shift in React's architecture, creating a true server-client hybrid rendering model:
+
+1. **Server Components (`.server.js`)**: Run only on the server and have no client bundle impact
+2. **Client Components (`.client.js`)**: Run on the client and can be interactive
+3. **Shared Components (`.js`)**: Can run in either environment
+
+```jsx
+// UserProfile.server.js - Server component
+import { db } from '../database.server';
+import UserAvatar from './UserAvatar.client';
+import UserDetails from './UserDetails';
+
+export default async function UserProfile({ userId }) {
+  // Direct database access without client-side code
+  const user = await db.users.findUnique({ where: { id: userId } });
+
+  // Server components can render client components
+  return (
+    <div className="user-profile">
+      <UserAvatar user={user} /> {/* Client component */}
+      <UserDetails user={user} /> {/* Shared component */}
+      <ServerOnlyStats userId={user.id} /> {/* Server-only component */}
+    </div>
+  );
+}
+
+// ServerOnlyStats.server.js
+export default async function ServerOnlyStats({ userId }) {
+  // Access server-only APIs and sensitive data
+  const stats = await db.analytics.getUserStats(userId);
+  const secretThreshold = process.env.SECRET_THRESHOLD;
+
+  return (
+    <div className="user-stats">
+      {/* Complex stats calculations done server-side */}
+      {stats.map(stat => (
+        <StatDisplay
+          key={stat.id}
+          value={stat.value}
+          isHighlighted={stat.value > secretThreshold}
+        />
+      ))}
+    </div>
+  );
+}
+```
+
+## Strict Mode Improvements
+
+Enhanced development mode that helps find bugs earlier by:
+
+- Double-invoking component functions to find side effects
+- Double-invoking effects to ensure proper cleanup
+- Checking for deprecated APIs
+
+### Strict Mode Testing Strategies
+
+React 18's strict mode is more stringent to help developers find concurrency-related bugs:
+
+```jsx
+// Wrapping your app in StrictMode for development
+import { StrictMode } from "react";
+import ReactDOM from "react-dom/client";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+);
+
+// Example of proper effect cleanup that passes strict mode checks
+function DataFetcher({ url }) {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    async function fetchData() {
+      try {
+        const response = await fetch(url, { signal });
+        const result = await response.json();
+
+        // Prevent state updates if component unmounted
+        if (isMounted) {
+          setData(result);
+        }
+      } catch (error) {
+        if (error.name !== "AbortError" && isMounted) {
+          console.error("Fetch error:", error);
+        }
+      }
+    }
+
+    fetchData();
+
+    // Proper cleanup function
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, [url]);
+
+  return data ? <DataDisplay data={data} /> : <Loading />;
+}
+```
 
 ## Automatic Batching
 
-Whenever you are using setState to change a variable inside any function, instead of making a render at each setState,
-React instead collects all setStates and then executes them together. This is known as batching.
+```jsx
+// Before React 18
+function handleClick() {
+  setCount((c) => c + 1); // Causes a re-render
+  setFlag((f) => !f); // Causes a re-render
+}
 
-Starting in React 18 with [createRoot], all state updates will be automatically batched,
-no matter where they originate from.
-This means that updates inside of timeouts, promises, native event handlers or any other event will batch the same way as updates inside of React events.
-This will result in less rendering work by React, and therefore better performance in applications.
+// React 18 with automatic batching
+function handleClick() {
+  setCount((c) => c + 1); // Does not cause a re-render
+  setFlag((f) => !f); // Both updates are batched and cause only one re-render
+}
+```
 
-> Disable automatic batching
+### Advanced Batching Examples
 
-### In React 18, we will have two root APIs: the `legacy root API and new root API`.
+Automatic batching now works in promises, setTimeout, native event handlers, and more:
 
-> Legacy root API (will be deprecated in upcoming versions)
-> The legacy root API is the existing API called with the ReactDOM.render method.
+```jsx
+// Batching in async contexts (didn't work before React 18)
+function handleAsyncClick() {
+  // These updates will be batched
+  setCount((c) => c + 1);
+  setFlag((f) => !f);
 
-> New root API
-> The new root API will be invoked with the ReactDOM.createRoot method. To use it, first, we have to create the root through the createRoot method with the root element as an argument.
-> Then, we call the root.render method and pass the app component as the parameter. By using the new root API, we can use all the enhancements and concurrent features available in React 18.
+  // Pre-React 18, these would cause separate renders
+  // Now they're automatically batched
+  fetch("/api/data").then(() => {
+    setCount((c) => c + 1);
+    setFlag((f) => !f);
+  });
 
-Changes in hydrate method
-The hydrate method is similar to the render method. But it helps to attach event listeners to the HTML elements within the containers that are rendered by the ReactDOMServer method on the server side.
-React 18 replaces this hydrate method with the hydrateRoot method.
-Changes in render callback
-The render callback is removed from the new root API. But we can pass it as property to the root component.
+  setTimeout(() => {
+    // These also get batched in React 18
+    setCount((c) => c + 1);
+    setFlag((f) => !f);
+  }, 1000);
+}
 
-Concurrency
-The major theme for this release is concurrency. To start with, let's look at what concurrency is. Concurrency is the ability to execute multiple tasks simultaneously. Taking the example of a standard React app, let's consider that an animation is playing in a component, and at the same time a user is
-able to click or type in other React components.
-Here, while the user is typing and clicking on buttons, an animation is also rendering there within the context of React.
-React has to manage all the function calls, hook calls, and event callbacks, several of which can even occur at the same time. If React spends all its time rendering animation frames, the user will feel like
-the app is "stuck", since it won't react to their inputs.
-Now React, running on a single threaded process, has to combine, reorder and prioritize these events and functions so that it can give users an optimum and performant experience.
-To do this, React uses a "dispatcher" internally which is responsible for prioritizing and invoking these callbacks.
-Before React 18, the user had no way to control the invocation order of these functions. But now, React is giving some control of this event loop to the user via the Transition API.
-Transition API
-The developers of React have exposed a few APIs which allow React users to have some control over concurrency.
-One of these APIs is startTransition, which allows developers to indicate to React which actions may block the thread and cause lag on screen.
-Typically, these actions are the ones you might have previously used debounce for, like network calls via a search API, or render-heavy processes like searching through an array of 1000 strings.
-Updates wrapped in startTransition are marked as non-urgent and are interrupted if more urgent updates like clicks or key presses come in.
-If a transition gets interrupted by the user (for example, by typing multiple letters into a search field),
-React will throw out the stale rendering work that wasn’t finished and render only the latest update.
-To understand this in more detail, let's consider a component with a search field. Let's say it has 2 functions to control the state:
-// Update input value
-setInputValue(input)
+// Opting out of automatic batching (rare cases)
+import { flushSync } from "react-dom";
 
-// Update the searched value and search results
-setSearchQuery(input);
-setInputValue is responsible for updating the input field, while setSearchQuery is responsible for performing search based on the present input value. Now, if these function calls happened synchronously every time the user started typing, either of 2 things would happen:
+function handleManualFlush() {
+  // Normal batched update
+  setCounter((c) => c + 1);
 
-1. Several search calls would be made, which would delay or slow down other network calls.
-2. Or, more likely, the search operation would turn out to be very heavy and would lock up the screen on each keystroke.
-   One way to solve this problem would've been using debounce, which would space out the network calls or search operations. But, the problem with debounce is that we have to play with and optimize
-   the debounce timer quite frequently.
-   So in this case, we can wrap setSearchQuery in startTransition, allowing it to handle it as non-urgent and to be delayed as long as the user is typing.
-   Transitions let you keep most interactions snappy even if they lead to significant UI changes. They also let you avoid wasting time rendering content that's no longer relevant.
-   React also provides a new hook called useTransition , so you can show a loader while the transition is pending. This helps in indicating to the user that the app is processing their input and will display the results shortly.
+  // Forces a synchronous render
+  flushSync(() => {
+    setFlag(true);
+  });
+  // Component has re-rendered by this point
 
-As a rule of thumb, you can use the transition API wherever network calls or render-blocking processes are present.
-The Suspense API
-React 18 includes a lot of changes to improve React performance in a Server-Side Rendered context. Server-side rendering is a way of rendering the JS data to HTML on the server to save computation on the frontend. This results in a faster initial page load in most cases.
-React performs Server Side Rendering in 4 sequential steps:
-• On the server, data is fetched for each component.
-• On the server, the entire app is rendered to HTML and sent to the client.
-• On the client, the JavaScript code for the entire app is fetched.
-• On the client, the JavaScript connects React to the server-generated HTML, which is known as Hydration.
-React 18 introduces the Suspense API, which allows you to break down your app into smaller independent units, which will go through these steps independently and won’t block the rest of the app. As a result, your app’s users will see the content sooner and be able to start interacting with it much faster.
-How does the Suspense API work?
-Streaming HTML
-With today’s SSR, rendering HTML and hydration are “all or nothing”. The client has to fetch and hydrate all of the app at once.
+  // This will cause another render
+  flushSync(() => {
+    setCount((c) => c + 10);
+  });
+}
+```
 
-But React 18 gives you a new possibility. You can wrap a part of the page with <Suspense>.
-By wrapping the component in <Suspense>, we tell React that it doesn’t need to wait for comments to start streaming the HTML for the rest of the page. Instead, React will send the placeholder (a spinner) instead.
-When the data for the comments is ready on the server, React will send additional HTML into the same stream, as well as a minimal inline <script> tag to put that HTML in the “right place”.
-Selective Hydration
-Before React 18, hydration couldn't start if the complete JavaScript code for the app hadn't loaded in. For larger apps, this process can take a while.
-But in React 18, <Suspense> lets you hydrate the app before the child components have loaded in.
-By wrapping components in <Suspense>, you can tell React that they shouldn’t block the rest of the page from streaming—and even hydration. This means that you no longer have to wait for all the code to load in order to start hydrating. React can hydrate parts as they’re being loaded.
-These 2 features of Suspense and several other changes introduced in React 18 speed up initial page loads tremendously.
+## Performance Improvements
+
+- Selective Hydration - hydrate components based on user interaction
+- Memory usage improvements
+- Faster server-side rendering with streaming
+
+### Selective Hydration Deep Dive
+
+Selective hydration represents a major performance advancement for server-rendered React applications:
+
+```jsx
+// App with selective hydration benefits
+import { Suspense } from "react";
+
+function App() {
+  return (
+    <Layout>
+      <NavBar />
+
+      {/* This content hydrates first because it's visible */}
+      <MainContent />
+
+      {/* Each Suspense boundary can hydrate independently */}
+      <Suspense fallback={<CommentsSkeleton />}>
+        <Comments />
+      </Suspense>
+
+      {/* This will hydrate only when scrolled into view */}
+      <Suspense fallback={<RelatedArticlesSkeleton />}>
+        <RelatedArticles />
+      </Suspense>
+
+      <Suspense fallback={<FooterSkeleton />}>
+        <Footer />
+      </Suspense>
+    </Layout>
+  );
+}
+```
+
+Key performance benefits include:
+
+1. **Prioritized Hydration**: Most important content hydrates first
+2. **Interaction-based Prioritization**: Elements are prioritized based on user interaction
+3. **Partial Hydration**: Only components in view are initially hydrated
+4. **Interleaved Hydration**: Hydration work is split into small chunks to keep the main thread responsive
+
+### Streaming SSR Architecture
+
+React 18 enables streaming HTML from the server with progressive enhancement:
+
+```jsx
+// server.js - Streaming SSR implementation
+import { renderToPipeableStream } from "react-dom/server";
+import App from "./App";
+
+function handleRequest(req, res) {
+  const { pipe, abort } = renderToPipeableStream(<App />, {
+    // Called when shell content is ready
+    onShellReady() {
+      res.statusCode = 200;
+      res.setHeader("Content-type", "text/html");
+      pipe(res);
+    },
+    // Called when all Suspense boundaries are resolved
+    onAllReady() {
+      // For crawlers or static generation
+      console.log("All content loaded");
+    },
+    // Error handling
+    onError(error) {
+      console.error(error);
+      res.statusCode = 500;
+      res.send("Server error");
+    },
+  });
+
+  // Handle request timeouts
+  setTimeout(() => {
+    abort();
+  }, 10000);
+}
+```
+
+## Browser Support
+
+React 18 no longer supports Internet Explorer, which was officially deprecated by Microsoft.
+
+### Browser Compatibility Details
+
+React 18 supports all modern browsers including:
+
+- Chrome, Firefox, Safari, and Edge latest versions
+- iOS Safari and Android Chrome latest versions
+- Limited support for older browser versions through polyfills
+
+Key browser requirements:
+
+- ES6 support (arrow functions, classes, etc.)
+- Promise support
+- Map and Set support
+- requestAnimationFrame support
+
+If you need to support Internet Explorer or other older browsers, you'll need to:
+
+1. Use React 17 or earlier
+2. Add appropriate polyfills
+3. Consider using a compatibility build process
+
+## Migration Guide
+
+### Upgrading to React 18
+
+1. **Update dependencies**:
+
+```bash
+npm install react@18 react-dom@18
+```
+
+2. **Change root API**:
+
+```jsx
+// Before
+import ReactDOM from "react-dom";
+ReactDOM.render(<App />, container);
+
+// After
+import ReactDOM from "react-dom/client";
+const root = ReactDOM.createRoot(container);
+root.render(<App />);
+```
+
+3. **Review effect cleanup code**:
+
+```jsx
+useEffect(() => {
+  // Setup logic
+
+  return () => {
+    // Make sure cleanup code properly removes all side effects
+  };
+}, [deps]);
+```
+
+4. **Update testing libraries**:
+
+```bash
+npm install @testing-library/react@latest
+```
+
+5. **Gradually adopt concurrent features**:
+   Start with automatic batching benefits, then move to transitions and Suspense features as needed.
