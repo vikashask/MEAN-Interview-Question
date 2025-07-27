@@ -1,6 +1,6 @@
 > > > useContext lets you subscribe to React context without introducing nesting.
 
-```
+```jsx
 // main component (WishlistContext)
 export const WishlistContext = createContext();
 

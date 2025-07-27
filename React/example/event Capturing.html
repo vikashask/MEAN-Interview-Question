@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Capturing Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .box {
+            padding: 30px;
+            margin: 10px;
+            border: 1px solid #000;
+            cursor: pointer;
+        }
+        #grandparent {
+            background-color: #ffcccc;
+        }
+        #parent {
+            background-color: #ccffcc;
+        }
+        #child {
+            background-color: #ccccff;
+        }
+        .console {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            height: 200px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            margin: 5px 0;
+            padding: 3px;
+            border-bottom: 1px solid #eee;
+        }
+        .capture {
+            color: #cc0000;
+        }
+        .bubble {
+            color: #0000cc;
+        }
+        button {
+            margin-top: 10px;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Event Capturing Example</h1>
+    
+    <p>Click on the nested boxes below to see event capturing in action. The console below will show the order of event execution.</p>
+    
+    <div class="box" id="grandparent">
+        Grandparent
+        <div class="box" id="parent">
+            Parent
+            <div class="box" id="child">
+                Child
+            </div>
+        </div>
+    </div>
+    
+    <div>
+        <button id="toggleCapturing">Toggle Capturing (Currently: ON)</button>
+        <button id="toggleBubbling">Toggle Bubbling (Currently: ON)</button>
+        <button id="clearLog">Clear Log</button>
+    </div>
+    
+    <h3>Event Console:</h3>
+    <div class="console" id="eventConsole"></div>
+    
+    <script>
+        // DOM elements
+        const grandparent = document.getElementById('grandparent');
+        const parent = document.getElementById('parent');
+        const child = document.getElementById('child');
+        const eventConsole = document.getElementById('eventConsole');
+        const toggleCapturingBtn = document.getElementById('toggleCapturing');
+        const toggleBubblingBtn = document.getElementById('toggleBubbling');
+        const clearLogBtn = document.getElementById('clearLog');
+        
+        // Flags to control event listeners
+        let capturingEnabled = true;
+        let bubblingEnabled = true;
+        
+        // Log function to display events in our custom console
+        function logEvent(element, phase) {
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${phase === 'Capturing' ? 'capture' : 'bubble'}`;
+            entry.textContent = `${element} - ${phase} phase`;
+            eventConsole.appendChild(entry);
+            eventConsole.scrollTop = eventConsole.scrollHeight;
+        }
+        
+        // Function to remove all event listeners
+        function removeAllEventListeners() {
+            grandparent.removeEventListener('click', grandparentCapture, true);
+            parent.removeEventListener('click', parentCapture, true);
+            child.removeEventListener('click', childCapture, true);
+            
+            grandparent.removeEventListener('click', grandparentBubble, false);
+            parent.removeEventListener('click', parentBubble, false);
+            child.removeEventListener('click', childBubble, false);
+        }
+        
+        // Event handler functions - Capturing phase
+        function grandparentCapture(e) {
+            logEvent('Grandparent', 'Capturing');
+        }
+        
+        function parentCapture(e) {
+            logEvent('Parent', 'Capturing');
+        }
+        
+        function childCapture(e) {
+            logEvent('Child', 'Capturing');
+        }
+        
+        // Event handler functions - Bubbling phase
+        function grandparentBubble(e) {
+            logEvent('Grandparent', 'Bubbling');
+        }
+        
+        function parentBubble(e) {
+            logEvent('Parent', 'Bubbling');
+        }
+        
+        function childBubble(e) {
+            logEvent('Child', 'Bubbling');
+        }
+        
+        // Function to set up event listeners based on current settings
+        function setupEventListeners() {
+            removeAllEventListeners();
+            
+            if (capturingEnabled) {
+                grandparent.addEventListener('click', grandparentCapture, true);
+                parent.addEventListener('click', parentCapture, true);
+                child.addEventListener('click', childCapture, true);
+            }
+            
+            if (bubblingEnabled) {
+                grandparent.addEventListener('click', grandparentBubble, false);
+                parent.addEventListener('click', parentBubble, false);
+                child.addEventListener('click', childBubble, false);
+            }
+        }
+        
+        // Toggle capturing event listeners
+        toggleCapturingBtn.addEventListener('click', function() {
+            capturingEnabled = !capturingEnabled;
+            this.textContent = `Toggle Capturing (Currently: ${capturingEnabled ? 'ON' : 'OFF'})`;
+            setupEventListeners();
+        });
+        
+        // Toggle bubbling event listeners
+        toggleBubblingBtn.addEventListener('click', function() {
+            bubblingEnabled = !bubblingEnabled;
+            this.textContent = `Toggle Bubbling (Currently: ${bubblingEnabled ? 'ON' : 'OFF'})`;
+            setupEventListeners();
+        });
+        
+        // Clear the log
+        clearLogBtn.addEventListener('click', function() {
+            eventConsole.innerHTML = '';
+        });
+        
+        // Initial setup
+        setupEventListeners();
+        
+        // Example with stopPropagation()
+        const stopPropagationSection = document.createElement('div');
+        stopPropagationSection.innerHTML = `
+            <h2>Example with stopPropagation()</h2>
+            <p>In this example, event propagation stops at the parent level during capturing phase.</p>
+            <div class="box" id="stop-grandparent" style="background-color: #ffe0e0;">
+                Stop Grandparent
+                <div class="box" id="stop-parent" style="background-color: #e0ffe0;">
+                    Stop Parent (propagation stops here)
+                    <div class="box" id="stop-child" style="background-color: #e0e0ff;">
+                        Stop Child
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(stopPropagationSection);
+        
+        // stopPropagation example setup
+        const stopGrandparent = document.getElementById('stop-grandparent');
+        const stopParent = document.getElementById('stop-parent');
+        const stopChild = document.getElementById('stop-child');
+        
+        stopGrandparent.addEventListener('click', function(e) {
+            logEvent('Stop Grandparent', 'Capturing');
+        }, true);
+        
+        stopParent.addEventListener('click', function(e) {
+            logEvent('Stop Parent', 'Capturing');
+            e.stopPropagation(); // Stop propagation here
+            logEvent('⛔ Event propagation stopped!', 'Capturing');
+        }, true);
+        
+        stopChild.addEventListener('click', function(e) {
+            logEvent('Stop Child', 'Capturing');
+        }, true);
+        
+        stopGrandparent.addEventListener('click', function(e) {
+            logEvent('Stop Grandparent', 'Bubbling');
+        }, false);
+        
+        stopParent.addEventListener('click', function(e) {
+            logEvent('Stop Parent', 'Bubbling');
+        }, false);
+        
+        stopChild.addEventListener('click', function(e) {
+            logEvent('Stop Child', 'Bubbling');
+        }, false);
+    </script>
+</body>
+</html>

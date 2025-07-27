@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Bubbling Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .container {
+            border: 3px solid #333;
+            padding: 20px;
+            background-color: #f8f8f8;
+        }
+        
+        .outer {
+            border: 2px solid #0066cc;
+            padding: 20px;
+            background-color: #e6f0ff;
+            margin: 20px 0;
+        }
+        
+        .middle {
+            border: 2px solid #00cc66;
+            padding: 20px;
+            background-color: #e6fff0;
+        }
+        
+        .inner {
+            border: 2px solid #cc6600;
+            padding: 20px;
+            background-color: #fff0e6;
+            text-align: center;
+        }
+        
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        #log {
+            border: 1px solid #ddd;
+            padding: 10px;
+            height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        .stop-btn {
+            background-color: #f44336;
+        }
+        
+        .stop-btn:hover {
+            background-color: #d32f2f;
+        }
+        
+        .clear-btn {
+            background-color: #9e9e9e;
+        }
+    </style>
+</head>
+<body>
+    <h1>Event Bubbling in JavaScript</h1>
+    
+    <p>Event bubbling is when an event triggers on the deepest target element, and then bubbles up to ancestor elements in the DOM tree.</p>
+    
+    <div class="container">
+        <h3>Click on any element below to see event bubbling in action:</h3>
+        
+        <div id="outer" class="outer">
+            OUTER DIV
+            <div id="middle" class="middle">
+                MIDDLE DIV
+                <div id="inner" class="inner">
+                    INNER DIV
+                    <button id="clickBtn">Click Me!</button>
+                </div>
+            </div>
+        </div>
+        
+        <h3>Example with stopPropagation():</h3>
+        
+        <div id="outer2" class="outer">
+            OUTER DIV (try clicking here too)
+            <div id="middle2" class="middle">
+                MIDDLE DIV
+                <div id="inner2" class="inner">
+                    INNER DIV
+                    <button id="stopBtn" class="stop-btn">Click Me! (stops at middle)</button>
+                </div>
+            </div>
+        </div>
+        
+        <h3>Event Log:</h3>
+        <button id="clearLog" class="clear-btn">Clear Log</button>
+        <div id="log"></div>
+    </div>
+    
+    <div style="margin-top: 30px;">
+        <h2>Key Points About Event Bubbling:</h2>
+        <ul>
+            <li>Events bubble up from the target element to the root of the document.</li>
+            <li>You can stop event propagation with <code>event.stopPropagation()</code>.</li>
+            <li>There is also event capturing (reverse of bubbling) which can be enabled with the third parameter in <code>addEventListener</code>.</li>
+            <li>The event phases are: capturing → target → bubbling.</li>
+            <li>Event delegation takes advantage of bubbling to handle events efficiently.</li>
+        </ul>
+    </div>
+    
+    <script>
+        // Get DOM elements
+        const logDiv = document.getElementById('log');
+        const clearBtn = document.getElementById('clearLog');
+        
+        // First example - normal event bubbling
+        const outer = document.getElementById('outer');
+        const middle = document.getElementById('middle');
+        const inner = document.getElementById('inner');
+        const clickBtn = document.getElementById('clickBtn');
+        
+        // Second example - with stopPropagation
+        const outer2 = document.getElementById('outer2');
+        const middle2 = document.getElementById('middle2');
+        const inner2 = document.getElementById('inner2');
+        const stopBtn = document.getElementById('stopBtn');
+        
+        // Helper function to log events
+        function logEvent(text) {
+            const entry = document.createElement('div');
+            entry.textContent = `${new Date().toLocaleTimeString()}: ${text}`;
+            logDiv.prepend(entry);
+        }
+        
+        // Clear log function
+        clearBtn.addEventListener('click', function() {
+            logDiv.innerHTML = '';
+            logEvent('Log cleared');
+        });
+        
+        // Add event listeners for the first example
+        outer.addEventListener('click', function(e) {
+            logEvent('OUTER div clicked - event bubbled up to here');
+        });
+        
+        middle.addEventListener('click', function(e) {
+            logEvent('MIDDLE div clicked - event bubbled up to here');
+        });
+        
+        inner.addEventListener('click', function(e) {
+            logEvent('INNER div clicked - event bubbled up to here');
+        });
+        
+        clickBtn.addEventListener('click', function(e) {
+            logEvent('BUTTON clicked - event started here');
+        });
+        
+        // Add event listeners for the second example with stopPropagation
+        outer2.addEventListener('click', function(e) {
+            logEvent('OUTER div 2 clicked - event bubbled all the way up');
+        });
+        
+        middle2.addEventListener('click', function(e) {
+            logEvent('MIDDLE div 2 clicked - event stopped here! ⛔');
+            e.stopPropagation(); // This prevents the event from bubbling up to outer2
+        });
+        
+        inner2.addEventListener('click', function(e) {
+            logEvent('INNER div 2 clicked - event bubbling through');
+        });
+        
+        stopBtn.addEventListener('click', function(e) {
+            logEvent('STOP BUTTON clicked - event started here');
+        });
+        
+        // Example of capturing phase (opposite direction of bubbling)
+        // Uncomment to see capturing in action
+        /*
+        document.body.addEventListener('click', function(e) {
+            logEvent('CAPTURING: Body (capturing phase)');
+        }, true); // true enables capturing phase
+        
+        outer.addEventListener('click', function(e) {
+            logEvent('CAPTURING: Outer div (capturing phase)');
+        }, true);
+        */
+    </script>
+</body>
+</html>

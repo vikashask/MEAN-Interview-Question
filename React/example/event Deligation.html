@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Delegation Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .container {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .list-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .item {
+            padding: 10px 15px;
+            border: 1px solid #eee;
+            margin-bottom: 5px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .item:hover {
+            background-color: #f0f0f0;
+        }
+        .selected {
+            background-color: #e0f7fa;
+            border-left: 4px solid #00bcd4;
+        }
+        .dynamic-container {
+            margin-top: 20px;
+        }
+        button {
+            padding: 8px 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .console {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 20px;
+            height: 150px;
+            overflow-y: auto;
+        }
+        .console-entry {
+            margin: 5px 0;
+            padding: 3px;
+            border-bottom: 1px solid #eee;
+        }
+        .explanation {
+            background-color: #fffde7;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #ffd600;
+        }
+    </style>
+</head>
+<body>
+    <h1>Event Delegation Example</h1>
+    
+    <div class="explanation">
+        <h3>What is Event Delegation?</h3>
+        <p>Event delegation is a technique where you attach a single event listener to a parent element to handle events for all its child elements (including ones added dynamically later), instead of attaching individual listeners to each child element.</p>
+        <p>It works because of <strong>event bubbling</strong> - when an event happens on an element, it first runs handlers on it, then on its parent, and so on up the tree.</p>
+    </div>
+    
+    <div class="container">
+        <h2>Example 1: Basic Event Delegation</h2>
+        <p>Click on any item below. Instead of attaching a click handler to each item, we've attached just one to the parent list container.</p>
+        
+        <div id="list-container" class="list-container">
+            <div class="item" data-id="1">Item 1</div>
+            <div class="item" data-id="2">Item 2</div>
+            <div class="item" data-id="3">Item 3</div>
+            <div class="item" data-id="4">Item 4</div>
+            <div class="item" data-id="5">Item 5</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h2>Example 2: Dynamic Elements</h2>
+        <p>Event delegation is especially useful when working with dynamically added elements. New items added below will work without needing new event handlers.</p>
+        
+        <div class="dynamic-container">
+            <button id="add-item">Add New Item</button>
+            <button id="remove-all">Remove All Items</button>
+            
+            <div id="dynamic-list" class="list-container">
+                <!-- Items will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+    
+    <h3>Console:</h3>
+    <div id="console" class="console"></div>
+    
+    <script>
+        // DOM elements
+        const listContainer = document.getElementById('list-container');
+        const dynamicList = document.getElementById('dynamic-list');
+        const addItemBtn = document.getElementById('add-item');
+        const removeAllBtn = document.getElementById('remove-all');
+        const consoleOutput = document.getElementById('console');
+        
+        // Counter for dynamic items
+        let itemCounter = 1;
+        
+        // Log function
+        function log(message) {
+            const entry = document.createElement('div');
+            entry.className = 'console-entry';
+            entry.textContent = message;
+            consoleOutput.appendChild(entry);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        
+        // Example 1: Basic event delegation
+        listContainer.addEventListener('click', function(event) {
+            // Check if the clicked element is an item
+            if (event.target.classList.contains('item')) {
+                const itemId = event.target.getAttribute('data-id');
+                
+                // Toggle selected class
+                document.querySelectorAll('#list-container .item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                event.target.classList.add('selected');
+                
+                log(`Static list: Clicked on Item ${itemId}`);
+            }
+        });
+        
+        // Example 2: Dynamic elements with event delegation
+        dynamicList.addEventListener('click', function(event) {
+            // Check if the clicked element is an item
+            if (event.target.classList.contains('item')) {
+                const itemId = event.target.getAttribute('data-id');
+                
+                // Toggle selected class
+                document.querySelectorAll('#dynamic-list .item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                event.target.classList.add('selected');
+                
+                log(`Dynamic list: Clicked on Item ${itemId}`);
+            }
+        });
+        
+        // Add new item button handler
+        addItemBtn.addEventListener('click', function() {
+            const newItem = document.createElement('div');
+            newItem.className = 'item';
+            newItem.setAttribute('data-id', `dynamic-${itemCounter}`);
+            newItem.textContent = `Dynamic Item ${itemCounter}`;
+            
+            dynamicList.appendChild(newItem);
+            log(`Added Dynamic Item ${itemCounter}`);
+            itemCounter++;
+        });
+        
+        // Remove all items button handler
+        removeAllBtn.addEventListener('click', function() {
+            dynamicList.innerHTML = '';
+            log('Removed all dynamic items');
+            itemCounter = 1;
+        });
+        
+        // Add a few dynamic items initially
+        for (let i = 1; i <= 3; i++) {
+            const item = document.createElement('div');
+            item.className = 'item';
+            item.setAttribute('data-id', `dynamic-${i}`);
+            item.textContent = `Dynamic Item ${i}`;
+            dynamicList.appendChild(item);
+            itemCounter++;
+        }
+        
+        // Initial log
+        log('Page loaded - Event delegation is set up and ready');
+    </script>
+</body>
+</html>
