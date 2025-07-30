@@ -1,40 +1,46 @@
-// to check prime no
-function check_prime(numberTocheck)
-{
-   for ( var c = 2 ; c <= numberTocheck - 1 ; c++ )
-   {
-      if ( numberTocheck %c === 0 )
-     return 0;
-   }
-   if ( c == numberTocheck )
-      return 1;
+/**
+ * Checks if a number is a prime number.
+ * This version is more efficient and handles edge cases.
+ * @param {number} num The number to check.
+ * @returns {boolean} True if the number is prime, otherwise false.
+ */
+function isPrime(num) {
+  // Prime numbers must be greater than 1.
+  if (num <= 1) {
+    return false;
+  }
+
+  // Check for divisors from 2 up to the square root of the number.
+  // If we find a divisor, the number is not prime.
+  for (let i = 2; i * i <= num; i++) {
+    if (num % i === 0) {
+      return false;
+    }
+  }
+
+  // If no divisors were found, the number is prime.
+  return true;
 }
 
-let result = check_prime(5);
-let finalOutput = result === 0 ? 'Not Prime' : 'Prime Number';
+let numberToCheck = 7;
+let finalOutput = isPrime(numberToCheck)
+  ? `${numberToCheck} is a Prime Number`
+  : `${numberToCheck} is Not a Prime Number`;
 console.log(finalOutput);
 
-// get list of prime no
-function listOfPrimeNumber(no) {
-    let i=3
-    for (var count = 2; count <= no;) {
-        // console.log(count);
-        
-        for (var j = 2; j <= i-1; j++) {
-            // console.log(i%j);
-            
-            if(i%j===0){
-                break;
-            }
-            if(j===i){
-                console.log(i);
-                count++;
-            }
-            i++
-        }
-        count++;
+/**
+ * Generates a list of prime numbers up to a given limit.
+ * @param {number} limit The upper bound to generate primes up to.
+ * @returns {number[]} An array of prime numbers.
+ */
+function getPrimesUpTo(limit) {
+  const primes = [];
+  for (let i = 2; i <= limit; i++) {
+    if (isPrime(i)) {
+      primes.push(i);
     }
-    // return 0
+  }
+  return primes;
 }
 
-listOfPrimeNumber(3);
+console.log("Prime numbers up to 20:", getPrimesUpTo(20));
