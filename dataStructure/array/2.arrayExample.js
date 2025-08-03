@@ -80,9 +80,41 @@ console.log("🚀 ~ intersection:", intersection);
 // 7. push element to the end of the array
 let array9 = [1, 2, 3];
 let elementToAdd = 4;
-for (let i = 0; i < array9.length; i++) {
-  if (i === array9.length - 1) {
-    array9[i + 1] = elementToAdd; // Add element at the end
-  }
+// for (let i = 0; i < array9.length; i++) {
+//   if (i === array9.length - 1) {
+//     array9[i + 1] = elementToAdd; // Add element at the end
+//   }
+// }
+// console.log("🚀 ~ array9 after adding element:", array9);
+
+// 8. pop element from the end of the array
+let array10 = [1, 2, 3, 4];
+let poppedElement = array10[array10.length - 1]; // Get the last element
+array10.length = array10.length - 1; // Remove the last element
+console.log("🚀 ~ poppedElement:", poppedElement);
+
+// 9. shift element from the start of the array
+let array11 = [1, 2, 3, 4];
+let shiftedElement = array11[0]; // Get the first element
+for (let i = 0; i < array11.length - 1; i++) {
+  array11[i] = array11[i + 1]; // Shift elements to the left
 }
-console.log("🚀 ~ array9 after adding element:", array9);
+// array11.length = array11.length - 1; // Remove the last element
+console.log("🚀 ~ shiftedElement:", array11);
+
+// 9. shift element from the start of the array using core data structure
+let array12 = [1, 2, 3, 4];
+for (let i = 0; i < array12.length - 1; i++) {
+  array12[i] = array12[i + 1]; // Shift elements to the left
+}
+array12.length = array12.length - 1; // Remove the last element
+console.log("🚀 ~ array12 after shifting:", array12);
+
+// 10. remove element from kth index of the array
+let array13 = [1, 2, 3, 4, 5];
+let indexToRemove = 2; // Remove element at index 2
+for (let i = indexToRemove; i < array13.length - 1; i++) {
+  array13[i] = array13[i + 1]; // Shift elements to the left
+}
+array13.length = array13.length - 1; // Remove the last element
+console.log("🚀 ~ array13 after removing element at index 2:", array13);
