@@ -1,5 +1,17 @@
 # React Fiber: Simple Explanation
 
+key features of React Fiber in React.js are:
+
+Incremental Rendering: Fiber splits rendering work into small units and spreads these over multiple frames. This allows React to pause, resume, or cancel work as needed—making UI updates smoother and more responsive, even for large and complex apps.
+
+Scheduling and Prioritization: React Fiber lets React prioritize higher-importance updates (like animations or user interactions) over lower-importance work (like background data fetching). This keeps the app responsive and avoids UI freezes.
+
+Concurrency Support: Fiber introduces concurrency, enabling React to work on multiple tasks at once, and to schedule or interrupt low-priority updates as required. This supports advanced features like Concurrent Mode and Suspense, leading to seamless, interruption-free user experiences.
+
+Error Boundaries: Fiber enables error boundaries—components that can catch and handle errors in specific parts of the UI, preventing the entire application from crashing.
+
+Enhanced Flexibility: The underlying tree structure (“fiber nodes”) allows React to keep track of the component tree more efficiently, improving the performance of complex and dynamic UIs.
+
 ## What is React Fiber?
 
 React Fiber is a behind-the-scenes update to React that makes apps run smoother and feel faster. Think of it as a new engine for React that was introduced in React 16.
