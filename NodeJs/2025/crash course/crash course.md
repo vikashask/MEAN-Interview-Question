@@ -11,7 +11,7 @@
 ## 1. Introduction to Node.js
 
 - **What is Node.js?**  
-  Node.js is a runtime environment that lets you run JavaScript on the server side, outside of a browser.
+  Node.js is a JavaScript runtime built on Chrome’s V8 engine that allows you to run JavaScript on the server side.
 
 - **Why use Node.js (vs other backends)?**  
   Node.js is fast, lightweight, and great for handling many simultaneous connections due to its non-blocking, event-driven architecture.
