@@ -135,46 +135,6 @@ except ValueError as e:
     print(f"Caught factorial error: {e}")
 print()
 
-# 8. Real-world usage example
-print("8. Real-world usage example - Data Analysis Pipeline:")
-
-# Step 1: Generate sample data
-import random
-sample_data = [random.gauss(50, 10) for _ in range(100)]  # Normal distribution
-sample_data.extend([100, 101, 102])  # Add some outliers
-
-# Step 2: Process data
-processor = data_utils.DataProcessor(sample_data)
-cleaned_data = processor.clean_data()
-
-# Step 3: Statistical analysis
-analyzer = StatisticalAnalyzer(cleaned_data)
-analysis_results = analyzer.summary_statistics()
-
-print("Data Analysis Results:")
-print(f"  Sample size: {analysis_results['count']}")
-print(f"  Mean: {analysis_results['mean']:.2f}")
-print(f"  Standard deviation: {analysis_results['std_dev']:.2f}")
-print(f"  Outliers detected: {analysis_results['outliers_count']}")
-
-# Step 4: Save results
-results_to_save = {
-    "analysis_date": "2024-01-01",
-    "sample_size": analysis_results['count'],
-    "statistics": {
-        "mean": round(analysis_results['mean'], 2),
-        "std_dev": round(analysis_results['std_dev'], 2),
-        "median": round(analysis_results['median'], 2)
-    }
-}
-
-try:
-    file_manager.save_data("analysis_results.json", results_to_save)
-    print("  Results saved to analysis_results.json")
-except Exception as e:
-    print(f"  Could not save results: {e}")
-print()
-
 # 9. Package namespace demonstration
 print("9. Package namespace:")
 

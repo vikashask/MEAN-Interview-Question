@@ -1,0 +1,23 @@
+{
+  "count": 5,
+  "mean": 3.0,
+  "median": 3,
+  "mode": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "std_dev": 1.5811388300841898,
+  "variance": 2.5,
+  "min": 1,
+  "max": 5,
+  "range": 4,
+  "q1": 2,
+  "q3": 4,
+  "iqr": 2,
+  "outliers_count": 0,
+  "skewness": 0.0,
+  "kurtosis": -1.912
+}
