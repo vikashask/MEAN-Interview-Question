@@ -7,33 +7,33 @@
 
 ## Runs Once on First Render and conditionally
 
-```
+```jsx
 useEffect(() => {
-    console.log('This runs once on first render');
+  console.log("This runs once on first render");
 }, []);
 ```
 
 ### runs on each render and each update
 
-```
+```jsx
 useEffect(() => {
-    console.log('This runs once on first render');
+  console.log("This runs once on first render");
 });
 ```
 
 ## Runs On a Specified Dependency
 
-```
- useEffect(() => {
-    console.log("Count variable has changed!")
- }, [count]);
+```jsx
+useEffect(() => {
+  console.log("Count variable has changed!");
+}, [count]);
 ```
 
 ## for multiple variable changes?
 
-```
- useEffect(() => {
-   console.log("Some count variable has changed!")
+```jsx
+useEffect(() => {
+  console.log("Some count variable has changed!");
 }, [count, count1, count2]);
 ```
 
@@ -42,12 +42,12 @@ useEffect(() => {
 run right before the component unmounts, just like componentWillUnmount,
 simply use its return function like so:
 
-```
+```jsx
 useEffect(() => {
-    console.log('This hook is running.');
+  console.log("This hook is running.");
 
-    return () => {
-        console.log('This hook is now unmounting.');
-    };
+  return () => {
+    console.log("This hook is now unmounting.");
+  };
 });
 ```

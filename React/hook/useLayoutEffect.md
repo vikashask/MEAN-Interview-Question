@@ -1,8 +1,8 @@
 - Handles synchronous side effects that need to read or modify the DOM before the browser paints.
 - Executes synchronously after React updates the DOM but before the browser paints.
 
-```
-import { useLayoutEffect, useRef, useState } from 'react';
+```jsx
+import { useLayoutEffect, useRef, useState } from "react";
 
 function Tooltip({ targetRef, text }) {
   const tooltipRef = useRef(null);
@@ -25,12 +25,12 @@ function Tooltip({ targetRef, text }) {
     <div
       ref={tooltipRef}
       style={{
-        position: 'absolute',
+        position: "absolute",
         top: position.top,
         left: position.left,
-        background: 'black',
-        color: 'white',
-        padding: '5px',
+        background: "black",
+        color: "white",
+        padding: "5px",
       }}
     >
       {text}
@@ -38,5 +38,5 @@ function Tooltip({ targetRef, text }) {
   );
 }
 ```
-Explanation: Measures the target element’s position and sets the tooltip’s position before the browser paints, preventing flickering.
 
+Explanation: Measures the target element’s position and sets the tooltip’s position before the browser paints, preventing flickering.

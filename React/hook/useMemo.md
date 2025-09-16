@@ -5,14 +5,14 @@ Example of use memo you will get here : https://github.com/vikashask/react-basic
   const memoizedValue = useMemo(functionThatReturnsValue,arrayDepencies)
 - You may rely on useMemo as a performance optimization, not as a semantic guarantee.
 
+- Example
 
-- Example 
-```
-import { useState, useMemo } from 'react';
+```jsx
+import { useState, useMemo } from "react";
 
 function ExpensiveComponent({ number }) {
   const expensiveValue = useMemo(() => {
-    console.log('Calculating...');
+    console.log("Calculating...");
     return number * 1000;
   }, [number]);
 

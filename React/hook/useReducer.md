@@ -12,7 +12,7 @@
 
 - codesandbox: link https://codesandbox.io/s/react-test-h3d7f?file=/src/component/ShopingListReducer.js
 
-```
+```jsx
 import React, { useReducer, useRef } from "react";
 
 const ShopingList = () => {
@@ -20,13 +20,13 @@ const ShopingList = () => {
 
   const [items, dispatch] = useReducer((state, action) => {
     switch (action.type) {
-      case   "add":
+      case "add":
         return [
           ...state,
           {
             id: state.length,
-            name: action.name
-          }
+            name: action.name,
+          },
         ];
         break;
 
@@ -40,7 +40,7 @@ const ShopingList = () => {
     e.preventDefault();
     dispatch({
       type: "add",
-      name: inputRef.current.value
+      name: inputRef.current.value,
     });
     inputRef.current.value = "";
   };
@@ -66,16 +66,19 @@ const ShopingList = () => {
 export default ShopingList;
 ```
 
+- Another example
 
-- Another example 
-```
-import { useReducer } from 'react';
+```jsx
+import { useReducer } from "react";
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'increment': return { count: state.count + 1 };
-    case 'decrement': return { count: state.count - 1 };
-    default: return state;
+    case "increment":
+      return { count: state.count + 1 };
+    case "decrement":
+      return { count: state.count - 1 };
+    default:
+      return state;
   }
 }
 
@@ -85,8 +88,8 @@ function Counter() {
   return (
     <div>
       <p>Count: {state.count}</p>
-      <button onClick={() => dispatch({ type: 'increment' })}>+</button>
-      <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+      <button onClick={() => dispatch({ type: "increment" })}>+</button>
+      <button onClick={() => dispatch({ type: "decrement" })}>-</button>
     </div>
   );
 }

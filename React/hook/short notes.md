@@ -4,46 +4,45 @@ Hooks are a new addition in React 16.8.
 useState
 
 ### Basic Hooks https://reactjs.org/docs/hooks-reference.html
+
 - State Hooks:
-    - useState
-    - useReducer
+  - useState
+  - useReducer
 - Effect Hooks:
-    - useEffect
-    - useLayoutEffect
-    - useInsertionEffect
+  - useEffect
+  - useLayoutEffect
+  - useInsertionEffect
 - Context Hook:
-    - useContext
+  - useContext
 - Ref Hooks:
-    - useRef
-    - useImperativeHandle
+  - useRef
+  - useImperativeHandle
 - Performance Hooks:
-    - useMemo
-    - useCallback
+  - useMemo
+  - useCallback
 - Transition Hooks (React 18):
-    - useTransition
-    - useDeferredValue
+  - useTransition
+  - useDeferredValue
 - Other Hooks:
-    - useId
-    - useSyncExternalStore
-    - useDebugValue
+  - useId
+  - useSyncExternalStore
+  - useDebugValue
 
 ## 📌 State Hook
 
-```
-import React, { useState } from 'react';
+```javascript
+import React, { useState } from "react";
 function Example() {
   // Declare a new state variable, which we'll call "count"
   const [count, setCount] = useState(0);
   return (
     <div>
       <p>You clicked {count} times</p>
-      <button onClick={() => setCount(count + 1)}>
+      <button onClick={() => setCount(count + 1)}>Click me</button>
+      // 📌 correct way to set state
+      <button onClick={() => setCount((prevCount) => prevCount + 1)}>
         Click me
       </button>
-// 📌 correct way to set state
-      <button onClick={() => setCount(prevCount => prevCount + 1)}>
-       Click me
-    </button>
     </div>
   );
 }
@@ -65,8 +64,8 @@ React runs the effects after every render — including the first render.
 
 📌 Just like with useState, you can use more than a single effect in a component:
 
-```
-import React, { useState, useEffect } from 'react';
+```javascript
+import React, { useState, useEffect } from "react";
 
 function Example() {
   const [count, setCount] = useState(0);
@@ -80,9 +79,7 @@ function Example() {
   return (
     <div>
       <p>You clicked {count} times</p>
-      <button onClick={() => setCount(count + 1)}>
-        Click me
-      </button>
+      <button onClick={() => setCount(count + 1)}>Click me</button>
     </div>
   );
 }
@@ -109,8 +106,8 @@ Tip: Use Multiple Effects to Separate Concerns
 
 A custom Hook is a JavaScript function whose name starts with ”use” and that may call other Hooks. For example, useFriendStatus
 
-```
-import { useState, useEffect } from 'react';
+```javascript
+import { useState, useEffect } from "react";
 function useFriendStatus(friendID) {
   const [isOnline, setIsOnline] = useState(null);
   useEffect(() => {

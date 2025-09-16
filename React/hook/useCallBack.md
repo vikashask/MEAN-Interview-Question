@@ -16,13 +16,13 @@ https://github.com/vikashask/react-basic/blob/master/src/components/hook/useCall
   // unless the value of c changes
   const sinOfC: number = useMemo(() => Math.sin(c) , [c])
 
+- another example
 
-- another example 
-```
-import { useCallback, useState } from 'react';
+```jsx
+import { useCallback, useState } from "react";
 
 function ButtonComponent({ onClick }) {
-  console.log('Button re-rendered');
+  console.log("Button re-rendered");
   return <button onClick={onClick}>Click</button>;
 }
 
@@ -30,7 +30,7 @@ function ParentComponent() {
   const [count, setCount] = useState(0);
 
   const handleClick = useCallback(() => {
-    setCount(c => c + 1);
+    setCount((c) => c + 1);
   }, []);
 
   return (
@@ -40,5 +40,4 @@ function ParentComponent() {
     </div>
   );
 }
-
 ```

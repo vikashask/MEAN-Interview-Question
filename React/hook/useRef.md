@@ -1,6 +1,5 @@
-
-```
-import { useRef } from 'react';
+```jsx
+import { useRef } from "react";
 
 function InputFocus() {
   const inputRef = useRef(null);
@@ -16,5 +15,4 @@ function InputFocus() {
     </div>
   );
 }
-
 ```
