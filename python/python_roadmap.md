@@ -10,7 +10,7 @@ A step-by-step guide for mastering Python, designed for an experienced software 
 
 - Install Python (latest stable version)
 - Learn to use `pip` and virtual environments (`venv`, `pipenv`, `poetry`)
-- Choose an IDE (VS Code, PyCharm) and configure Python linting/formatting (Black, Flake8)
+- Choose an IDE (VS Code, PyCharm) and configure Python linting/formatting (Black, Flake8,Black Formatter)
 
 ### Core Syntax
 
