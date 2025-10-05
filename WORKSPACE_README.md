@@ -22,7 +22,6 @@ _Complete full-stack development interview preparation_
 MEAN-Interview-Question/
 ├── Angular/              # Angular framework deep dive
 ├── NodeJs/              # Backend development with Node.js
-├── python/              # Python programming tutorials
 ├── React/               # React.js frontend development
 ├── javaScript/          # Core JavaScript concepts
 ├── dataStructure/       # DSA implementations and examples
