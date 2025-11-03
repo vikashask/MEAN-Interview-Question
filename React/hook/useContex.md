@@ -16,11 +16,13 @@ const WishlistContextProvider = (props) => {
 
 </WishlistContext.Provider
 }
+```
 
+```jsx
 // child component
 import { WishlistContext } from "./WishlistContext";
 const WishlistDetails = ({ wishlistDataProvider, props }) => {
-const { wishlistDataProvider, handelRMAQty, handleUnitType } =
-useContext(WishlistContext);
-}
+  const { wishlistDataProvider, handelRMAQty, handleUnitType } =
+    useContext(WishlistContext);
+};
 ```
