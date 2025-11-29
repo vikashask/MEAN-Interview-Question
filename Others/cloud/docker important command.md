@@ -15,7 +15,7 @@ docker system info
 
 ```bash
 # List all images
-docker images
+docker image ls
 
 # Pull an image from Docker Hub
 docker pull <image_name>
@@ -36,6 +36,8 @@ docker tag <source_image> <target_image>
 # List running containers
 docker ps
 
+docker container ls
+
 # List all containers (including stopped)
 docker ps -a
 
@@ -53,6 +55,7 @@ docker rm <container_id>
 
 # Remove all stopped containers
 docker container prune
+
 ```
 
 ### Logs & Exec
