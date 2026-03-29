@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microservices Architecture Preview</title>
+    <!-- Include Mermaid.js from CDN -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    </script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; padding: 40px; background-color: #0d1117; color: #c9d1d9; max-width: 1200px; margin: 0 auto;}
+        h1, h2, h3 { color: #58a6ff; }
+        .mermaid { background-color: #161b22; padding: 20px; border-radius: 8px; margin-bottom: 40px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .description { font-size: 1.1em; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Microservices Deployment Architectures</h1>
+    <p class="description">This page previews the architectural diagrams defined in your markdown files.</p>
+    
+    <h2>1. Kubernetes GitOps Pipeline Architecture</h2>
+    <div class="mermaid">
+graph TD
+    %% Developers
+    Dev1[Developer] --> |Commits Code| GitSource[App Source Repo Github/GitLab]
+    
+    %% CI Pipeline
+    subgraph "Continuous Integration"
+        GitSource --> |Triggers| CI[CI Pipeline \n Tests & Build Image]
+        CI --> |Pushes Image| ImageRegistry[(Container Registry \n Docker Hub / ECR)]
+        CI --> |Updates Manifest| GitConfig[Config Repo \n Helm/YAML]
+    end
+    
+    %% GitOps / CD
+    subgraph "Continuous Deployment (GitOps)"
+        GitConfig --> |Watches| Argo[GitOps Agent \n ArgoCD / Flux]
+        ImageRegistry --> |Pulls Image| Cluster
+    end
+    
+    %% Target Kubernetes Cluster
+    subgraph "Kubernetes Cluster Production"
+        Argo --> |Applies State| Cluster
+        
+        subgraph Cluster [K8s Resources]
+            Ingress[Ingress Controller \n API Gateway]
+            
+            subgraph "Service Mesh (Istio / Linkerd)"
+                ServiceA[Microservice A v1.0]
+                ServiceB[Microservice B v2.1]
+                ServiceB_Canary[Microservice B v2.2 Canary]
+                
+                Ingress --> ServiceA
+                Ingress --> ServiceB
+                Ingress --> ServiceB_Canary
+            end
+        end
+    end
+    
+    %% Users
+    User[End Users] --> |HTTPS Requests| Ingress
+    </div>
+
+    <h2>2. Serverless Microservices Architecture (AWS)</h2>
+    <div class="mermaid">
+graph TD
+    %% Users
+    Client[Web/Mobile Client] --> |REST/GraphQL Request| CDN[CloudFront / CDN]
+    CDN --> API_GW[Amazon API Gateway]
+    
+    %% Auth
+    API_GW --> |Authorizes| Cognito[Amazon Cognito]
+    
+    %% Compute / Microservices
+    subgraph "Serverless Compute (AWS Lambda)"
+        API_GW --> |Routes to| UserSvc[User Service Lambda]
+        API_GW --> |Routes to| OrderSvc[Order Service Lambda]
+        API_GW --> |Routes to| ProductSvc[Product Service Lambda]
+    end
+    
+    %% Event / Async Architecture
+    OrderSvc --> |Publishes Event| EventBus[Amazon EventBridge / SNS]
+    EventBus --> |Triggers| NotificationSvc[Notification Service Lambda]
+    EventBus --> |Triggers| AnalyticsSvc[Analytics Service Lambda]
+    
+    %% Independent Databases
+    UserSvc --> |Reads/Writes| DynamoUser[(DynamoDB Users)]
+    OrderSvc --> |Reads/Writes| DynamoOrder[(DynamoDB Orders)]
+    ProductSvc --> |Reads/Writes| DynamoProduct[(DynamoDB Products)]
+    
+    %% External
+    NotificationSvc --> |Sends Email/SMS| SES[Amazon SES/SNS]
+    </div>
+</body>
+</html>
