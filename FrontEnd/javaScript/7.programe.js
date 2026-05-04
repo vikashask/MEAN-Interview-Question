@@ -37,3 +37,22 @@ console.log('meargeAr',meargeAr);
 //using Array.concat
 let meargeAr2 = array1.concat(array2)
 console.log('meargeAr2',meargeAr2);
+
+// identifying third repitative letter from the string 
+let str = "vikash kumar vermak"
+str.split('').filter((value,index) => -1 !== str.indexOf(value,index+1)).forEach((value,index) => {
+    if(index === 2){
+        console.log("third repitative letter",value);
+    }
+})
+
+hashmap = {}
+for(let i = 0; i < str.length; i++){
+    if(hashmap[str[i]]){
+        hashmap[str[i]]++
+    }
+    else{
+        hashmap[str[i]] = 1
+    }
+}
+console.log(hashmap);
