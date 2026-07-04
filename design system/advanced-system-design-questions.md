@@ -2,6 +2,22 @@
 
 With 10 years of experience, you can expect more open-ended, large-scale system design questions that test your architectural and leadership skills. The focus will be less on simple definitions and more on trade-offs, scalability, reliability, and cost.
 
+```mermaid
+graph TD
+    Q[10+ Yrs System Design Interview] --> L[Large-Scale App Design]
+    Q --> F[Foundational/Architectural]
+    L --> L1[Netflix/YouTube]
+    L --> L2[Twitter/FB Feed]
+    L --> L3[Uber/Lyft]
+    L --> L4[Google Docs/Dropbox]
+    L --> L5[Web Crawler]
+    F --> F1[KV Store]
+    F --> F2[Message Queue]
+    F --> F3[URL Shortener]
+    F --> F4[Rate Limiter]
+    F --> F5[Cost Reduction 30%]
+```
+
 ### Large-Scale Application Design
 
 1.  **Design a service like Netflix or YouTube.**

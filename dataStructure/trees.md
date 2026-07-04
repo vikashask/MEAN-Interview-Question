@@ -45,6 +45,17 @@ If you search for `12`, you go right from `10`, left from `15`, and find it.
   2   7 12   20
 ```
 
+```mermaid
+graph TD
+    N10((10)) --> N5((5))
+    N10 --> N15((15))
+    N5 --> N2((2))
+    N5 --> N7((7))
+    N15 --> N12((12))
+    N15 --> N20((20))
+```
+Search for `12`: 10 → go right (12>10) → 15 → go left (12<15) → found. Each step halves the remaining nodes → **O(log n)** if balanced.
+
 ---
 
 ### 3. AVL Tree (Self-balancing BST)
@@ -138,3 +149,36 @@ For an array `A = [2, 5, 1, 8, 4]`.
 *   **Query:** What is the sum of the range from index 0 to 3 (`A[0...3]`)?
 *   **Answer:** A Segment Tree can quickly compute this sum as `2 + 5 + 1 + 8 = 16` without iterating through each element.
 *   **Update:** If you update `A[2]` from `1` to `6`, the tree structure is efficiently updated in O(log n) time.
+
+---
+
+### Complexity Cheat Sheet
+
+| Tree Type | Search | Insert | Delete | Why |
+|---|---|---|---|---|
+| BST (balanced) | O(log n) | O(log n) | O(log n) | Each step halves remaining nodes |
+| BST (unbalanced, worst case = a line) | O(n) | O(n) | O(n) | Degenerates into a linked list |
+| AVL Tree | O(log n) | O(log n) | O(log n) | Rotations guarantee balance always |
+| B-Tree | O(log n) | O(log n) | O(log n) | High branching factor keeps height tiny → fewer disk reads |
+| Trie | O(k)* | O(k)* | O(k)* | *k = length of the word/key, not n |
+
+> ⚠️ **Common mistake:** assuming a plain BST is always O(log n). Insert `1,2,3,4,5` in order into a BST with no balancing → it degenerates into a straight line (like a linked list) → O(n). This is exactly *why* AVL/Red-Black trees exist.
+
+### Traversal Types (Binary Tree)
+```
+       1
+      / \
+     2   3
+    / \
+   4   5
+
+Pre-order  (root,L,R): 1 2 4 5 3   → used to COPY/serialize a tree
+In-order   (L,root,R): 4 2 5 1 3   → gives SORTED order for a BST
+Post-order (L,R,root): 4 5 2 3 1   → used to DELETE a tree safely (children first)
+Level-order (BFS):     1 2 3 4 5   → used for shortest-path-like / width problems
+```
+
+### ✅ Revision Checklist
+- [ ] Draw a BST and show why in-order traversal = sorted output
+- [ ] Explain why unbalanced BST degrades to O(n)
+- [ ] Know when to reach for B-Tree (databases) vs Trie (prefix/autocomplete) vs Segment Tree (range queries)

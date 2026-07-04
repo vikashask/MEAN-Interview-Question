@@ -1,5 +1,7 @@
 # Azure Repos - Source Control Hub
 
+> **Expert framing:** Branch policies are the actual security/quality control layer of your SDLC — an expert configures them defensively (assuming someone *will* try to push straight to `main`, or approve their own PR, eventually) rather than just enabling the defaults. PATs are also a common real-world security incident source — know their scope and expiry implications cold.
+
 ## Setting Up an Azure Repo
 
 ### Cloning a Repo
@@ -39,6 +41,8 @@ Go to **Project Settings > Repos > Branches → Click `...` next to `main` > Bra
 | Check for comment resolution | Required | Ensures all review comments are addressed |
 | Limit merge types | Squash or Rebase | Keeps main history clean |
 | Build validation | Required - link to CI pipeline | Ensures code builds before merge |
+
+**Expert insight:** also enable **"Reset code reviewer votes when there are new changes"** — without it, a reviewer can approve a PR, then someone pushes an unreviewed change onto the same branch before merge, and it ships without a fresh review. This is a real, commonly-missed gap. For genuinely sensitive branches, also check **"The most recent push was not approved by the pusher"**, which stops someone from approving their own final change.
 
 ---
 
@@ -132,6 +136,16 @@ git tag -l "v1.*"
 
 ---
 
+## Common Pitfalls & Expert Tips
+
+- **PATs with no expiry, and overly broad scope ("Full access").** Treat a PAT exactly like a password — scope it to the minimum needed (e.g., just "Code: Read & Write") and set a short expiry. A leaked full-access PAT with no expiry is a standing security incident waiting to happen.
+- **Not rotating PATs used in automation/service hooks.** Any script or external tool holding a PAT should be tracked somewhere so it can be rotated before expiry without breaking silently in production.
+- **Skipping "reset approvals on new changes."** Without it, a PR can be approved once and then quietly modified before merge — approvals become theater rather than an actual control.
+- **Allowing all merge types on `main`.** Mixing merge commits, squash, and rebase on the same protected branch produces an inconsistent, hard-to-read history. Pick one (squash is most common for keeping `main` linear and readable) and enforce it via policy.
+- **Using `.gitattributes` line-ending settings inconsistently across a team with mixed OSes** (Windows devs + Linux CI) causes noisy diffs where every line shows as changed due to CRLF/LF mismatches — `* text=auto eol=lf` at the repo root prevents this.
+
+---
+
 ## Practical Exercise ✅
 1. Create a new repository in Azure DevOps.
 2. Clone it locally and push a Node.js or Python app.
@@ -139,3 +153,16 @@ git tag -l "v1.*"
 4. Create a `feature/update-readme` branch, commit a change, and open a Pull Request.
 5. Link the PR to a work item created in Phase 2's Boards exercise.
 6. Complete the PR using the "Squash commit" merge strategy.
+
+---
+
+## Expert Interview Q&A
+
+**Q: What's wrong with a branch policy that only requires "1 reviewer," with no other settings?**
+Without "reset votes on new changes," an approval can become stale — someone approves, then the branch gets more (unreviewed) commits pushed before merge, and it ships anyway. Without "most recent push not approved by the pusher," someone could push a change and then approve their own PR. A robust policy combines: minimum reviewers, reset-on-change, linked work items, comment resolution required, and build validation — not just reviewer count alone.
+
+**Q: How do you securely automate PR creation/approval from a script without embedding a personal password?**
+Use a Personal Access Token (PAT) scoped to only the permissions needed (e.g., Code Read & Write) with a defined expiry, stored in a secrets manager (Key Vault/pipeline secret variable) rather than hardcoded — or, in newer setups, use Azure DevOps' support for Azure AD / Workload Identity Federation-based auth where available to avoid a long-lived secret entirely.
+
+**Q: Why would a team enforce "squash merge only" on `main` instead of allowing regular merge commits?**
+Squash merging collapses a PR's often-messy intermediate commits ("fix typo," "wip," "actually fix it") into one clean commit on `main`, keeping history readable and making `git log`/`git bisect` easier to reason about. The trade-off is losing the individual commit-level granularity from the feature branch — acceptable for most teams since that detail is still visible in the PR itself if needed.

@@ -1,6 +1,46 @@
 # DynamoDB & ElastiCache
 
+> **In plain English:** DynamoDB is AWS's NoSQL database — no fixed schema, scales to any size automatically, and is fast as long as you query it the way it's designed to be queried (by key). ElastiCache is an in-memory cache (Redis or Memcached) that sits in front of a slower database to make repeat reads near-instant.
+
+## Real-world analogy
+
+- **DynamoDB table** = a giant filing system organized entirely by a label (Partition Key) you choose upfront — fast if you look things up by that label, slow/impossible if you try to search by something else without an index.
+- **Partition Key** = the drawer label. **Sort Key** = the order of folders *inside* that drawer (lets you range-query within one partition, e.g. "all of user123's orders after March 1st").
+- **GSI (Global Secondary Index)** = an entirely separate filing cabinet, auto-kept in sync, organized by a *different* label — lets you query by fields other than the main partition key.
+- **DynamoDB Streams** = a person standing by the filing cabinet writing down every single change (insert/update/delete) as it happens, so other systems can react.
+- **DAX** = a sticky-note board in front of the filing cabinet — check the sticky notes first (cache) before walking to the actual cabinet (much faster for repeat reads).
+- **ElastiCache/Redis** = a whiteboard next to your desk — near-instant read/write, but it's memory only (can lose data if it's not persisted/replicated), used as a cache in front of a "real" database.
+
+## Core concepts (memorize these first)
+
+| Term | What it means |
+|---|---|
+| **Partition Key (Hash Key)** | Determines which physical partition an item lives on; required for every item, used for fast direct lookups. |
+| **Sort Key (Range Key)** | Optional second key — lets multiple items share a partition key but be ordered/range-queried within it. |
+| **GSI (Global Secondary Index)** | An alternate view of the table with a different partition/sort key — lets you query by other attributes. |
+| **LSI (Local Secondary Index)** | Same partition key as the base table, different sort key — must be created at table creation time, unlike GSIs. |
+| **Provisioned vs On-Demand capacity** | Provisioned = you set fixed read/write capacity (cheaper, predictable load). On-Demand = pay per request, auto-scales instantly (unpredictable/spiky load). |
+| **DynamoDB Streams** | A change log of every insert/update/delete — commonly consumed by Lambda for event-driven side effects. |
+| **DAX** | An in-memory cache specifically built in front of DynamoDB — microsecond reads for repeat queries. |
+| **Transactions** | All-or-nothing multi-item writes (e.g. transferring balance between two users atomically). |
+| **Redis vs Memcached** | Redis: richer data structures (lists, sets, sorted sets, pub/sub), persistence, replication. Memcached: simpler, multi-threaded, purely a cache with no persistence — Redis is almost always the default choice today. |
+| **Cache-aside pattern** | App checks cache first; on a miss, reads from the real database and then populates the cache. |
+| **Write-through pattern** | Every write updates both the database and the cache at the same time, so the cache is never stale. |
+
+**The #1 interview trap:** Query vs Scan in DynamoDB. **Query** uses the partition key (and optionally sort key) — fast, efficient, the "correct" way. **Scan** reads the *entire table* and filters afterward — slow, expensive, avoid in production hot paths.
+
+## Memory hooks
+
+- **"Partition Key = which drawer. Sort Key = order inside the drawer."**
+- **GSI = new cabinet, new keys, created anytime. LSI = same drawer label, different order, locked in at table creation.**
+- Cache-aside = "check cache, miss? go to DB, then remember it for next time." Write-through = "update both at once, always in sync."
+- Redis wins almost every "which cache" interview question unless the answer specifically calls for Memcached's simplicity/multi-threading.
+
+---
+
 ## DynamoDB Tables
+
+Every table needs at least a partition key. GSIs let you add alternate query patterns after the fact.
 
 ```bash
 # Create table
@@ -26,6 +66,8 @@ aws dynamodb update-table \
 ```
 
 ## DynamoDB with SDK
+
+`DynamoDBDocumentClient` lets you use plain JS objects instead of DynamoDB's verbose typed attribute format. Note `Query` (efficient, uses keys) is used far more than `Scan` (reads everything).
 
 ```javascript
 import {
@@ -187,6 +229,8 @@ const batchCreateUsers = async (users) => {
 
 ## DynamoDB Pagination
 
+Like S3, DynamoDB never returns unlimited results in one call — loop using `LastEvaluatedKey` until it comes back empty/undefined.
+
 ```javascript
 const getAllUsers = async () => {
   const users = [];
@@ -212,6 +256,8 @@ const getAllUsers = async () => {
 ```
 
 ## DynamoDB Transactions
+
+All-or-nothing writes across multiple items — if any condition fails (like insufficient balance), the *entire* transaction is cancelled, none of the writes happen.
 
 ```javascript
 import { TransactWriteItemsCommand } from "@aws-sdk/client-dynamodb";
@@ -256,6 +302,8 @@ const transferBalance = async (fromUserId, toUserId, amount) => {
 
 ## DynamoDB Streams
 
+A real-time change feed of your table — every insert/update/delete produces a record a Lambda can react to. Classic use: send a welcome email the moment a new user row is inserted.
+
 ```javascript
 // Lambda function to process DynamoDB stream
 export const handler = async (event) => {
@@ -289,6 +337,8 @@ export const handler = async (event) => {
 
 ## DynamoDB DAX (Caching)
 
+DAX is a purpose-built in-memory cache that sits in front of DynamoDB — same API, but repeat reads return in microseconds instead of milliseconds.
+
 ```javascript
 import AmazonDaxClient from "amazon-dax-client";
 
@@ -313,6 +363,8 @@ const getUser = async (id) => {
 
 ## ElastiCache Redis
 
+A replication group gives you Multi-AZ automatic failover for Redis — same idea as RDS Multi-AZ, but for your cache layer.
+
 ```bash
 # Create Redis cluster
 aws elasticache create-cache-cluster \
@@ -336,6 +388,8 @@ aws elasticache create-replication-group \
 ```
 
 ## Redis with Node.js
+
+Redis isn't just key-value — it has rich data structures: strings, hashes (like objects), lists, sets, and sorted sets (great for leaderboards).
 
 ```javascript
 import { createClient } from "redis";
@@ -414,6 +468,8 @@ await redis.publish(
 
 ## Caching Patterns
 
+Two main strategies, worth memorizing by name for interviews: **cache-aside** (lazy, only caches what's actually requested) and **write-through** (always keeps cache fresh but writes cost a bit more).
+
 ```javascript
 // Cache-aside pattern
 const getUser = async (userId) => {
@@ -487,6 +543,8 @@ const processOrder = async (orderId) => {
 
 ## Redis Session Store
 
+A very common real-world use of Redis: storing user login sessions outside your app server, so any server instance can read the same session (needed once you have more than one app server).
+
 ```javascript
 import session from "express-session";
 import RedisStore from "connect-redis";
@@ -505,3 +563,25 @@ app.use(
   })
 );
 ```
+
+---
+
+## Quick interview answers
+
+**Q: Query vs Scan in DynamoDB — why does it matter?**
+Query uses the partition key (and optionally sort key) to jump straight to the relevant data — fast and cheap. Scan reads the *entire table* then filters — slow and expensive at scale. Always design your table/indexes so you can Query, not Scan.
+
+**Q: GSI vs LSI?**
+GSI: different partition + sort key, can be added anytime after table creation, has its own capacity. LSI: same partition key as the base table but a different sort key, must be defined at table creation time, shares the base table's capacity.
+
+**Q: When would you choose On-Demand vs Provisioned capacity?**
+On-Demand for unpredictable/spiky traffic where you don't want to manage capacity planning. Provisioned (with auto scaling) for steady, predictable traffic — cheaper per-request at scale.
+
+**Q: Redis vs Memcached?**
+Redis supports richer data types (lists, sets, sorted sets, hashes), persistence, and replication/pub-sub. Memcached is simpler and multi-threaded, purely an in-memory key-value cache with no persistence. Redis is the default pick unless you specifically need Memcached's simplicity.
+
+**Q: Cache-aside vs write-through?**
+Cache-aside: app checks cache, on miss reads DB and populates cache — cache only holds what's been requested (lazy). Write-through: every write updates the cache immediately alongside the DB — cache is never stale, but every write costs more.
+
+**Q: What problem does DAX solve that Query/Scan optimization doesn't?**
+DAX caches DynamoDB reads in-memory (microsecond latency) without changing your query patterns or table design — useful for read-heavy, repeat-key access patterns.

@@ -1,6 +1,43 @@
 # IAM (Identity & Access Management)
 
+> **In plain English:** IAM controls *who* can do *what* in your AWS account. Every single AWS API call is checked against IAM first — no IAM permission, no action, no matter how simple the request.
+
+## Real-world analogy
+
+Think of an AWS account like an office building.
+
+- **Users** = employees with an ID badge (a person or an app that needs to log in).
+- **Groups** = departments (Finance, Engineering) — badge one person into a department and they inherit that department's access.
+- **Roles** = a visitor badge that a robot/machine (EC2, Lambda) or an outside company (another AWS account) can borrow temporarily. Nobody "owns" a role permanently — it's put on and taken off.
+- **Policies** = the actual rulebook stapled to a badge or a door ("this badge can open Room 5, cannot open the server room").
+- **Trust policy** = the sign on the door of a role that says "only these people/services are allowed to borrow me."
+
+## Core concepts (memorize these first)
+
+| Term | What it means |
+|---|---|
+| **User** | A permanent identity (person or app) with long-term credentials (password / access keys). |
+| **Group** | A bucket of users that all share the same policies. You never attach permissions to a person directly — attach to a group instead. |
+| **Role** | A temporary identity with no long-term password/keys. Anything can "assume" a role and get short-lived credentials (this is the #1 best practice over hardcoding keys). |
+| **Policy** | A JSON document = a list of Allow/Deny rules. Every policy has `Effect`, `Action`, `Resource`, and optionally `Condition`. |
+| **Principal** | *Who* the rule applies to (a user, role, account, or service like `ec2.amazonaws.com`). |
+| **Assume Role** | The act of "borrowing" a role's permissions temporarily via AWS STS (Security Token Service). |
+| **Permission Boundary** | A hard ceiling — even if a policy grants more, the boundary caps what's actually allowed. |
+| **SCP (Service Control Policy)** | An org-wide guardrail applied to whole AWS accounts (used with AWS Organizations), not individual users. |
+
+**The golden rule to remember:** *Explicit Deny always wins.* If any policy says Deny, it overrides every Allow, no matter how many Allows exist.
+
+## Memory hooks
+
+- **"Users log in, Roles are borrowed."** — Users have permanent credentials; roles hand out temporary ones.
+- **U-G-R-P** = Users → Groups → Roles → Policies, the order you usually set things up in.
+- Deny > explicit Allow > default Deny (nothing is allowed unless something explicitly says Allow).
+
+---
+
 ## Users, Groups & Roles
+
+Everyday commands to create a user, put them in a group, and hand them keys to use the CLI/SDK.
 
 ```bash
 # Create IAM user
@@ -20,6 +57,8 @@ aws iam delete-user --user-name john-doe
 ```
 
 ## IAM Policies
+
+A policy is just JSON: `Effect` (Allow/Deny) + `Action` (which API calls) + `Resource` (which AWS objects) + optional `Condition` (extra restriction, like "only from this IP").
 
 ```json
 // Inline policy example
@@ -68,6 +107,8 @@ aws iam delete-user --user-name john-doe
 ```
 
 ## IAM Roles
+
+A role has no password. Something has to "assume" it — an EC2 instance, a Lambda function, or a user from another account. The **trust policy** decides who is allowed to assume it; the **permission policy** decides what the role can do once assumed.
 
 ```bash
 # Create role
@@ -119,7 +160,11 @@ aws iam add-role-to-instance-profile \
 }
 ```
 
+> **Note on "Instance Profile":** EC2 can't wear a role directly — it wears an *instance profile*, which is basically a wrapper/holder around a role. Just remember: role → wrapped in instance profile → attached to EC2.
+
 ## Cross-Account Access
+
+One AWS account (A) can let a role in another account (B) be assumed — no shared passwords needed. The `ExternalId` is an extra password-like check to stop the "confused deputy" problem (someone tricking a third party into assuming the role on their behalf).
 
 ```json
 // Role in Account B (123456789012) trusted by Account A
@@ -151,6 +196,8 @@ aws sts assume-role \
 ```
 
 ## AWS SDK with IAM
+
+Three ways an app can get AWS credentials, ranked by preference: (1) let EC2/Lambda hand them out automatically via a role — best, (2) use a named profile locally for dev, (3) explicitly assume a role and pass the temporary keys — used for cross-account or elevated access.
 
 ```javascript
 // Node.js SDK v3
@@ -190,6 +237,8 @@ const s3Client = new S3Client({
 ```
 
 ## Permission Boundaries
+
+A permission boundary is a *ceiling*, not a grant. Even if someone attaches `AdministratorAccess` to a user, the boundary still caps them at whatever the boundary allows. Used so junior admins can create IAM users/roles without being able to escalate themselves to full admin.
 
 ```json
 // Permission boundary limits maximum permissions
@@ -233,6 +282,8 @@ aws sts get-session-token --duration-seconds 3600
 
 ## Service Control Policies (SCPs)
 
+SCPs live one level above IAM — they apply to entire AWS *accounts* inside an AWS Organization, not to individual users. Think of SCPs as "company-wide rules HR enforces on every department," while IAM policies are "what each department decides for its own staff." An SCP can only take away permissions, never grant them.
+
 ```json
 // Deny root account usage
 {
@@ -271,6 +322,8 @@ aws sts get-session-token --duration-seconds 3600
 
 ## IAM Policy Variables
 
+Policy variables let one policy template apply differently per user, without writing one policy per person.
+
 ```json
 // User-specific S3 bucket access
 {
@@ -304,3 +357,25 @@ aws sts get-session-token --duration-seconds 3600
   ]
 }
 ```
+
+---
+
+## Quick interview answers
+
+**Q: Difference between a Role and a User?**
+A User has permanent credentials (password/access keys) for a specific person or app. A Role has no credentials of its own — anything trusted can "assume" it and get temporary credentials that auto-expire.
+
+**Q: Why prefer roles over access keys on EC2/Lambda?**
+No secrets to leak, rotate, or store. AWS auto-rotates the temporary credentials behind the scenes.
+
+**Q: What decides who can assume a role?**
+The role's **trust policy** (a policy attached to the role itself, separate from its permission policy).
+
+**Q: Explicit Deny vs explicit Allow — which wins?**
+Deny always wins, everywhere, no exceptions.
+
+**Q: What's a permission boundary for?**
+Capping the maximum permissions a user/role can ever have, even if a more permissive policy gets attached later — used to safely delegate IAM admin work.
+
+**Q: SCP vs IAM policy?**
+SCP = account-wide guardrail (Organizations level, can only restrict). IAM policy = grants/denies specific actions to a specific user/role/group inside one account.

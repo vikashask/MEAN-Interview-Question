@@ -1,6 +1,47 @@
 # SQS, SNS & EventBridge
 
+> **In plain English:** These three services let different parts of your app talk to each other *without* calling each other directly — this is "decoupling," and it's the backbone of event-driven architecture. SQS = a queue (one message, one consumer). SNS = a broadcast (one message, many subscribers). EventBridge = a smart router that filters and routes events based on their content.
+
+## Real-world analogy
+
+- **SQS (queue)** = a single ticket line at a counter — each ticket (message) is served by exactly one worker (consumer), and the ticket disappears once handled. If no worker is free, tickets just wait in line.
+- **SNS (pub/sub)** = a radio broadcast — one announcement goes out, and every subscribed radio (email, SQS queue, Lambda, phone) hears it simultaneously.
+- **Fan-out (SNS + SQS)** = one radio broadcast being recorded onto multiple separate tape decks (queues) at once, so each department can process it at their own pace without missing anything.
+- **EventBridge** = a mailroom clerk who reads the *content* of each envelope and routes it to the correct department based on rules — much smarter than a name-only broadcast.
+- **Dead Letter Queue (DLQ)** = the "return to sender" bin — messages that failed processing too many times get set aside here instead of being retried forever or silently lost.
+- **FIFO queue** = a strict single-file line — no cutting, first come first served, exactly once.
+
+## Core concepts (memorize these first)
+
+| Term | What it means |
+|---|---|
+| **SQS Standard Queue** | At-least-once delivery, best-effort ordering, nearly unlimited throughput. |
+| **SQS FIFO Queue** | Strict ordering + exactly-once processing, but lower throughput; messages with the same `MessageGroupId` are processed in order. |
+| **Visibility Timeout** | Once a consumer picks up a message, it's hidden from others for this duration — if the consumer doesn't delete it in time (crash/slow), it reappears for someone else to retry. |
+| **Long Polling** | Consumer waits up to N seconds for a message to arrive instead of instantly returning empty — cheaper and lower-latency than constantly re-polling ("short polling"). |
+| **Dead Letter Queue (DLQ)** | Where messages go after failing processing too many times (`maxReceiveCount`) — prevents infinite retry loops and poison messages from blocking the queue. |
+| **SNS Topic** | A named channel that broadcasts one message to every subscriber (email, SMS, Lambda, SQS, HTTP). |
+| **Fan-out pattern** | SNS topic with multiple SQS queues subscribed — one publish reaches many independent consumers, each processing at its own pace. |
+| **EventBridge Event Bus** | A router that matches incoming events against rules (event patterns) and sends matches to one or more targets. |
+| **Event Pattern** | The filter rule EventBridge uses to decide which events go where (can match on source, detail-type, and even values inside the event body). |
+| **EventBridge Scheduler** | Cron-like or one-time scheduled triggering of targets (e.g. Lambda) — the modern replacement for CloudWatch Events "scheduled rules." |
+
+**The #1 interview trap:** SQS vs SNS. SQS = pull-based, one consumer processes and removes each message (queue). SNS = push-based, broadcasts to *all* subscribers at once (topic). They're often combined: SNS fans out to multiple SQS queues so each downstream service gets its own durable copy.
+
+**SNS/SQS vs EventBridge:** SNS/SQS route by *destination* (who's subscribed). EventBridge routes by *content* (rules based on what's inside the event) — much more powerful filtering, and it's the standard choice for building event-driven microservices today.
+
+## Memory hooks
+
+- **"SQS = queue, one winner takes the message. SNS = topic, everyone subscribed gets a copy."**
+- **Fan-out = SNS shouts once, many SQS queues each get their own durable copy.**
+- Visibility timeout too short = message gets processed twice (duplicate work). Too long = failed messages take forever to retry. Tune it close to your actual processing time.
+- EventBridge = "route by what's inside the message." SNS = "route by who signed up."
+
+---
+
 ## SQS (Simple Queue Service)
+
+FIFO queues need a `.fifo` suffix in the name and typically enable content-based deduplication to avoid processing the same message twice.
 
 ```bash
 # Create queue
@@ -31,6 +72,8 @@ aws sqs delete-message \
 ```
 
 ## SQS with SDK
+
+The core worker loop pattern: receive → process → delete. If processing throws, you *don't* delete the message, so it becomes visible again after the visibility timeout and gets retried.
 
 ```javascript
 import {
@@ -128,6 +171,8 @@ const processMessages = async () => {
 
 ## SQS FIFO Queue
 
+Messages sharing the same `MessageGroupId` are guaranteed to be processed in the order they were sent — different group IDs can be processed in parallel.
+
 ```javascript
 // Send to FIFO queue
 const sendFifoMessage = async (message, groupId) => {
@@ -149,6 +194,8 @@ await sendFifoMessage({ id: "3", action: "delete" }, "user-123");
 
 ## Dead Letter Queue
 
+After `maxReceiveCount` failed attempts, a message is automatically moved to the DLQ instead of retrying forever — lets you inspect/debug "poison" messages without them blocking the whole queue.
+
 ```bash
 # Create DLQ
 aws sqs create-queue --queue-name my-dlq
@@ -162,6 +209,8 @@ aws sqs set-queue-attributes \
 ```
 
 ## SNS (Simple Notification Service)
+
+A topic is the broadcast channel; anything subscribed (email, SMS, SQS, Lambda, HTTP endpoint) receives every message published to it.
 
 ```bash
 # Create topic
@@ -239,6 +288,8 @@ const publishToPhone = async (phoneNumber, message) => {
 
 ## Fan-Out Pattern (SNS + SQS)
 
+The classic combo: publish once to SNS, and every subscribed SQS queue gets its own independent, durable copy — each downstream service (processing, analytics, notifications) can consume at its own pace without stepping on each other.
+
 ```javascript
 // SNS publishes to multiple SQS queues
 const setupFanOut = async () => {
@@ -271,6 +322,8 @@ await publishMessage({ orderId: 123, total: 99.99 }, "New Order");
 
 ## EventBridge
 
+Unlike SNS (which broadcasts to whoever subscribed), EventBridge routes based on the *content* of the event — the rule's `event-pattern` decides which events go to which targets.
+
 ```bash
 # Create event bus
 aws events create-event-bus --name my-event-bus
@@ -299,6 +352,8 @@ aws events put-events \
 ```
 
 ## EventBridge with SDK
+
+Rules can filter on values *inside* the event body, not just its type — here, only orders over $1000 trigger the `NotifyManager` Lambda.
 
 ```javascript
 import {
@@ -370,6 +425,8 @@ await publishEvent({
 
 ## EventBridge Scheduler
 
+The modern way to run something on a schedule (cron-like) or at a specific one-time future moment — replaces the older "CloudWatch Events scheduled rule" pattern.
+
 ```javascript
 import {
   SchedulerClient,
@@ -416,6 +473,8 @@ const scheduleOneTime = async (dateTime) => {
 
 ## Event-Driven Architecture Pattern
 
+The payoff of all this: the order service doesn't need to know or care who reacts to a new order — inventory, notifications, and analytics services each independently subscribe and react on their own.
+
 ```javascript
 // Order service publishes event
 const createOrder = async (orderData) => {
@@ -452,3 +511,25 @@ export const handler = async (event) => {
   await trackOrderMetrics(order);
 };
 ```
+
+---
+
+## Quick interview answers
+
+**Q: SQS vs SNS — the core difference?**
+SQS is pull-based, a durable queue — one consumer processes and removes each message. SNS is push-based, a broadcast — every subscriber gets a copy of every message immediately, with no built-in durability for a slow/offline subscriber.
+
+**Q: What is the fan-out pattern and why use it?**
+Publishing once to an SNS topic that has multiple SQS queues subscribed — each downstream service gets its own durable queue to process independently, at its own pace, without missing messages.
+
+**Q: What happens if a consumer fails to process an SQS message?**
+It doesn't delete the message, so once the visibility timeout expires, the message becomes visible again for another consumer to retry — after `maxReceiveCount` failed attempts, it's moved to the Dead Letter Queue.
+
+**Q: SNS/SQS vs EventBridge — when would you pick EventBridge?**
+When routing needs to be based on the *content* of the event, not just "who subscribed." EventBridge's event patterns can filter on fields inside the event body, making it the better fit for complex event-driven microservice architectures.
+
+**Q: FIFO vs Standard SQS queue?**
+FIFO guarantees strict order and exactly-once processing (within a MessageGroupId) but has lower throughput limits. Standard offers nearly unlimited throughput with at-least-once delivery and best-effort ordering (duplicates and out-of-order delivery are possible).
+
+**Q: Why use long polling instead of short polling?**
+Long polling waits up to N seconds for a message before returning empty, reducing the number of empty API calls (cheaper) and reducing latency compared to constantly re-polling on a tight loop.

@@ -1,5 +1,40 @@
 # Route53 & CloudFront
 
+> **In plain English:** Route53 is AWS's DNS service — it turns domain names (`example.com`) into IP addresses and decides *which* server should answer based on rules you set. CloudFront is AWS's CDN (Content Delivery Network) — it caches your content at edge locations around the world so users get it fast, from nearby, instead of from one far-away origin server.
+
+## Real-world analogy
+
+- **Route53** = a phone book plus a smart receptionist. Someone asks "where's example.com?" and Route53 doesn't just give one answer — it can say "if you're in Europe, call this branch; if that branch is down, call the backup" (routing policies).
+- **Hosted Zone** = the specific page in the phone book for your domain.
+- **CloudFront** = a chain of local warehouses (edge locations) that keep a cached copy of your product close to every customer, so nobody has to wait for a shipment from the single factory (your origin server, e.g. S3 or your ALB).
+- **Cache invalidation** = telling every local warehouse "throw out the old stock, the factory has an update."
+- **Signed URL** = a time-limited VIP ticket — only someone holding it can get the item from the warehouse, and it expires.
+- **Lambda@Edge** = a small worker stationed at each local warehouse who can inspect/modify orders on the way in or out, without going back to the factory.
+
+## Core concepts (memorize these first)
+
+| Term | What it means |
+|---|---|
+| **Hosted Zone** | A container for all DNS records of one domain. |
+| **Record types** | `A` = domain → IPv4. `AAAA` = domain → IPv6. `CNAME` = domain → another domain name. `Alias` = AWS-specific "smart CNAME" that can point at the root domain and AWS resources (ALB, CloudFront) for free. |
+| **Routing policy** | The *rule* for which answer to give: Simple (one answer), Weighted (split traffic by %), Latency-based (send to the closest/fastest region), Failover (primary/secondary), Geolocation (route by visitor's location). |
+| **Health Check** | Route53 actively pings an endpoint; used to power Failover routing (stop sending traffic to a dead primary). |
+| **Distribution** | A CloudFront "instance" — the configuration tying an origin (S3/ALB/custom) to cache behavior and a domain. |
+| **Origin** | The real backend CloudFront fetches content from when it's not already cached. |
+| **Cache Behavior** | Per-path rules (e.g. `/api/*` never cached, `/static/*` cached for a day). |
+| **TTL (Time To Live)** | How long a DNS record or cached CloudFront object is considered valid before re-checking. |
+| **Invalidation** | Force CloudFront to drop cached copies early (before TTL expires) so it re-fetches fresh content. |
+| **OAI / OAC (Origin Access Identity/Control)** | Lets CloudFront be the *only* way to reach a private S3 bucket — the bucket itself stays locked to direct public access. |
+| **Signed URL/Cookie** | A URL with a cryptographic signature + expiry, used to serve private/paid content only to authorized users. |
+
+## Memory hooks
+
+- **"Route53 finds the right door. CloudFront makes sure the door is close by."** DNS routing vs content caching — different jobs, often used together.
+- Routing policy pick: **need a backup? → Failover. Need speed? → Latency. Need A/B split? → Weighted. Need country rules? → Geolocation.**
+- **Alias record = CNAME's smarter AWS-only cousin** — works at the root domain (`example.com`), which plain CNAME can't do.
+
+---
+
 ## Route53 Hosted Zones
 
 ```bash
@@ -16,6 +51,8 @@ aws route53 get-hosted-zone --id Z1234567890ABC
 ```
 
 ## DNS Records
+
+`A` record points straight to an IP. `CNAME` points to another domain name (can't be used on the root/apex domain). `Alias` is AWS's special record type that works like a CNAME but is allowed on the root domain and can point directly at AWS resources like an ALB.
 
 ```bash
 # Create A record
@@ -68,6 +105,8 @@ aws route53 change-resource-record-sets \
 ```
 
 ## Routing Policies
+
+Same domain name, different backend answer depending on the rule: split traffic (Weighted), route to the nearest/fastest region (Latency), or route to a backup if primary fails (Failover).
 
 ```javascript
 import {
@@ -186,6 +225,8 @@ const createFailoverRecords = async () => {
 
 ## Health Checks
 
+Route53 actively probes an endpoint on a schedule; if it fails enough times in a row, DNS answers stop pointing there (used by Failover routing).
+
 ```bash
 # Create health check
 aws route53 create-health-check \
@@ -205,6 +246,8 @@ aws route53 update-health-check \
 ```
 
 ## CloudFront Distribution
+
+A distribution ties an origin (where the real content lives) to caching rules and a public CloudFront domain (or your custom domain via a certificate).
 
 ```bash
 # Create distribution
@@ -276,6 +319,8 @@ const createDistribution = async () => {
 
 ## CloudFront Cache Behaviors
 
+You can point different URL paths at different origins with different caching rules from the same distribution — e.g. `/api/*` always goes live to your backend (no caching), everything else is served from cached S3 static files.
+
 ```javascript
 // Multiple cache behaviors for different paths
 const distributionConfig = {
@@ -329,6 +374,8 @@ const distributionConfig = {
 
 ## CloudFront Invalidation
 
+Forces edge locations to drop their cached copy immediately instead of waiting for the TTL to expire — use sparingly, it costs money per path invalidated at scale.
+
 ```bash
 # Create invalidation
 aws cloudfront create-invalidation \
@@ -365,6 +412,8 @@ await invalidateCache("E1234567890ABC", ["/images/*", "/index.html"]);
 
 ## Signed URLs
 
+A time-limited, cryptographically signed link — used to serve private content (paid videos, private files) only to people who were actually granted access, without making the whole distribution public.
+
 ```javascript
 import { getSignedUrl } from "@aws-sdk/cloudfront-signer";
 import { readFileSync } from "fs";
@@ -392,6 +441,8 @@ console.log(signedUrl);
 ```
 
 ## Lambda@Edge
+
+A Lambda function that runs *at the CDN edge location itself* (close to the user), not in one central region — used to tweak requests/responses on the fly (add security headers, rewrite URLs) without a round trip to your origin server.
 
 ```javascript
 // Viewer request function (modify headers)
@@ -426,3 +477,22 @@ export const handler = async (event) => {
   return response;
 };
 ```
+
+---
+
+## Quick interview answers
+
+**Q: A record vs CNAME vs Alias?**
+A = domain to IPv4 directly. CNAME = domain to another domain name (can't be used at the zone apex/root). Alias = AWS-only "smart CNAME" that works at the root domain and is free to query, typically used to point at ALB/CloudFront/S3.
+
+**Q: How does Route53 Failover routing know when to switch?**
+It relies on a Health Check continuously probing the primary endpoint; once it fails the threshold, Route53 stops returning the primary's IP and returns the secondary's instead.
+
+**Q: What does a CloudFront cache behavior actually control?**
+Per-URL-path rules: which origin serves that path, whether/how long to cache, which HTTP methods are allowed, and which headers/cookies/query strings vary the cache.
+
+**Q: Why use OAI/OAC with an S3 origin instead of making the bucket public?**
+So the S3 bucket stays completely private — only CloudFront (using the OAI/OAC identity) can fetch objects from it, preventing people from bypassing the CDN and hitting S3 directly.
+
+**Q: Signed URL vs Signed Cookie?**
+Signed URL grants access to a single file. Signed Cookie grants access to multiple files/paths at once (e.g. an entire video course) without needing a signed link per asset.

@@ -1,5 +1,7 @@
 # Azure Kubernetes Service (AKS)
 
+> **Expert framing:** Deploying a YAML manifest is basic Kubernetes. Expert Kubernetes is knowing *why* `resources.requests/limits` and probes exist (cluster stability, not just best-practice boilerplate), understanding what actually happens during a rolling update when `maxUnavailable: 0`, and being able to debug a `CrashLoopBackOff` or a Pod stuck in `Pending` from first principles rather than just re-applying and hoping.
+
 ## Core Kubernetes Concepts
 
 ```
@@ -98,6 +100,25 @@ spec:
               port: 3000
             initialDelaySeconds: 5
             periodSeconds: 10
+
+# Expert insight — these aren't boilerplate, they solve specific failure modes:
+# - `resources.requests` is what the SCHEDULER uses to decide which node has
+#   room for this Pod — no requests set means the scheduler can over-pack a
+#   node, causing every Pod on it to compete for real resources under load.
+# - `resources.limits` is what the KUBELET enforces at runtime — exceeding the
+#   memory limit gets the container OOMKilled; exceeding CPU limit gets it
+#   throttled (not killed). A container with no limits can starve its
+#   neighbors on a shared node — this is the single most common cause of
+#   "random unrelated Pods keep restarting" incidents.
+# - `livenessProbe` failing restarts the CONTAINER (assumes it's stuck/dead).
+# - `readinessProbe` failing removes the Pod from the SERVICE's endpoints
+#   (traffic stops routing to it) WITHOUT restarting it — critical during
+#   slow startup (DB connection warming up) so traffic doesn't hit a Pod
+#   that's alive but not yet able to serve requests. Confusing liveness with
+#   readiness is one of the most common AKS/K8s interview trip-ups: a bad
+#   liveness probe during slow startup causes a restart LOOP (CrashLoopBackOff)
+#   even though the app would have become healthy if just given more time —
+#   this is exactly what `initialDelaySeconds` is meant to prevent.
 
 ---
 # k8s/service.yaml
@@ -285,9 +306,36 @@ helm rollback myapp-release 1  # Rollback to revision 1
 
 ---
 
+## Common Pitfalls & Expert Tips
+
+- **No `resources.requests/limits` set.** Beyond the scheduling/OOM issues noted above, this also breaks Horizontal Pod Autoscaling (HPA scales based on % of *requested* CPU/memory — with no request set, HPA has nothing to calculate a percentage against).
+- **Confusing liveness and readiness probes** — a failing readiness probe should mean "temporarily stop sending traffic," not "restart me." Wiring the wrong probe type causes unnecessary restarts (liveness) or zombie Pods still receiving traffic while unhealthy (missing readiness).
+- **Secrets stored as plain `Opaque` type with no further protection**, base64 encoded (which is *encoding*, not encryption — anyone with read access to the Secret object can trivially decode it). For real secrets, integrate AKS with Azure Key Vault via the CSI Secrets Store driver instead of raw K8s Secrets.
+- **`maxUnavailable: 0` with only 1 replica.** This makes rolling updates impossible (there's no "extra" capacity to shift traffic to, and it can't take the only replica down) — rolling update strategy needs enough replicas to tolerate the configured unavailability.
+- **Not setting `namespace` boundaries thoughtfully.** Everything in `default` namespace makes RBAC scoping, resource quotas, and network policies far harder to apply per team/environment.
+- **Debugging by re-running `kubectl apply` repeatedly instead of reading `kubectl describe pod` events.** The Events section at the bottom of `describe` almost always names the actual root cause (ImagePullBackOff, insufficient resources, failed probe, etc.) — check it first, every time.
+
+---
+
 ## Practical Exercise ✅
 1. Create a 2-node AKS cluster using the Azure CLI.
 2. Deploy the Docker image you pushed to ACR (Phase 6 exercise) using a `deployment.yaml`.
 3. Create a `Service` of type `LoadBalancer` and access the app from your browser using the external IP.
 4. Scale the deployment from 1 replica to 3 and watch the pods appear with `kubectl get pods -w`.
 5. Simulate a rolling update by pushing a new image tag and re-applying the deployment.
+
+---
+
+## Expert Interview Q&A
+
+**Q: A Pod is stuck in `CrashLoopBackOff`. Walk through your debugging process.**
+Start with `kubectl describe pod <name>` and read the Events section — it usually states the direct cause (OOMKilled, failed liveness probe, non-zero exit code). Then `kubectl logs <pod> --previous` to see the crashed container's last output before it died (regular `logs` shows the *current* restarted attempt, which may not have failed yet). Common root causes: an unhandled startup exception, a missing environment variable/config, a liveness probe firing before the app finishes initializing (fix with a higher `initialDelaySeconds` or a startup probe), or the container being OOMKilled because of an undersized memory limit.
+
+**Q: What's the practical difference between a liveness probe and a readiness probe failing?**
+A failed liveness probe tells Kubernetes "this container is unresponsive/stuck," triggering a container restart. A failed readiness probe tells Kubernetes "this Pod isn't ready to serve traffic right now," which removes it from the Service's load-balancing endpoints *without* restarting it — used for temporary states like a slow dependency connection or graceful shutdown draining. Using a liveness probe where a readiness probe was intended causes unnecessary restart loops during normal, temporary unavailability.
+
+**Q: Why does Horizontal Pod Autoscaling not work correctly without `resources.requests` defined?**
+HPA (when scaling on CPU/memory) computes current utilization as a *percentage of the Pod's requested resources* — no request means there's no baseline to compute a percentage against, so HPA can't make a scaling decision at all (or behaves unpredictably depending on the metric source). Setting accurate `requests` is a prerequisite for resource-based autoscaling to function correctly.
+
+**Q: Why would you use the AKS Key Vault CSI driver instead of native Kubernetes Secrets for sensitive values?**
+Native Kubernetes Secrets are only base64-*encoded* (trivially reversible) and, without additional encryption-at-rest configuration on the cluster's etcd, are stored in a way that's easier to expose than a proper secrets manager. The Key Vault CSI driver mounts secrets from Azure Key Vault directly into Pods at runtime (as files or env vars) without ever persisting the raw secret in Kubernetes' own storage — centralizing secret rotation, auditing, and access control in Key Vault instead of duplicating it across cluster manifests.

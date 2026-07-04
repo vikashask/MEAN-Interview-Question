@@ -1,6 +1,39 @@
 # AWS CLI & SDKs
 
+> **In plain English:** The CLI is a command-line tool for talking to AWS from your terminal. The SDK is the same idea but from inside your code (Node.js, Python, etc). Both do the exact same thing under the hood — call AWS's HTTP APIs — just with different front doors.
+
+## Real-world analogy
+
+Imagine AWS as a giant vending machine with thousands of buttons (APIs).
+
+- **AWS Console** = pressing buttons by hand, one click at a time (good for exploring, bad for repeating).
+- **AWS CLI** = a remote control you type commands into — same buttons, but scriptable.
+- **AWS SDK** = wiring the vending machine directly into your app, so your code presses the buttons itself.
+
+Whichever front door you use, IAM still checks your badge before anything happens.
+
+## Core concepts (memorize these first)
+
+| Term | What it means |
+|---|---|
+| **Profile** | A named set of saved credentials (`aws configure --profile X`), so you can switch between accounts without retyping keys. |
+| **Region** | Which AWS data center location your commands target (`us-east-1`, `ap-south-1`...). Most services are region-scoped. |
+| **JMESPath (`--query`)** | A mini query language to filter/shape the JSON that CLI commands return, instead of dumping everything. |
+| **Pagination** | AWS APIs return results in pages (e.g. max 1000 S3 objects per call) — you must loop using a "continuation token" to get everything. |
+| **Exponential backoff** | If a request fails (e.g. throttled), wait a little, retry, wait longer, retry again — instead of hammering the API. SDKs do this automatically. |
+| **SDK v3 (JS)** | The current AWS SDK for JavaScript — modular (`@aws-sdk/client-s3` etc, install only what you use) vs old SDK v2 which was one giant package. |
+
+## Memory hooks
+
+- **Profile = "which account am I."** Region = "which building am I calling."
+- CLI output formats to remember: `json` (default, machine-friendly), `table` (human-friendly), `text` (script-friendly, easy to pipe into `grep`/`awk`).
+- **"Send a Command"** — in SDK v3, everything is `new XCommand({...})` then `client.send(command)`. Same pattern for every AWS service.
+
+---
+
 ## AWS CLI Configuration
+
+First thing you always do on a new machine — tell the CLI which keys and region to use.
 
 ```bash
 # Configure AWS CLI
@@ -27,6 +60,8 @@ export AWS_SECRET_ACCESS_KEY=YOUR_SECRET
 ```
 
 ## Common AWS CLI Commands
+
+These are the everyday "read/list/start/stop" commands you'll type constantly for each service. Notice the pattern: `aws <service> <verb>-<noun>`.
 
 ```bash
 # S3
@@ -67,6 +102,8 @@ aws logs filter-log-events \
 
 ## AWS CLI Query & Filters
 
+`--query` uses JMESPath to pick out exactly the fields you want from a big JSON response, so you don't have to eyeball a huge dump.
+
 ```bash
 # JMESPath queries
 aws ec2 describe-instances \
@@ -89,6 +126,8 @@ aws ec2 describe-instances \
 ```
 
 ## AWS SDK for JavaScript (v3)
+
+SDK v3 is modular — install only the client packages you actually need (`client-s3`, `client-dynamodb`...) instead of one giant SDK. The pattern is always: build a client → build a command object → `client.send(command)`.
 
 ```javascript
 // Install
@@ -132,6 +171,8 @@ console.log(listResult.Contents);
 ```
 
 ## DynamoDB SDK
+
+`DynamoDBDocumentClient` wraps the raw client so you can send/receive plain JS objects instead of DynamoDB's verbose `{ "S": "value" }` typed format.
 
 ```javascript
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
@@ -217,6 +258,8 @@ const result = JSON.parse(Buffer.from(response.Payload).toString());
 
 ## Error Handling
 
+Every SDK v3 service error extends a `<Service>ServiceException` class. Check `error.name` for the specific error type (e.g. `NoSuchKey`, `AccessDenied`) to react differently per failure.
+
 ```javascript
 import { S3ServiceException } from "@aws-sdk/client-s3";
 
@@ -239,6 +282,8 @@ try {
 ```
 
 ## Pagination
+
+AWS never hands you a million records in one response — it caps each page and gives you a token to fetch the next page. Two ways to handle it: let the SDK's built-in paginator loop for you, or do it manually.
 
 ```javascript
 import { paginateListObjects } from "@aws-sdk/client-s3";
@@ -269,6 +314,8 @@ do {
 
 ## Retry & Exponential Backoff
 
+If AWS throttles you (too many requests), the SDK automatically waits and retries with increasing delay instead of failing immediately. You rarely need to write this by hand — just configure `maxAttempts`.
+
 ```javascript
 import { S3Client } from "@aws-sdk/client-s3";
 
@@ -286,6 +333,8 @@ const customRetry = (attempt) => {
 ```
 
 ## Environment-Specific Configuration
+
+Point the SDK at LocalStack (a fake local AWS) in dev, and real AWS in production, using the same code.
 
 ```javascript
 // config.js
@@ -309,3 +358,19 @@ import { awsConfig } from "./config";
 
 const s3Client = new S3Client(awsConfig);
 ```
+
+---
+
+## Quick interview answers
+
+**Q: CLI vs SDK — when to use which?**
+CLI for one-off/manual/scripted ops tasks (deploy scripts, debugging). SDK when your application code itself needs to talk to AWS at runtime.
+
+**Q: How does the CLI/SDK find credentials if you don't pass any?**
+A fixed lookup order: explicit code config → environment variables → shared credentials file (`~/.aws/credentials`) → EC2/ECS/Lambda instance role. This is called the "credential provider chain."
+
+**Q: Why does AWS paginate responses?**
+Performance and safety — returning millions of records in one call would be slow and memory-heavy. You loop using a continuation/next token instead.
+
+**Q: What is exponential backoff and why does it matter?**
+A retry strategy where wait time doubles each failed attempt. It matters because hammering a throttled API with instant retries makes the throttling worse ("thundering herd").

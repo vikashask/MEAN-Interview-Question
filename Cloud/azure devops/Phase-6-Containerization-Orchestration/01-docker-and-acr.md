@@ -1,5 +1,7 @@
 # Docker & Azure Container Registry (ACR)
 
+> **Expert framing:** Writing *a* Dockerfile is basic; writing a **small, secure, cache-efficient, non-root, multi-stage** Dockerfile is expert. Also know the ACR authentication story cold — `admin-enabled false` + Managed Identity/AcrPull role is the production-correct answer, and interviewers specifically probe whether you'd reach for admin credentials (wrong) or RBAC (right).
+
 ## Why Containers?
 Containers package your application + its dependencies into a single, portable unit that runs identically on any machine — your laptop, a CI server, or Azure.
 
@@ -61,6 +63,12 @@ USER appuser
 EXPOSE 3000
 CMD ["node", "dist/server.js"]
 ```
+
+**Expert insight — why every line here earns its place:**
+- **Multi-stage build**: the `builder` stage's dev dependencies, source TypeScript, and build tools never make it into the final image — only compiled output does. This is the single biggest lever for shrinking image size and attack surface, and interviewers use it as a quick "have you actually shipped containers to production" filter.
+- **Copying `package*.json` before the rest of the source**: Docker caches layers; if only application code changed (not dependencies), this ordering means `npm ci` is served from cache instead of re-running — dramatically faster builds. Reversing this order (copying everything, then installing) busts the cache on every single code change.
+- **`USER appuser` (non-root)**: running as root inside a container is a privilege-escalation risk if the container is ever compromised or escapes its sandbox — a container breakout as root can potentially affect the host. Non-root is a baseline security expectation in any production image review.
+- **Pinning `node:20-alpine` instead of `node:latest`**: `latest` is a moving target — a rebuild next month could silently pull a different major Node version and break your app. Pin specific tags (ideally by digest for full immutability in high-security contexts).
 
 ### Key Dockerfile Instructions
 ```dockerfile
@@ -161,6 +169,12 @@ az acr create \
   --name mydevopsacr \
   --sku Basic \
   --admin-enabled false  # Prefer Managed Identities over admin credentials
+# Expert note: the ACR "admin account" is a single shared username/password with
+# full push/pull rights to the ENTIRE registry — no per-identity audit trail, no
+# scoped permissions, and if it leaks, rotating it breaks every consumer at once.
+# Production setups grant AcrPull/AcrPush RBAC roles to specific Managed
+# Identities or Service Principals instead — individually revocable, auditable
+# per-identity, and scoped to exactly what each consumer needs.
 
 # Login to ACR (uses your az login credentials)
 az acr login --name mydevopsacr
@@ -216,9 +230,36 @@ az security sub-assessment list \
 
 ---
 
+## Common Pitfalls & Expert Tips
+
+- **Using `latest` tag in production deployments.** It's ambiguous which actual build is running, makes rollback guesswork, and breaks the immutability principle IaC/GitOps depends on. Tag images with something traceable — the build ID, git commit SHA, or semantic version.
+- **Running containers as root** (skipping `USER` in the Dockerfile) — the single most common finding in container security reviews.
+- **Not setting resource limits when running containers** — a container with a memory leak and no limit can starve the whole host, taking down unrelated workloads on the same machine.
+- **Leaving the ACR admin account enabled "just in case."** It's a standing, broadly-scoped credential that undermines the whole point of using Managed Identities elsewhere — disable it and use RBAC (`AcrPull`/`AcrPush`) consistently.
+- **Not scanning images for vulnerabilities before they reach production.** A clean build today can still contain a base-image OS package with a known CVE — continuous scanning (Defender for Containers or similar) catches vulnerabilities discovered *after* the image was built and pushed.
+- **Bloated images from not using `.dockerignore`.** Without it, `COPY . .` pulls in `node_modules`, `.git`, and other junk into the build context, slowing builds and potentially leaking files (like `.env`) into the image.
+
+---
+
 ## Practical Exercise ✅
 1. Write a `Dockerfile` for a simple Node.js "Hello World" Express app (use multi-stage build).
 2. Build the image locally and run it. Verify it responds at `http://localhost:3000`.
 3. Create an ACR in Azure.
 4. Tag and push the image to your ACR.
 5. Automate this: Write a pipeline that builds and pushes to ACR on every commit to `main`.
+
+---
+
+## Expert Interview Q&A
+
+**Q: Why use a multi-stage Dockerfile instead of just installing everything in one stage?**
+A single-stage build bakes build tools, dev dependencies, and source artifacts (that are no longer needed at runtime) into the final image — increasing size and attack surface unnecessarily. Multi-stage builds let you use a full toolchain in an intermediate stage, then copy only the final compiled/production artifacts into a minimal final stage, producing a smaller, more secure runtime image.
+
+**Q: Why is enabling the ACR admin account considered a security anti-pattern in production?**
+It's a single shared credential with full registry access, has no per-consumer audit trail (you can't tell which service pulled which image), and rotating it (necessary if leaked) breaks every consumer simultaneously since they all share the same credential. RBAC-based access (Managed Identity or Service Principal granted `AcrPull`/`AcrPush`) gives per-identity, individually-revocable, auditable access instead.
+
+**Q: A container is running fine in your Dockerfile locally but fails a security review for "running as root." Why does that matter if the app itself doesn't need special privileges?**
+Container isolation (namespaces, cgroups) is not a perfect security boundary — a container escape vulnerability (in the runtime or kernel) run as root inside the container can translate to root-equivalent access on the host if exploited. Running as a non-root user inside the container limits the damage even if such an escape occurs — defense in depth, not a statement about whether the app itself needs elevated privileges.
+
+**Q: How would you keep a production image up to date with security patches without changing your application code?**
+Rebuild the image periodically (e.g., a scheduled pipeline) against the same base image tag so it pulls the latest patched layer, then push and redeploy — since Docker layers are content-addressed, a rebuild picks up upstream base-image security patches automatically. Pairing this with continuous vulnerability scanning (e.g., Defender for Containers) surfaces newly-discovered CVEs in already-deployed images so you know when a rebuild is actually needed.

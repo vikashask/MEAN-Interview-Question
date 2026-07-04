@@ -38,6 +38,16 @@ _A comprehensive learning roadmap for mastering system design and succeeding in 
 - **Consistency vs Availability**: Trade-offs in distributed systems
 - **Fault Tolerance**: System's ability to continue operating despite failures
 
+```mermaid
+graph TD
+    SD[System Design] --> Arch[Architecture: how components interact]
+    SD --> Sc[Scalability: handle more load/users]
+    SD --> Rel[Reliability: availability + fault tolerance]
+    SD --> Perf[Performance: response time + throughput]
+    SD --> Sec[Security: protect data, prevent unauthorized access]
+    SD --> Cost[Cost: features vs infra spend]
+```
+
 ---
 
 ## Why System Design Matters
@@ -569,6 +579,14 @@ _Innovation & Leadership: Cutting-edge Systems_
 4. **Issues** - Address bottlenecks, failures, and edge cases
 5. **Optimization** - Scale the system and improve performance
 
+```mermaid
+flowchart LR
+    R[Requirements\nclarify scope] --> A[Architecture\nhigh level boxes]
+    A --> D[Deep Dive\npick 1-2 components]
+    D --> I[Issues\nbottlenecks/SPOF]
+    I --> O[Optimize\nscale it]
+```
+
 ### 📋 Common Interview Questions by Level:
 
 #### Entry Level (L3-L4):
@@ -699,6 +717,16 @@ _Innovation & Leadership: Cutting-edge Systems_
 5. **Document Assumptions**: Make your assumptions explicit
 6. **Validate with Numbers**: Back your design with capacity planning
 
+```mermaid
+graph TD
+    P1["Jumping to tech before\nclarifying requirements"] --> F1["Start with requirements +\nback-of-envelope math"]
+    P2["Ignoring non-functional\nrequirements"] --> F2["Discuss scale, latency,\navailability upfront"]
+    P3["Over-engineering a\nsimple problem"] --> F3["Start simple, scale\nwhen justified"]
+    P4["Assuming network\nis reliable"] --> F4["Design for partitions\n(CAP thinking)"]
+    P5["No monitoring plan"] --> F5["Logging/metrics/tracing\nfrom day one"]
+    P6["Vendor lock-in"] --> F6["Abstraction layers,\nportable design"]
+```
+
 ---
 
 ## Tools & Visual Frameworks
@@ -752,6 +780,13 @@ Level 1: System Context - How your system fits in the world
 Level 2: Containers - High-level technology choices
 Level 3: Components - Components within containers
 Level 4: Code - Classes and interfaces (optional)
+```
+
+```mermaid
+graph TD
+    L1[Level 1: System Context] --> L2[Level 2: Containers]
+    L2 --> L3[Level 3: Components]
+    L3 --> L4[Level 4: Code - optional]
 ```
 
 #### 2. 4+1 Architectural View Model

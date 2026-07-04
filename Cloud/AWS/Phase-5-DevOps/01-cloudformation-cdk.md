@@ -1,6 +1,45 @@
 # CloudFormation & AWS CDK
 
+> **In plain English:** Instead of clicking around the AWS Console to create resources by hand, you write down what you want in a file, and AWS builds it for you automatically — this is "Infrastructure as Code" (IaC). CloudFormation is the raw YAML/JSON way. CDK lets you write the same thing using real programming languages (TypeScript, Python), which then compiles down into CloudFormation underneath.
+
+## Real-world analogy
+
+- **CloudFormation template** = a full architectural blueprint handed to a construction crew — every wall, pipe, and wire spelled out explicitly in a fixed format (YAML/JSON).
+- **Stack** = one building constructed from that blueprint — if you update the blueprint, CloudFormation figures out what changed and only rebuilds those parts.
+- **Change Set** = a "preview of changes" the contractor shows you before touching anything — "here's exactly what will be added/changed/destroyed if you approve this."
+- **AWS CDK** = instead of drawing the raw blueprint by hand, you describe the building in a familiar programming language and a translator (the CDK "synth" step) generates the official blueprint (CloudFormation template) for you.
+- **CDK Construct** = a pre-fabricated wall unit — someone already figured out the wiring/plumbing best practices, you just say "put one here."
+
+## Core concepts (memorize these first)
+
+| Term | What it means |
+|---|---|
+| **Template** | The file (YAML/JSON) describing every AWS resource to create. |
+| **Stack** | One deployed collection of resources from a template — the unit of deploy/update/delete. |
+| **Resource** | One thing being created (`AWS::EC2::VPC`, `AWS::Lambda::Function`, etc). |
+| **Parameters** | Inputs you can pass in at deploy time (e.g. environment name) without hardcoding them into the template. |
+| **Outputs** | Values exported from a stack (e.g. a VPC ID) so other stacks can reference them. |
+| **Intrinsic functions** | Built-in template helpers like `!Ref` (reference a resource/parameter), `!GetAtt` (get an attribute of a resource), `!Sub` (string substitution). |
+| **Change Set** | A preview of what an update would actually do, before it's applied — avoids surprise deletions. |
+| **Drift Detection** | Finds resources that were manually changed outside of CloudFormation (so the real world no longer matches the template). |
+| **Nested Stack** | A stack referenced inside another stack — used to break huge templates into reusable pieces. |
+| **CDK Construct** | A reusable, higher-level building block (L1 = raw CloudFormation resource, L2 = AWS-curated with sane defaults, L3/Patterns = whole common architectures like "load-balanced Fargate service"). |
+| **`cdk synth`** | Compiles your CDK code into the actual CloudFormation template (without deploying). |
+| **`cdk diff`** | Shows what would change if you deployed right now — the CDK equivalent of reviewing a Change Set. |
+
+**Interview-favorite distinction:** CloudFormation = declarative infrastructure directly in YAML/JSON. CDK = the same underlying engine, but you write in TypeScript/Python/etc and get real programming features (loops, conditionals, reusable classes) — CDK always ends up generating a CloudFormation template behind the scenes; it doesn't replace CloudFormation, it generates it.
+
+## Memory hooks
+
+- **"CDK writes the blueprint for you; CloudFormation is the blueprint itself."**
+- Update flow to remember: change template → CloudFormation computes a diff → Change Set (preview) → apply → only the changed resources are touched.
+- **L1 = raw resource. L2 = smart defaults. L3/Pattern = whole pre-built architecture.** Higher number = more abstraction, less to write.
+
+---
+
 ## CloudFormation Template
+
+The typical structure: `Parameters` (inputs) → `Resources` (what to build) → `Outputs` (what to expose to other stacks).
 
 ```yaml
 # template.yaml
@@ -77,6 +116,8 @@ Outputs:
 
 ## Deploy CloudFormation
 
+`create-stack` for the first deploy, `update-stack` for every change after — CloudFormation compares the new template against what's currently running and only touches what changed.
+
 ```bash
 # Create stack
 aws cloudformation create-stack \
@@ -101,6 +142,8 @@ aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE UPDATE_COMP
 ```
 
 ## Lambda Function Template
+
+A common real-world pattern: an IAM role, a Lambda function, and a DynamoDB table all defined together in one template, wired together with `!Ref`/`!GetAtt`.
 
 ```yaml
 Resources:
@@ -178,6 +221,8 @@ npm install @aws-cdk/aws-s3 @aws-cdk/aws-lambda @aws-cdk/aws-dynamodb
 ```
 
 ## CDK Stack Example
+
+The same "S3 + DynamoDB + Lambda + API Gateway" setup as a raw CloudFormation template would take much more YAML — here, `table.grantReadWriteData(fn)` auto-generates the correct IAM policy for you, instead of you writing it by hand.
 
 ```typescript
 // lib/my-stack.ts
@@ -270,6 +315,8 @@ export class MyStack extends cdk.Stack {
 
 ## VPC Stack with CDK
 
+CDK's `ec2.Vpc` L2 construct creates an entire multi-AZ VPC (public/private subnets, route tables, NAT gateway) with sensible defaults from just a few lines — this would be 100+ lines of raw CloudFormation.
+
 ```typescript
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 
@@ -320,6 +367,8 @@ export class VpcStack extends cdk.Stack {
 ```
 
 ## ECS Fargate with CDK
+
+`ApplicationLoadBalancedFargateService` is an L3 "pattern" construct — it stands up an entire ALB + Fargate service + target group + auto scaling in one call, instead of wiring each piece manually.
 
 ```typescript
 import * as ecs from "aws-cdk-lib/aws-ecs";
@@ -379,6 +428,8 @@ export class EcsStack extends cdk.Stack {
 
 ## CDK Deploy Commands
 
+`synth` shows you the generated CloudFormation without deploying; `diff` shows what would change; `deploy` actually applies it; `bootstrap` is a one-time setup CDK needs per account/region before its first deploy.
+
 ```bash
 # Synthesize CloudFormation template
 cdk synth
@@ -406,6 +457,8 @@ cdk bootstrap aws://ACCOUNT-ID/REGION
 ```
 
 ## CDK Pipelines
+
+A CI/CD pipeline defined *as CDK code itself* — it can deploy to multiple environments/accounts (dev, then prod with a manual approval gate) directly from a `cdk synth`.
 
 ```typescript
 import * as pipelines from "aws-cdk-lib/pipelines";
@@ -438,3 +491,22 @@ export class PipelineStack extends cdk.Stack {
   }
 }
 ```
+
+---
+
+## Quick interview answers
+
+**Q: CloudFormation vs CDK — what's actually different under the hood?**
+Nothing at the deployment layer — CDK compiles (`synth`) down to a regular CloudFormation template, then CloudFormation deploys it exactly like a hand-written template would. CDK just gives you a real programming language (loops, conditionals, reusable constructs) to *generate* that template.
+
+**Q: What's a Change Set and why does it matter?**
+A preview of exactly what an update would create/modify/delete, shown before you actually apply it — prevents accidentally destroying a resource because of an unintended template change.
+
+**Q: What is CDK "drift"?**
+Not a CDK-specific term — it's a CloudFormation concept: drift means someone changed a resource manually (outside CloudFormation/CDK), so the real infrastructure no longer matches what the template says. Drift detection finds these mismatches.
+
+**Q: L1 vs L2 vs L3 CDK constructs?**
+L1 = direct 1-to-1 mapping to a raw CloudFormation resource (`CfnBucket`). L2 = AWS-curated wrapper with sane defaults and helper methods (`s3.Bucket`). L3/Patterns = a whole pre-built architecture combining multiple resources (`ApplicationLoadBalancedFargateService`).
+
+**Q: Why use Nested Stacks?**
+To break a huge template into smaller, reusable, independently manageable pieces (e.g. a shared "networking" stack referenced by multiple app stacks) instead of one giant unmaintainable file.

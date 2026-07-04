@@ -12,6 +12,18 @@ Scalability is the ability of a system to handle a growing amount of work by add
 
 *   **Horizontal Scaling (Scaling Out):** This involves adding more machines to your pool of resources to distribute the load. Instead of making one server more powerful, you add more servers to the system. This is like adding more lanes to a highway to handle more traffic.
 
+```mermaid
+graph LR
+    subgraph Vertical["Vertical — bigger engine"]
+        S1[Server] -->|upgrade CPU/RAM| S2[Bigger Server]
+    end
+    subgraph Horizontal["Horizontal — more lanes"]
+        LB{Load Balancer} --> H1[Server]
+        LB --> H2[Server]
+        LB --> H3[Server]
+    end
+```
+
 ## In-Depth Comparison
 
 ### 3. What are the advantages and disadvantages of vertical scaling?
@@ -74,6 +86,17 @@ Scaling a relational database can be challenging. Here's a typical approach:
 *   **Read Replicas (Horizontal Scaling for Reads):** To handle a high volume of read requests, you can create read-only copies (replicas) of the database. The write operations still go to the primary database, but read operations can be distributed across the replicas.
 *   **Sharding (Horizontal Scaling for Writes):** For very large datasets and high write volumes, you can implement sharding. This involves partitioning the database into smaller, more manageable pieces called shards and distributing them across multiple servers. However, this adds significant complexity, especially for operations that need to join data across shards.
 
+```mermaid
+graph TD
+    App[App Servers] -->|writes| Primary[(Primary DB)]
+    Primary -->|replicate| Replica1[(Read Replica)]
+    Primary -->|replicate| Replica2[(Read Replica)]
+    App -->|reads| Replica1
+    App -->|reads| Replica2
+    App -.->|if writes too high, shard instead| Shard1[(Shard A)]
+    App -.-> Shard2[(Shard B)]
+```
+
 ## Advanced Topics
 
 ### 8. What are some of the challenges you might face when implementing horizontal scaling?
@@ -86,3 +109,10 @@ Scaling a relational database can be challenging. Here's a typical approach:
 ### 9. What is hybrid scaling?
 
 A hybrid scaling approach combines both vertical and horizontal scaling to leverage the advantages of each. For example, you might vertically scale individual servers to a certain optimal size and then horizontally scale by adding more of these optimized servers to your cluster. This allows for a balance of performance, cost, and reliability.
+
+```mermaid
+graph LR
+    LB{Load Balancer} --> N1["Node (optimal size\nvia vertical scale)"]
+    LB --> N2["Node (optimal size)"]
+    LB --> N3["Node (optimal size)"]
+```

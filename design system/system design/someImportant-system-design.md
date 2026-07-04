@@ -47,6 +47,16 @@ Clients → Load Balancer → App Servers → Cache/Database/CDN
 
 **Step 7: Identifying Bottlenecks** - Single points of failure, data bottlenecks
 
+```mermaid
+graph LR
+    A[1.Requirements] --> B[2.Estimation]
+    B --> C[3.Interface]
+    C --> D[4.Data Model]
+    D --> E[5.High-Level Design]
+    E --> F[6.Deep Dive]
+    F --> G[7.Bottlenecks]
+```
+
 ---
 
 ## 2. Monolithic Architecture
@@ -101,6 +111,17 @@ Clients → Load Balancer → App Servers → Cache/Database/CDN
 - Need for independent scaling
 - High availability requirements
 
+```mermaid
+graph TB
+    subgraph Monolith["Monolithic"]
+        M1[UI + Logic + Data Access] --> MDB[(Shared DB)]
+    end
+    subgraph Micro["Microservices"]
+        Gate[API Gateway] --> S1[Service A] --> DB1[(DB A)]
+        Gate --> S2[Service B] --> DB2[(DB B)]
+    end
+```
+
 ---
 
 ## 4. What is Latency in Networking | How to Reduce Latency | CDN vs Caching
@@ -135,6 +156,14 @@ Round trip CA to EU:          150,000,000 ns (150 ms)
 | **Purpose**      | Reduce geographic latency | Reduce DB/computation load |
 | **Content Type** | Static (images, CSS, JS)  | Dynamic data, queries      |
 | **Examples**     | CloudFlare, CloudFront    | Redis, Memcached           |
+
+```mermaid
+graph LR
+    User -->|1.geographically closest| CDN[CDN Edge Server\nstatic assets]
+    CDN -->|2.dynamic data miss| App[App Server]
+    App -->|3.check cache first| Cache[(Redis Cache)]
+    Cache -->|4.miss| DB[(Database)]
+```
 
 ---
 
@@ -243,6 +272,15 @@ In a distributed system, you can only guarantee **two out of three**:
 | Banking      | CP     | Financial accuracy critical       |
 | Social Media | AP     | High availability, stale posts OK |
 
+```mermaid
+graph TD
+    CAP((CAP\npick 2 of 3)) --- C[Consistency]
+    CAP --- Av[Availability]
+    CAP --- P[Partition Tolerance]
+    C -.CP e.g. Mongo/HBase.- P
+    Av -.AP e.g. Cassandra/Dynamo.- P
+```
+
 ---
 
 ## 9. What is Lamport Logical Clock?
@@ -302,6 +340,15 @@ Master (Read + Write) → Slaves (Read Only)
 
 Both masters accept writes; requires conflict resolution.
 
+```mermaid
+graph TD
+    Master[(Master\nRead+Write)] -->|replicate| Slave1[(Slave\nRead only)]
+    Master -->|replicate| Slave2[(Slave\nRead only)]
+    App[App Servers] -->|writes| Master
+    App -->|reads| Slave1
+    App -->|reads| Slave2
+```
+
 ---
 
 ## 12. What is Load Balancer and How It Works (Load Balancing Algorithms)
@@ -323,6 +370,14 @@ Both masters accept writes; requires conflict resolution.
 ### Popular Load Balancers:
 
 Nginx, HAProxy, AWS ELB/ALB/NLB
+
+```mermaid
+graph LR
+    Client --> LB{Load Balancer}
+    LB -->|Round Robin / Weighted / Least Conn / IP Hash| S1[Server 1]
+    LB --> S2[Server 2]
+    LB --> S3[Server 3]
+```
 
 ---
 
@@ -351,6 +406,22 @@ Nginx, HAProxy, AWS ELB/ALB/NLB
 ### Popular Solutions:
 
 Redis, Memcached, Varnish
+
+```mermaid
+sequenceDiagram
+    participant App
+    participant Cache
+    participant DB
+    Note over App,DB: Cache-Aside
+    App->>Cache: GET key
+    alt hit
+        Cache-->>App: value
+    else miss
+        App->>DB: query
+        DB-->>App: value
+        App->>Cache: SET key
+    end
+```
 
 ---
 
@@ -407,6 +478,14 @@ Large binary files, logs, backups, static assets
 | **Document**      | MongoDB, Firestore | CMS, User profiles               |
 | **Column-Family** | Cassandra, HBase   | Time-series, Logs                |
 | **Graph**         | Neo4j, Neptune     | Social networks, Recommendations |
+
+```mermaid
+graph TD
+    NoSQL --> KV[Key-Value: Redis, DynamoDB]
+    NoSQL --> Doc[Document: MongoDB, Firestore]
+    NoSQL --> Col[Column-Family: Cassandra, HBase]
+    NoSQL --> Graph[Graph: Neo4j, Neptune]
+```
 
 ---
 
@@ -487,6 +566,17 @@ CREATE INDEX idx_user_email ON users(email);
 | **Latency**    | Higher      | Lower perceived |
 | **Complexity** | Simpler     | More complex    |
 
+```mermaid
+graph LR
+    subgraph Sync["Synchronous"]
+        C1[Client] -->|HTTP request| S1[Server] -->|waits...response| C1
+    end
+    subgraph Async["Asynchronous"]
+        C2[Producer] -->|publish| Q[(Broker)]
+        Q -->|consume| Con[Consumer]
+    end
+```
+
 ---
 
 ## 23. What is Message Based Communication?
@@ -507,6 +597,14 @@ Services communicate via messages through a message broker.
 ### Benefits:
 
 - Decoupling, scalability, fault tolerance, load leveling
+
+```mermaid
+graph LR
+    P[Producer] -->|publish| Broker[(Message Broker\nKafka/RabbitMQ/SQS)]
+    Broker -->|Point-to-Point| C1[Consumer]
+    Broker -->|Pub/Sub| C2[Subscriber 1]
+    Broker -->|Pub/Sub| C3[Subscriber 2]
+```
 
 ---
 
@@ -575,6 +673,11 @@ Rules governing data exchange between systems.
 Presentation Tier → Business Logic Tier → Data Tier
 ```
 
+```mermaid
+graph LR
+    Pres[Presentation Tier\nUI] --> Biz[Business Logic Tier\nAPI/Services] --> Data[Data Tier\nDatabase]
+```
+
 ---
 
 ## 27. Difference Between Authentication and Authorization
@@ -585,6 +688,12 @@ Presentation Tier → Business Logic Tier → Data Tier
 | **Verifies** | Identity       | Permissions          |
 | **When**     | First          | After authentication |
 | **Example**  | Login          | Access control       |
+
+```mermaid
+graph LR
+    U[User] -->|"1. Who are you?"| Auth[Authentication] --> Ident[Identity confirmed]
+    Ident -->|"2. What can you do?"| Authz[Authorization] --> Access[Access granted/denied]
+```
 
 ---
 
@@ -618,6 +727,17 @@ Header.Payload.Signature
 
 **Benefits:** Stateless, scalable, cross-domain
 
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant S as Server
+    U->>S: login(credentials)
+    S-->>U: JWT (Header.Payload.Signature)
+    U->>S: request + Authorization: Bearer JWT
+    S->>S: verify signature (stateless)
+    S-->>U: response
+```
+
 ---
 
 ## 30. OAuth Authentication
@@ -636,6 +756,19 @@ Header.Payload.Signature
 - Authorization Code (web apps)
 - Client Credentials (server-to-server)
 - Refresh Token
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant App as Your App
+    participant IdP as Google (Auth Server)
+    U->>App: click "Login with Google"
+    App->>IdP: redirect for consent
+    U->>IdP: approve
+    IdP-->>App: authorization code
+    App->>IdP: exchange code for access token
+    IdP-->>App: access token
+```
 
 ---
 
@@ -660,6 +793,12 @@ Client → Internet → Reverse Proxy → Server(s)
 - Hides server identity
 - Load balancing, SSL termination
 - Example: Nginx, AWS ALB
+
+```mermaid
+graph LR
+    C1[Client] --> FP[Forward Proxy\nhides client] --> Internet1((Internet)) --> Srv1[Server]
+    C2[Client] --> Internet2((Internet)) --> RP[Reverse Proxy\nhides server] --> Srv2[Server Pool]
+```
 
 ---
 
@@ -713,6 +852,15 @@ GET /{code} → Lookup mapping → 301 Redirect
 
 ```
 urls: short_code, long_url, created_at, user_id, clicks
+```
+
+```mermaid
+graph LR
+    U1[User] -->|POST /shorten long_url| API[App Server]
+    API -->|base62 encode| KV[(Redis KV Store)]
+    U2[User] -->|GET /abc123| API
+    API -->|lookup| KV
+    API -->|301 redirect| U2
 ```
 
 ---
@@ -770,4 +918,14 @@ users: id, email, storage_used
 files: id, user_id, name, path, size, hash, version
 blocks: id, file_id, block_hash, order
 shares: id, file_id, shared_with, permission
+```
+
+```mermaid
+graph TD
+    Client -->|upload/sync| LB{Load Balancer}
+    LB --> API2[API Servers]
+    API2 --> Meta[(Metadata DB)]
+    API2 --> Block[Block Server\nchunk + dedupe]
+    Block --> Obj[(Object Storage S3)]
+    API2 -->|WebSocket notify| Client2[Other Devices]
 ```

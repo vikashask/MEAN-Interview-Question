@@ -8,6 +8,17 @@
 
 **In short:** A load balancer distributes traffic, while an API gateway manages, secures, and orchestrates APIs.
 
+```mermaid
+graph LR
+    Client --> LB{Load Balancer\ntraffic spreading}
+    LB --> S1[Server 1]
+    LB --> S2[Server 2]
+
+    Client2[Client] --> GW{API Gateway\nauth+rate-limit+routing}
+    GW --> MS1[Microservice A]
+    GW --> MS2[Microservice B]
+```
+
 ---
 
 ## What’s the difference between forward proxy and reverse proxy?
@@ -15,6 +26,12 @@
 - **Forward Proxy:** A forward proxy sits in front of a client (or a group of clients) and forwards their requests to the internet. It can be used for security, filtering, and caching. The server that receives the request sees the IP address of the proxy, not the original client.
 
 - **Reverse Proxy:** A reverse proxy sits in front of a server (or a group of servers) and forwards client requests to those servers. It's used for load balancing, SSL termination, and caching. The client that sends the request doesn't know which server is actually handling it.
+
+```mermaid
+graph LR
+    C1[Client] --> FP[Forward Proxy\nhides client] --> Internet1((Internet)) --> Srv1[Server]
+    C2[Client] --> Internet2((Internet)) --> RP[Reverse Proxy\nhides server] --> Srv2[Server Pool]
+```
 
 ---
 
@@ -24,6 +41,18 @@
 
 - **Vertical Scaling (Scaling Up):** This involves increasing the resources of a single machine, such as adding more CPU, RAM, or storage. It's often simpler to implement initially but can be more expensive and has physical limits.
 
+```mermaid
+graph LR
+    subgraph Vertical["Vertical (Scale Up)"]
+        S1[Small Server] -->|add CPU/RAM| S2[Bigger Server]
+    end
+    subgraph Horizontal["Horizontal (Scale Out)"]
+        LB{Load Balancer} --> H1[Server]
+        LB --> H2[Server]
+        LB --> H3[Server]
+    end
+```
+
 ---
 
 ## Explain microservices vs. monolithic architecture.
@@ -31,6 +60,17 @@
 - **Monolithic Architecture:** In a monolithic architecture, the entire application is built as a single, unified unit. All the components are tightly coupled and run in the same process. This can be simpler to develop and deploy initially, but it can become difficult to maintain, scale, and update as the application grows.
 
 - **Microservices Architecture:** In a microservices architecture, the application is broken down into a collection of small, independent services. Each service is responsible for a specific business capability and can be developed, deployed, and scaled independently. This provides more flexibility and resilience but also introduces more complexity in terms of deployment and management.
+
+```mermaid
+graph TB
+    subgraph Monolith["Monolithic"]
+        M1[UI + Business Logic + Data Access] --> MDB[(Single Shared DB)]
+    end
+    subgraph Micro["Microservices"]
+        Gate[API Gateway] --> S1[User Service] --> DB1[(User DB)]
+        Gate --> S2[Order Service] --> DB2[(Order DB)]
+    end
+```
 
 ---
 
@@ -44,6 +84,16 @@ The CAP theorem (also known as Brewer's theorem) states that it is impossible fo
 
 In a distributed system, you must choose between consistency and availability when a network partition occurs.
 
+```mermaid
+graph TD
+    CAP((CAP\npick 2 of 3))
+    CAP --- C[Consistency]
+    CAP --- Av[Availability]
+    CAP --- P[Partition Tolerance]
+    C -.CP e.g. Mongo/HBase.- P
+    Av -.AP e.g. Cassandra/Dynamo.- P
+```
+
 ---
 
 ## How does a Rate Limiter work?
@@ -55,6 +105,16 @@ A rate limiter is a mechanism that controls the rate at which requests are proce
 - **Token Bucket:** A bucket is filled with tokens at a fixed rate. Each request consumes a token. If the bucket is empty, the request is rejected.
 - **Leaky Bucket:** Requests are added to a queue (the bucket). They are processed at a fixed rate. If the queue is full, new requests are rejected.
 - **Fixed Window Counter:** The number of requests in a fixed time window is tracked. If the count exceeds a threshold, requests are rejected.
+
+```mermaid
+graph LR
+    subgraph TokenBucket["Token Bucket"]
+        TB[Tokens refill at fixed rate] -->|consume 1/req| Req1[Request]
+    end
+    subgraph LeakyBucket["Leaky Bucket"]
+        Req2[Requests] --> Queue[Queue] -->|leak at fixed rate| Out[Processed]
+    end
+```
 
 ---
 
@@ -71,6 +131,19 @@ Single Sign-On (SSO) allows a user to log in once and gain access to multiple ap
 5.  The browser sends the token to the SP.
 6.  The SP validates the token and grants the user access.
 
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant SP as App (Service Provider)
+    participant IdP as Identity Provider
+    U->>SP: access app
+    SP->>IdP: redirect to login
+    U->>IdP: authenticate once
+    IdP-->>U: token (SAML/JWT)
+    U->>SP: present token
+    SP-->>U: access granted
+```
+
 ---
 
 ## What is caching, and why is it important?
@@ -80,12 +153,33 @@ Caching is the process of storing copies of files or data in a temporary storage
 - **Reducing latency:** By serving data from a cache closer to the user, you can reduce the time it takes to retrieve it.
 - **Reducing load on backend services:** By serving frequently accessed data from a cache, you can reduce the number of requests that hit your backend servers.
 
+```mermaid
+sequenceDiagram
+    participant App
+    participant Cache
+    participant DB
+    App->>Cache: GET key
+    alt cache hit
+        Cache-->>App: value (fast)
+    else cache miss
+        App->>DB: query
+        DB-->>App: value
+        App->>Cache: SET key=value
+    end
+```
+
 ---
 
 ## What are the types of load balancers and their use cases?
 
 - **Layer 4 (Transport Layer):** These load balancers operate at the TCP/UDP level. They make routing decisions based on the source and destination IP addresses and ports. They are fast and efficient but don't have any knowledge of the application-level data.
 - **Layer 7 (Application Layer):** These load balancers operate at the HTTP level. They can inspect the content of the requests (e.g., headers, URLs, cookies) and make more intelligent routing decisions. They are useful for things like content-based routing and SSL termination.
+
+```mermaid
+graph LR
+    Req[Incoming Request] --> L4[Layer 4\nTCP/UDP, IP+port only\nfast, blind to content]
+    Req --> L7[Layer 7\nHTTP-aware\ncontent-based routing, SSL termination]
+```
 
 ---
 
@@ -98,6 +192,13 @@ Sharding is a database scaling technique that involves breaking up a large datab
 - **Improved Performance:** By distributing the data and the query load across multiple servers, you can improve the performance of your database.
 - **Increased Scalability:** You can add more shards as your data grows, allowing you to scale your database horizontally.
 
+```mermaid
+graph LR
+    Router{Shard Router\nhash(key)} --> Shard1[(Shard 1)]
+    Router --> Shard2[(Shard 2)]
+    Router --> Shard3[(Shard 3)]
+```
+
 ---
 
 ## Differences between JWT, OAuth, and SAML?
@@ -107,3 +208,10 @@ Sharding is a database scaling technique that involves breaking up a large datab
 - **OAuth (Open Authorization):** An authorization framework that allows a third-party application to obtain limited access to a user's account on another service, without giving it the user's password.
 
 - **SAML (Security Assertion Markup Language):** An XML-based standard for exchanging authentication and authorization data between parties, in particular, between an identity provider and a service provider. It's often used for enterprise-level single sign-on (SSO).
+
+```mermaid
+graph TD
+    JWT["JWT — token format\nstateless auth, self-contained"]
+    OAuth["OAuth — authorization framework\n3rd-party limited access (Login with Google)"]
+    SAML["SAML — XML auth/authz standard\nenterprise SSO"]
+```

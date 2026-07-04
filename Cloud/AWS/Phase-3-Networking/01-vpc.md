@@ -1,5 +1,48 @@
 # VPC (Virtual Private Cloud)
 
+> **In plain English:** A VPC is your own private, isolated network inside AWS — like having your own fenced plot of land in a shared city. Everything else (EC2, RDS, Lambda-in-VPC) lives inside subnets carved out of that plot.
+
+## Real-world analogy
+
+Think of a VPC as a gated housing complex:
+
+- **VPC** = the whole complex, with its own address range (CIDR block).
+- **Subnet** = one street inside the complex. **Public subnet** = a street with a direct gate to the outside world (Internet Gateway attached). **Private subnet** = an inner street with no direct gate — residents can go out via a supervised exit (NAT Gateway) but nobody outside can walk straight in.
+- **Route table** = the complex's signage telling traffic "to reach outside, go through this gate."
+- **Internet Gateway (IGW)** = the complex's main public gate — two-way traffic to the internet.
+- **NAT Gateway** = a one-way turnstile in a private street — residents (private subnet) can go out to fetch something (e.g. software updates), but strangers from outside can't come in through it.
+- **Security Group** = a bouncer standing at *each house's door* (attached to individual EC2 instances), checking every visitor.
+- **Network ACL (NACL)** = a checkpoint at the *street entrance* (attached to the whole subnet), checking everyone entering/leaving that street.
+- **VPC Peering / Transit Gateway** = a private tunnel connecting two separate complexes (VPCs) so residents can visit each other without going through the public internet.
+- **VPC Endpoint** = a private back-door directly into an AWS service (like S3) so traffic never has to leave the complex to reach it.
+
+## Core concepts (memorize these first)
+
+| Term | What it means |
+|---|---|
+| **CIDR block** | The IP address range for the VPC/subnet, e.g. `10.0.0.0/16` (~65k IPs) or `10.0.1.0/24` (256 IPs). |
+| **Subnet** | A slice of the VPC's IP range, tied to one Availability Zone. |
+| **Public subnet** | Has a route to an Internet Gateway → resources can have public IPs and be reached from the internet. |
+| **Private subnet** | No direct route to an Internet Gateway → not reachable from the internet directly. |
+| **Internet Gateway (IGW)** | Lets a VPC talk to the public internet — two-way. |
+| **NAT Gateway** | Lets private-subnet resources *initiate* outbound internet traffic (e.g. download updates), but nothing from outside can initiate a connection in — one-way. |
+| **Security Group (SG)** | Firewall at the instance level. Stateful (if you allow inbound, the matching outbound reply is automatically allowed). |
+| **Network ACL (NACL)** | Firewall at the subnet level. Stateless (you must explicitly allow both inbound AND outbound, even for replies). |
+| **VPC Peering** | 1-to-1 private connection between two VPCs. |
+| **Transit Gateway** | A central hub connecting many VPCs together (better than peering when you have many VPCs — peering doesn't scale well past a handful). |
+| **VPC Endpoint** | A private connection from your VPC directly to an AWS service (S3, DynamoDB...) without going over the public internet. |
+| **VPC Flow Logs** | Records of all IP traffic going in/out of network interfaces — used for troubleshooting/auditing. |
+
+**The #1 interview trap:** Security Group vs NACL. SG = stateful, applies per-instance, only supports "Allow" rules. NACL = stateless, applies per-subnet, supports both "Allow" and explicit "Deny" rules.
+
+## Memory hooks
+
+- **"Public subnet has a gate (IGW). Private subnet has a one-way turnstile (NAT)."**
+- **SG = bodyguard for a person (stateful, remembers the conversation). NACL = checkpoint for a street (stateless, checks every single packet both ways).**
+- CIDR sizing to remember: `/16` = big VPC (~65k IPs), `/24` = normal subnet (256 IPs, 251 usable — AWS reserves 5).
+
+---
+
 ## Create VPC
 
 ```bash
@@ -18,6 +61,8 @@ aws ec2 modify-vpc-attribute \
 ```
 
 ## Subnets
+
+Public subnet gets `map-public-ip-on-launch` so instances auto-receive a public IP. Private subnet doesn't.
 
 ```bash
 # Create public subnet
@@ -39,6 +84,8 @@ aws ec2 modify-subnet-attribute \
 ```
 
 ## Internet Gateway
+
+A subnet only becomes "public" once its route table sends `0.0.0.0/0` (all internet-bound traffic) to an Internet Gateway.
 
 ```bash
 # Create IGW
@@ -66,6 +113,8 @@ aws ec2 associate-route-table \
 
 ## NAT Gateway
 
+Lives *inside a public subnet* but serves *private subnet* traffic — private resources route their outbound internet traffic through it. It needs an Elastic IP to have a stable public-facing address.
+
 ```bash
 # Allocate Elastic IP
 aws ec2 allocate-address --domain vpc
@@ -83,6 +132,8 @@ aws ec2 create-route \
 ```
 
 ## Security Groups
+
+Stateful, per-instance firewall — only "Allow" rules exist (no explicit deny needed; anything not allowed is blocked by default). You can even reference another security group as the source, instead of an IP range (common pattern: "only let the ALB's security group talk to the app's security group").
 
 ```bash
 # Create security group
@@ -122,6 +173,8 @@ aws ec2 authorize-security-group-ingress \
 
 ## Network ACLs
 
+Stateless, per-subnet firewall — you must explicitly allow both directions (inbound rule for the request, outbound rule for the reply), and rules are evaluated in order by `rule-number` (lowest first).
+
 ```bash
 # Create network ACL
 aws ec2 create-network-acl --vpc-id vpc-12345
@@ -149,6 +202,8 @@ aws ec2 create-network-acl-entry \
 
 ## VPC Peering
 
+A private, direct link between two VPCs (even across regions) — but it's 1-to-1 and doesn't transitively connect a third VPC (if A peers with B, and B peers with C, A still can't reach C through B).
+
 ```bash
 # Create peering connection
 aws ec2 create-vpc-peering-connection \
@@ -169,6 +224,8 @@ aws ec2 create-route \
 
 ## VPC Endpoints
 
+Lets resources inside your VPC reach S3/DynamoDB/etc *without* going over the public internet or through a NAT Gateway — cheaper and more secure. Gateway endpoints (S3, DynamoDB) are free; Interface endpoints (most other services) cost a bit but work the same way.
+
 ```bash
 # S3 Gateway endpoint
 aws ec2 create-vpc-endpoint \
@@ -186,6 +243,8 @@ aws ec2 create-vpc-endpoint \
 ```
 
 ## VPC Flow Logs
+
+Captures metadata about every packet in/out of your VPC (source, destination, port, accept/reject) — essential for debugging "why can't X reach Y" and for security audits.
 
 ```bash
 # Create flow log
@@ -270,6 +329,8 @@ const createSubnets = async (vpcId) => {
 
 ## Transit Gateway
 
+When you have more than a handful of VPCs, peering every pair becomes unmanageable (N VPCs need up to N×(N-1)/2 peering connections). Transit Gateway is a central hub — every VPC connects once to the hub instead.
+
 ```bash
 # Create transit gateway
 aws ec2 create-transit-gateway \
@@ -308,3 +369,22 @@ aws ec2 create-transit-gateway-route \
 - Implement defense in depth (NACL + SG)
 - Tag all resources consistently
 ```
+
+---
+
+## Quick interview answers
+
+**Q: Security Group vs Network ACL?**
+SG: stateful, instance-level, Allow-only rules. NACL: stateless, subnet-level, supports explicit Allow and Deny, rules processed in numeric order.
+
+**Q: What makes a subnet "public"?**
+Its route table has a route to an Internet Gateway for `0.0.0.0/0` — nothing more. (Auto-assign public IP is a convenience setting, not what defines "public.")
+
+**Q: Why use a NAT Gateway instead of just putting everything in a public subnet?**
+Security — private resources (like a database) should never be directly reachable from the internet, but they may still need outbound access (e.g., to download patches or call external APIs). NAT gives one-way outbound access only.
+
+**Q: VPC Peering vs Transit Gateway — when to use which?**
+Peering for a small number of VPCs needing direct connections. Transit Gateway when you have many VPCs — avoids the N² peering explosion and centralizes routing.
+
+**Q: Why use a VPC Endpoint instead of just routing through NAT to reach S3?**
+Lower latency/cost (no NAT Gateway data processing charges), traffic never touches the public internet, and it works even without any internet access configured at all.

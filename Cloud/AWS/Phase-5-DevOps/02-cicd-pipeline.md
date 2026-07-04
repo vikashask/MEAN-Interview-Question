@@ -1,6 +1,47 @@
 # CI/CD Pipeline
 
+> **In plain English:** CI/CD automates "code gets pushed → tested → built → deployed" so nobody manually copies files to a server. On AWS, CodePipeline is the conductor, CodeBuild does the building/testing, and CodeDeploy (or ECS/Lambda deploy actions) actually ships the new version.
+
+## Real-world analogy
+
+Think of a car factory assembly line:
+
+- **CodePipeline** = the conveyor belt moving the car through each station in order (Source → Build → Deploy).
+- **CodeBuild** = the assembly station that actually puts pieces together and runs quality checks (compiles code, runs tests, builds a Docker image).
+- **CodeDeploy** = the delivery team that installs the finished car at the customer's location (deploys the built artifact to EC2/ECS/Lambda), and can do it carefully in stages.
+- **Blue-Green Deployment** = building the new car in a separate garage while the old one keeps running, then swapping the customer over to the new one instantly once it's verified — old car (blue) stays available as an instant fallback.
+- **Canary Deployment** = letting only 10% of customers test-drive the new car model first, and only rolling it out to everyone if nothing goes wrong.
+- **Rollback** = returning to the previous car model immediately if the new one turns out to be broken.
+
+## Core concepts (memorize these first)
+
+| Term | What it means |
+|---|---|
+| **CI (Continuous Integration)** | Automatically build + test every code change, so bugs are caught immediately instead of at release time. |
+| **CD (Continuous Delivery/Deployment)** | Automatically ship the tested build to an environment — Delivery = a human clicks "go," Deployment = fully automatic with no human step. |
+| **CodePipeline** | Orchestrates the whole flow: Source → Build → Test → Deploy, in stages. |
+| **CodeBuild** | Runs your build/test commands in a temporary container, defined by a `buildspec.yml`. |
+| **CodeDeploy** | Handles the actual deployment to EC2, ECS, or Lambda, including rolling/blue-green strategies. |
+| **buildspec.yml** | CodeBuild's instructions: what to do in `pre_build`, `build`, and `post_build` phases. |
+| **appspec.yml** | CodeDeploy's instructions: what to deploy and which lifecycle hooks (scripts) to run at each stage. |
+| **Artifact** | The output of one pipeline stage, passed as input to the next (e.g. Build stage outputs a Docker image reference, Deploy stage consumes it). |
+| **Blue-Green Deployment** | Old version stays fully live while new version deploys separately; traffic switches over only once the new version is verified healthy. Instant rollback = just switch back. |
+| **Canary Deployment** | Gradually shift a small % of traffic to the new version first, increasing over time, watching for errors before going 100%. |
+| **Rolling Deployment** | Replace instances/tasks a few at a time, rather than all at once — some capacity always available, but old and new versions briefly coexist. |
+
+**Interview-favorite distinction:** Blue-Green vs Canary vs Rolling — all three avoid downtime, but differ in *how fast* and *how much* traffic shifts. Blue-Green = instant full cutover (with instant rollback). Canary = gradual % ramp-up (catches issues early with minimal blast radius). Rolling = replace a few instances at a time (simplest, but old/new versions coexist briefly and rollback is slower).
+
+## Memory hooks
+
+- **"Pipeline = the conveyor belt. Build = the workstation. Deploy = the delivery truck."**
+- **buildspec = how to build it. appspec = how to deploy it.** Easy to mix up the two YAML files — remember "build" and "app(deploy)" in the names.
+- Canary = "small test group first." Blue-Green = "flip the switch, keep the old one on standby." Rolling = "replace a few at a time."
+
+---
+
 ## CodePipeline
+
+The orchestrator — defines the ordered stages (Source, Build, Deploy) and which artifact flows between them.
 
 ```bash
 # Create pipeline
@@ -108,6 +149,8 @@ aws codepipeline list-pipelines
 
 ## CodeBuild
 
+`buildspec.yml` has three phases you should remember: `pre_build` (login/setup), `build` (compile/test/build image), `post_build` (push image, produce artifact). Secrets can be pulled directly from Secrets Manager into env vars.
+
 ```yaml
 # buildspec.yml
 version: 0.2
@@ -175,6 +218,8 @@ aws codebuild batch-get-builds --ids my-build-id
 
 ## CodeDeploy
 
+`appspec.yml` tells CodeDeploy what to deploy and which lifecycle hooks to fire — the ECS version wires in a new task definition; the EC2 version copies files and runs shell scripts at each stage.
+
 ```yaml
 # appspec.yml (for ECS)
 version: 0.0
@@ -229,6 +274,8 @@ hooks:
 ```
 
 ## GitHub Actions with AWS
+
+If your source lives in GitHub rather than CodeCommit, GitHub Actions can do the whole build+deploy pipeline itself, authenticating to AWS via access keys (or better, OIDC federation) stored as repo secrets.
 
 ```yaml
 # .github/workflows/deploy.yml
@@ -302,6 +349,8 @@ jobs:
 
 ## Lambda Deployment
 
+Same idea but simpler — zip the code, upload it, publish a numbered version, then move a named alias (e.g. `production`) to point at the new version. Aliases are what makes instant rollback possible (just repoint the alias to the old version number).
+
 ```yaml
 # .github/workflows/deploy-lambda.yml
 name: Deploy Lambda
@@ -363,6 +412,8 @@ jobs:
 
 ## Blue-Green Deployment
 
+The new version deploys fully alongside the old one; traffic only cuts over after validation hooks pass — meaning rollback is just "route traffic back to the old, still-running version."
+
 ```yaml
 # Blue-Green with CodeDeploy
 Resources:
@@ -411,6 +462,8 @@ export const handler = async (event) => {
 
 ## Canary Deployment
 
+Send a small percentage of traffic (10% here) to the new version first, and only shift everyone over once it's proven stable — limits the "blast radius" if something's wrong.
+
 ```yaml
 # API Gateway Canary
 Resources:
@@ -425,6 +478,8 @@ Resources:
 ```
 
 ## Multi-Region Deployment
+
+Deploy the exact same template to multiple regions in parallel — common for disaster recovery or reducing latency for a global user base.
 
 ```yaml
 # .github/workflows/multi-region-deploy.yml
@@ -455,6 +510,8 @@ jobs:
 
 ## Rollback Strategy
 
+Every deploy target has a "go back to the previous known-good version" command — good to know these off the top of your head for incident response.
+
 ```bash
 # Rollback ECS service
 aws ecs update-service \
@@ -471,3 +528,22 @@ aws lambda update-alias \
 # Rollback CloudFormation
 aws cloudformation cancel-update-stack --stack-name my-app
 ```
+
+---
+
+## Quick interview answers
+
+**Q: Continuous Delivery vs Continuous Deployment — what's the actual difference?**
+Delivery: every change is automatically built/tested and made ready to deploy, but a human clicks "go" for production. Deployment: no human step at all — passing all checks means it ships automatically.
+
+**Q: Blue-Green vs Canary vs Rolling deployment?**
+Blue-Green: full new environment stood up alongside the old, instant cutover, instant rollback. Canary: small % of traffic shifted first, gradually increased — limits blast radius of a bad release. Rolling: replace instances/tasks a few at a time — simplest, but old and new versions briefly coexist and rollback takes longer.
+
+**Q: buildspec.yml vs appspec.yml?**
+buildspec.yml = CodeBuild's instructions (how to build/test/package). appspec.yml = CodeDeploy's instructions (how/where to deploy the built artifact, plus lifecycle hook scripts).
+
+**Q: How do you achieve safe, instant Lambda rollback?**
+Publish immutable numbered versions on every deploy, and point an alias (like `production`) at the desired version — rollback is just repointing the alias to the previous version number.
+
+**Q: Why validate a deployment with lifecycle hooks instead of just deploying and hoping?**
+Hooks (BeforeInstall, AfterInstall, AfterAllowTestTraffic, etc) let you run automated health checks at each stage of the deployment and automatically halt/rollback if something's wrong, before real users are affected.

@@ -1,5 +1,7 @@
 # Monitoring, Observability & Pipeline Optimization
 
+> **Expert framing:** Instrumenting an app with Application Insights is basic. Expert-level observability is knowing which of the three pillars (logs/metrics/traces) actually answers the question you're asking, writing KQL that scales (not scanning huge time ranges unnecessarily), and treating pipeline speed as a first-class engineering concern (caching, parallelism, templates) rather than an afterthought once builds get painfully slow.
+
 ## The Three Pillars of Observability
 1. **Logs** – What happened? (Text records of events)
 2. **Metrics** – How is it performing? (CPU, memory, request rate, error %)
@@ -117,6 +119,12 @@ AzureDevOpsAuditEvents
             Failed = countif(Data contains "Failed")
 | extend SuccessRate = round(100.0 * Success / (Success + Failed), 2)
 ```
+
+**Expert insight — writing KQL that doesn't fall over at scale:**
+- **Always filter on `TimeGenerated` first**, before other `where` clauses — KQL is optimized to prune by time range early; filtering time last (or omitting it) forces a scan across the entire retention window, which gets slow and expensive as data volume grows.
+- **`summarize` before `project`** when you only need aggregated results — projecting first and summarizing after processes unnecessary row-level data through the pipeline.
+- **Prefer `has`/`contains` only when necessary** — `has` is faster than `contains` because it matches on indexed whole-term tokens rather than doing a full substring scan; use `contains` only when you genuinely need substring matching (e.g., partial words).
+- These aren't just performance trivia — a KQL query scanning a huge un-time-filtered range against a busy Log Analytics workspace is a common real-world cause of slow, expensive dashboards and alert queries that time out.
 
 ---
 
@@ -243,9 +251,36 @@ steps:
 
 ---
 
+## Common Pitfalls & Expert Tips
+
+- **Alerting on raw thresholds without accounting for normal variance.** A static "CPU > 80%" alert fires constantly on a workload with legitimate periodic spikes (batch jobs, traffic bursts) — leading to alert fatigue where the team starts ignoring alerts entirely (the real danger, since it means a *genuine* incident gets ignored too). Use dynamic thresholds or aggregate over a sensible window (e.g., sustained for 5+ minutes) instead.
+- **Logging everything at maximum verbosity in production.** Excessive logging increases Application Insights/Log Analytics ingestion cost significantly and makes genuinely important signals harder to find in the noise — sample or filter appropriately (Application Insights supports adaptive sampling for exactly this reason).
+- **Not correlating traces across services.** Without distributed tracing (`setAutoDependencyCorrelation(true)`), a slow user-facing request in a microservices architecture is nearly impossible to root-cause — you see the symptom (slow request) but not which downstream dependency actually caused it.
+- **Caching keyed only on `Agent.OS` without including the lockfile hash.** A cache key like `npm | "$(Agent.OS)"` alone never invalidates when dependencies change — the pipeline keeps using stale cached dependencies. Always include a hash of the lockfile (`package-lock.json`) in the key so the cache automatically invalidates when dependencies actually change.
+- **Copy-pasting the same pipeline steps across many `azure-pipelines.yml` files instead of using templates.** This is a maintenance trap — a fix or improvement has to be manually applied to every copy, and they inevitably drift out of sync over time.
+- **Running everything sequentially "because it's simpler."** Independent test suites, lint checks, and builds across different configurations (Node versions, OSes) should run in parallel via a `matrix` strategy — sequential execution wastes wall-clock time for no correctness benefit when the jobs don't actually depend on each other.
+
+---
+
 ## Practical Exercise ✅
 1. Create an Application Insights instance and integrate it into a Node.js app.
 2. Deploy the app and trigger a few requests + one intentional error.
 3. Write a KQL query in Log Analytics to find all requests with `DurationMs > 200ms`.
 4. Add a `Cache@2` step to your pipeline. Compare the build time before and after.
 5. Extract 2+ repeated steps into a YAML template file and reference it across 2 pipeline stages.
+
+---
+
+## Expert Interview Q&A
+
+**Q: Logs, Metrics, and Traces — give a concrete scenario where you'd need each, and why one wouldn't be enough alone.**
+Metrics tell you *something* is wrong fast (error rate spiked at 2:14pm) but not *why*. Traces show you the end-to-end path of a specific slow/failed request across multiple services, pinpointing *where* in the chain the time was lost or the failure occurred. Logs give you the detailed contextual message at that exact point (a stack trace, a specific input value that caused the failure) once traces have narrowed down *where* to look. In practice: metrics alert you, traces localize the problem, logs explain the root cause.
+
+**Q: Why does alert fatigue actually make systems less reliable, and how do you design around it?**
+If alerts fire too often for non-actionable reasons (normal variance, transient blips), the on-call team starts to reflexively dismiss or mute them — meaning a genuinely critical alert gets the same "probably nothing" treatment and is missed or delayed. Design around it with thresholds that require sustained breach (not single data points), dynamic/seasonal baselines instead of static numbers where traffic patterns vary, and routing only truly actionable alerts to paging channels (informational ones to a dashboard instead).
+
+**Q: Your pipeline caching isn't actually speeding anything up even though you added a `Cache@2` step. What's the likely misconfiguration?**
+The cache key is probably too broad or too narrow. Too broad (e.g., keyed only on OS) means it never invalidates and might serve stale dependencies, or the restore itself takes as long as a fresh install if the cache is enormous and unfocused. Too narrow/unstable (e.g., including a timestamp or build ID in the key) means it *never* gets a cache hit because the key is different every single run. The correct key includes something stable that changes exactly when the cache should invalidate — typically a hash of the lockfile.
+
+**Q: When would you use a pipeline `matrix` strategy versus a single sequential job with multiple steps?**
+Use a matrix when the work is genuinely independent and would benefit from running concurrently — e.g., testing against multiple Node versions or OSes, where a failure in one combination shouldn't block or be conflated with another. Sequential steps are appropriate when there's a real dependency between steps (build must complete before test can run against its output) — parallelizing dependent steps would either fail or produce incorrect results.

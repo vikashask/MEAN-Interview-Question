@@ -2,6 +2,20 @@
 
 This example illustrates the difference and the typical evolution from vertical to horizontal scaling.
 
+```mermaid
+graph TD
+    P1["Phase 1: Launch\nsingle server, 2-core/4GB"] -->|traffic doubles| P2["Vertical scale-up\n4-core/16GB NVMe"]
+    P2 -->|Black Friday 100x spike\nsingle giant box = costly + SPOF| P3["Phase 2: Horizontal scale-out"]
+    P3 --> LB{Load Balancer}
+    LB --> W1[Web Server]
+    LB --> W2[Web Server]
+    LB --> W3[Web Server]
+    W1 --> Redis[(Redis - shared sessions)]
+    W2 --> Redis
+    W3 --> Redis
+    W1 --> PDB[(Dedicated DB Server)]
+```
+
 ### Phase 1: The Launch (Vertical Scaling)
 
 *   **Initial Setup:** You launch your website on a single server. It has a 2-core CPU, 4GB of RAM, and a 500GB SSD. This is enough to handle the initial traffic of a few hundred users a day.

@@ -1,3 +1,53 @@
+## Quick Comparison Table
+
+| Algorithm | Best | Average | Worst | Space | Stable? |
+|---|---|---|---|---|---|
+| Bubble | O(n) | O(n²) | O(n²) | O(1) | Yes |
+| Selection | O(n²) | O(n²) | O(n²) | O(1) | No |
+| Insertion | O(n) | O(n²) | O(n²) | O(1) | Yes |
+| Merge | O(n log n) | O(n log n) | O(n log n) | O(n) | Yes |
+| Quick | O(n log n) | O(n log n) | O(n²) | O(log n) | No |
+| Heap | O(n log n) | O(n log n) | O(n log n) | O(1) | No |
+| Counting | O(n+k) | O(n+k) | O(n+k) | O(k) | Yes |
+| Radix | O(nk) | O(nk) | O(nk) | O(n+k) | Yes |
+
+## Merge Sort — Divide & Conquer Diagram
+```mermaid
+graph TD
+    A["[5,3,8,4,2,7,1,6]"] --> B["[5,3,8,4]"]
+    A --> C["[2,7,1,6]"]
+    B --> D["[5,3]"] --> D1["[5] [3]"]
+    B --> E["[8,4]"] --> E1["[8] [4]"]
+    C --> F["[2,7]"] --> F1["[2] [7]"]
+    C --> G["[1,6]"] --> G1["[1] [6]"]
+    D1 --> H["merge -> [3,5]"]
+    E1 --> I["merge -> [4,8]"]
+    F1 --> J["merge -> [2,7]"]
+    G1 --> K["merge -> [1,6]"]
+    H --> L["merge -> [3,4,5,8]"]
+    I --> L
+    J --> M["merge -> [1,2,6,7]"]
+    K --> M
+    L --> N["merge -> [1,2,3,4,5,6,7,8]"]
+    M --> N
+```
+Splitting is `O(log n)` levels deep; merging at each level touches all `n` elements → **O(n log n)** total. Why `O(n)` extra space: merge needs a temporary array to hold merged results at each step.
+
+## Quick Sort — Partition Diagram
+```
+arr = [6, 3, 8, 2, 9, 4]   pivot = last element = 4
+                                    i=-1
+6 > 4 skip | 3 < 4 → i=0 swap(0,1) → [3,6,8,2,9,4]
+8 > 4 skip | 2 < 4 → i=1 swap(1,3) → [3,2,8,6,9,4]
+9 > 4 skip
+swap pivot into place: swap(i+1, last) → [3,2,4,6,9,8]
+                                          ↑ pivot now correctly placed, left all <4, right all >4
+recurse left [3,2] and right [6,9,8] independently
+```
+Average `O(n log n)` (balanced splits like merge sort) but worst case `O(n²)` when pivot is always smallest/largest (e.g., already-sorted array with last-element pivot) — **why:** partitions become size `n-1, n-2, ...` instead of halving.
+
+---
+
 1. Comparison-Based Sorting Algorithms
    These algorithms sort elements by comparing them directly.
 
@@ -281,3 +331,11 @@ Below are JavaScript implementations for some of the common sorting algorithms, 
     return sortedArray;
   }
   ```
+
+---
+
+### ✅ Revision Checklist
+- [ ] Draw merge sort's divide tree and explain O(n log n)
+- [ ] Trace quick sort partition by hand on `[6,3,8,2,9,4]`
+- [ ] Know which sorts are **stable** (matters when sorting objects by secondary key)
+- [ ] Know when NOT to compare: counting/radix sort for small-range integers → O(n)

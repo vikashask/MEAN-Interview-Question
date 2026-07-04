@@ -1,5 +1,7 @@
 # Build Agents & Azure Artifacts
 
+> **Expert framing:** Choosing hosted vs self-hosted agents is a cost/control/security trade-off, not just a checkbox — an expert can articulate exactly *why* a workload needs self-hosted (network access to on-prem, licensing, pre-warmed caches, specific hardware) rather than defaulting to it out of habit. Artifacts feed management (upstream sources) is also a frequently-tested, easy-to-get-wrong area around supply-chain security.
+
 ## Build Agents
 
 ### Microsoft-Hosted Agents
@@ -70,6 +72,11 @@ pool:
 
 You register capabilities on a self-hosted agent via:
 **Agent Pool → Agents → Select Agent → Capabilities → Add user capability**.
+
+**Expert insight — the real trade-offs behind hosted vs self-hosted:**
+- **Microsoft-hosted**: zero maintenance, fresh/clean VM every run (no state leakage between builds — good for security/reproducibility), but capped build minutes on free tiers, no access to private/on-prem networks, and slower cold-start since a fresh VM boots each time.
+- **Self-hosted**: full control (custom tools, pre-warmed dependency caches for much faster builds), can sit inside a private VNet to reach internal resources (on-prem DBs, internal APIs) — but *you* own patching, security hardening, and capacity planning, and because the same machine may be reused across runs, state can leak between builds unless you clean up deliberately (a security/reproducibility risk if not managed).
+- A common enterprise pattern: Microsoft-hosted for public/open-source-style builds, self-hosted (often in a VNet with private endpoints) for anything needing internal network access or heavy caching.
 
 ---
 
@@ -150,9 +157,31 @@ npm install @myorg/my-private-lib
 
 ---
 
+## Common Pitfalls & Expert Tips
+
+- **Self-hosted agents that never get patched.** Since you own the OS, they're your responsibility for security updates — a stale, unpatched agent VM is a real attack surface, especially since it often has broad credentials (service connections) configured on it.
+- **State leakage between builds on self-hosted agents.** Unlike the always-fresh Microsoft-hosted VMs, a self-hosted agent can carry over files/env vars from a previous job unless the pipeline explicitly cleans the workspace — this can cause "works sometimes, fails other times" flakiness that's hard to diagnose.
+- **Upstream sources in Azure Artifacts feeding directly from the public npm/NuGet registry without any vetting.** This is a supply-chain risk — a compromised public package gets pulled straight into your internal feed and consumed by every project pointing at it. Many orgs configure upstream sources with additional scanning/approval steps for exactly this reason.
+- **Granting the pipeline's default identity ("Project Collection Build Service") more Artifacts feed permissions than needed** (e.g., Owner instead of Contributor) — violates least privilege for a non-human identity that's a common pivot point if a pipeline is compromised.
+
+---
+
 ## Practical Exercise ✅
 1. Set up a self-hosted agent on a local VM or Azure VM. Verify it appears in your agent pool.
 2. Modify the pipeline from the previous exercise to run on your self-hosted agent.
 3. Create an Azure Artifacts feed.
 4. Publish a sample npm package (version `1.0.0`) to your feed.
 5. In another pipeline (or another step), consume that package via a `.npmrc` file.
+
+---
+
+## Expert Interview Q&A
+
+**Q: When would you choose a self-hosted agent over a Microsoft-hosted one, specifically?**
+When the build needs access to resources not reachable from the public internet (an on-prem database, an internal API behind a VPN/private endpoint), when you need pre-warmed dependency caches for significantly faster builds at high volume, when you need specific hardware (GPU builds) or licensed software not on the hosted images, or when you've exhausted free-tier hosted build minutes and want predictable cost via owned infrastructure.
+
+**Q: What security risk does an Azure Artifacts "upstream source" pointing directly at the public npm registry introduce, and how is it mitigated?**
+It creates a direct supply-chain path from any public package straight into your organization's builds — a compromised or typosquatted public package becomes available to every internal consumer immediately. Mitigation: use upstream sources with review/approval gates, pin exact versions (avoid open version ranges like `^1.0.0` in production dependencies), and consider a scanning step (e.g., `npm audit`, dependency vulnerability scanning) before packages are trusted for consumption.
+
+**Q: Why might state leak between builds on a self-hosted agent, and why doesn't this happen on Microsoft-hosted agents?**
+Self-hosted agents reuse the same OS/filesystem across multiple pipeline runs unless the pipeline explicitly does a clean checkout/workspace reset — leftover files, cached dependencies, or environment state from a previous job can silently affect the next one. Microsoft-hosted agents provision a brand-new VM for every single job and destroy it afterward, so there's no possibility of cross-run contamination by design.

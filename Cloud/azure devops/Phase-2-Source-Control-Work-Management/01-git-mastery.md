@@ -1,5 +1,7 @@
 # Git Mastery for Azure DevOps
 
+> **Expert framing:** Knowing `add`/`commit`/`push` is table stakes. Expert-level Git means understanding *why* rebase rewrites history and when that's dangerous, being able to recover from a bad `reset --hard` before it's too late, and picking a branching strategy that matches your team's release cadence rather than cargo-culting GitFlow because a tutorial said so.
+
 ## Core Git Workflow
 
 ### Initial Setup
@@ -68,6 +70,8 @@ git rebase -i HEAD~3  # Reword/squash/drop last 3 commits
 | Cleaning up local feature branch | `rebase -i` |
 | Keeping feature branch up-to-date | `rebase main` |
 
+**Expert insight — the "golden rule of rebase":** never rebase a branch that other people have already pulled/based work on. Rebase rewrites commit hashes; if someone else already has the old commits, their next `pull` produces duplicated/conflicting history. This is the single most common Git incident in teams — someone force-pushes a rebased shared branch and everyone else's local history diverges. Rule of thumb: rebase freely on branches only you use; merge on anything shared.
+
 ---
 
 ## Remote Operations
@@ -135,9 +139,35 @@ main         (the ONE trunk - always deployable)
 
 ---
 
+## Common Pitfalls & Expert Tips
+
+- **Force-pushing a rebased shared branch.** Use `git push --force-with-lease` instead of `--force` — it refuses to overwrite the remote if someone else has pushed since your last fetch, preventing you from silently destroying a teammate's work.
+- **`git reset --hard` without checking `git reflog` first.** Every commit you've ever had HEAD point to is recoverable via `git reflog` for a while (default ~90 days) even after a hard reset — this is the "oh no" escape hatch every expert knows before they need it.
+- **Confusing `git fetch` with `git pull`.** `fetch` only downloads; it never touches your working directory or current branch — always safe to run. `pull` = `fetch` + `merge` (or `rebase`), which *does* modify your branch. When debugging "why does my branch look wrong," a plain `fetch` + `git log origin/main` is the safe way to inspect without side effects.
+- **Trunk-based development requires small, short-lived branches** (hours to 1-2 days) merged frequently, plus feature flags for incomplete work — teams that adopt "trunk-based" in name but keep branches alive for weeks get the worst of both worlds (merge conflicts *and* no real CI benefit).
+- **Squash-merging by default in Azure Repos** keeps `main` history readable (one commit per PR) but loses the individual commit granularity for `git bisect` — know this trade-off before setting it as a blanket policy.
+
+---
+
 ## Practical Exercise ✅
 1. Create a new local repo and make 3 commits on `main`.
 2. Create a `feature/add-readme` branch, make 2 commits.
 3. Simulate a merge conflict: edit the same line in `main` and `feature/add-readme`. Resolve it.
 4. Squash your 2 feature commits into 1 using `git rebase -i`.
 5. Merge the feature into `main` with a merge commit.
+
+---
+
+## Expert Interview Q&A
+
+**Q: You accidentally ran `git reset --hard HEAD~3` and lost 3 commits. How do you recover them?**
+Run `git reflog` — it records every position HEAD has been at, including the commits before the reset. Find the commit hash from before the reset and run `git reset --hard <hash>` (or `git cherry-pick` the individual commits) to restore them. The reflog is local-only and expires eventually, so this isn't a permanent safety net, but it covers the vast majority of "oops" scenarios.
+
+**Q: Why is `git push --force-with-lease` preferred over `git push --force` after a rebase?**
+`--force` unconditionally overwrites the remote branch, even if someone else pushed commits you don't have locally — silently destroying their work. `--force-with-lease` checks that the remote branch is still at the commit you last saw before pushing; if someone else pushed in the meantime, it refuses and fails safely, forcing you to fetch and reconcile first.
+
+**Q: GitFlow vs Trunk-Based Development — when would you pick one over the other?**
+GitFlow suits products with scheduled/versioned releases (e.g., installed software, mobile apps with app-store review cycles) where you need a dedicated `release/*` branch to stabilize before shipping and `hotfix/*` for emergency patches to production. Trunk-based development suits continuous-delivery web services deploying multiple times a day — it minimizes merge conflicts and long-lived divergence, but requires strong CI, small PRs, and feature flags to hide incomplete work on `main`.
+
+**Q: What's the practical difference between `git merge` and `git rebase` in terms of the resulting commit graph, and why does it matter for `git bisect`?**
+Merge preserves the true chronological/branching history, including a merge commit — you can see exactly when and how branches diverged and reconverged. Rebase rewrites the feature commits to appear as if they were made sequentially after the latest main commit, producing a linear history. `git bisect` (binary-searching for the commit that introduced a bug) works cleanly on linear history; a history full of merge commits can make bisect land on a merge commit rather than the actual offending change, complicating root-cause analysis.

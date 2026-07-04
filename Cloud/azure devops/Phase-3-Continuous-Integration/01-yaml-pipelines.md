@@ -1,5 +1,7 @@
 # Azure Pipelines - YAML From the Ground Up
 
+> **Expert framing:** Basic knowledge gets you a pipeline that builds and deploys. Expert knowledge gets you a pipeline that's **fast** (parallelism, caching), **safe** (conditions that actually match intent, not just "it happened to work"), and **maintainable** (templates instead of copy-pasted YAML across 10 repos). Interviewers probe the difference between `variables` (compile-time-ish, always a string) and `parameters` (true compile-time, typed) constantly — know it cold.
+
 ## YAML Pipeline Anatomy
 
 Every Azure Pipeline is defined in a `azure-pipelines.yml` file at the root of your repository.
@@ -141,6 +143,11 @@ jobs:
         condition: ${{ parameters.runTests }}
 ```
 
+**Expert insight — variables vs parameters, the distinction that trips people up:**
+- **Parameters** (`${{ parameters.x }}`) are resolved at **template/YAML compile time**, before the pipeline even starts running. They're typed (string, boolean, number, object, list), can restrict allowed `values`, and can even control which *stages/jobs exist at all* (structural decisions) — but they can't be changed by a running step.
+- **Variables** (`$(x)`) are resolved at **runtime**, are always strings under the hood, and can be set/overridden by a step (`##vso[task.setvariable]`), making them the right tool for values computed *during* the run (like a version number read from `package.json`).
+- Rule of thumb: use **parameters** for anything that changes pipeline *structure* (which stages run, which template to include); use **variables** for anything that's just a runtime value passed into steps.
+
 ---
 
 ## Conditions, Expressions & Output Variables
@@ -168,9 +175,35 @@ steps:
 
 ---
 
+## Common Pitfalls & Expert Tips
+
+- **Confusing `condition: succeeded()` (the implicit default) with actually needed logic.** Every step/job implicitly requires the previous one to succeed unless you override with `condition: always()`, `succeededOrFailed()`, or a custom expression — forgetting this means a "cleanup" step you wanted to always run gets silently skipped after a failure.
+- **`trigger` vs `pr` confusion.** `trigger` controls CI runs on pushes to branches; `pr` controls validation runs on pull requests — they're independent. Forgetting to configure `pr` means PRs merge without any pipeline validation at all.
+- **Runtime expressions (`$[ ]`) vs compile-time expressions (`${{ }}`) vs macro syntax (`$( )`)** are three different evaluation times in the same YAML file — mixing them up (e.g. expecting `${{ }}` to see a variable set by an earlier *runtime* step) is one of the most common YAML pipeline bugs, because `${{ }}` is already resolved before the pipeline runs, so it can never see a runtime-set variable.
+- **Not pinning the agent image version** (`vmImage: 'ubuntu-latest'`) for anything sensitive to toolchain versions — "latest" images get updated by Microsoft periodically and can silently change installed tool versions, breaking a previously-passing pipeline with no code change on your side.
+- **Overusing `condition: always()`** on deploy steps — this can cause a deployment step to run even after a build failure, potentially deploying broken/incomplete artifacts.
+
+---
+
 ## Practical Exercise ✅
 1. Push a simple Node.js or Python app to your Azure Repo.
 2. Create an `azure-pipelines.yml` at the root of the repo.
 3. Configure it to trigger on `main`.
 4. Add steps to: install dependencies, run tests, and publish the artifact.
 5. Run the pipeline and verify the artifact is published in the "Artifacts" tab.
+
+---
+
+## Expert Interview Q&A
+
+**Q: `${{ }}` vs `$( )` vs `$[ ]` in Azure Pipelines YAML — what's the actual difference?**
+`${{ }}` is a **compile-time (template) expression** — resolved before the pipeline run starts, used for parameters and structural template logic. `$( )` is a **runtime (macro) expression** — resolved at the start of each step, mainly for variables, always substituted as plain text before the step runs. `$[ ]` is a **runtime expression** evaluated just before a task runs, typically used in `condition:` and can reference output variables from earlier steps in the same job/stage. Mixing these up — e.g. trying to reference a runtime-set variable with `${{ }}` — silently fails because that syntax already resolved before the variable existed.
+
+**Q: How would you pass a value computed in one job to another job in a later stage?**
+Set it as an output variable in the producing job (`##vso[task.setvariable variable=x;isOutput=true]` with a named step), then reference it in the consuming job/stage via `dependencies` (cross-stage) or `stageDependencies`, e.g. `$[ stageDependencies.Build.BuildJob.outputs['SetVersionStep.APP_VERSION'] ]` — this is a very common real-world need (e.g., passing a computed version number from Build to Deploy).
+
+**Q: Why might a pipeline that was passing suddenly start failing with no code changes?**
+Common culprits: a Microsoft-hosted agent image update (`ubuntu-latest` silently changed a tool version), an expired/rotated service connection or secret, a dependency (npm/NuGet package) publishing a breaking change picked up by an unpinned version range, or an external service the pipeline depends on being down/changed. Pinning agent images and dependency versions reduces this class of "mystery failure."
+
+**Q: What's the danger of setting `condition: always()` broadly across a pipeline?**
+It causes a step/job to run even after upstream failures — appropriate for cleanup/notification steps, but dangerous on deployment steps, where it could deploy a partially-built or broken artifact after a failed build stage. Conditions should be deliberately chosen per step based on what's actually safe to run in a failure state.

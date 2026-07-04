@@ -1,6 +1,50 @@
 # AWS Security Services
 
+> **In plain English:** This file covers the "safe boxes and guards" of AWS — where to store secrets, how to encrypt things, how to detect attacks, and how to prove (audit) what happened. Different from IAM: IAM decides *who can do what*; these services protect *data* and *detect threats*.
+
+## Real-world analogy
+
+- **Secrets Manager** = a bank vault specifically for passwords/API keys, with an auto-rotation feature (the bank changes the vault combination on a schedule automatically).
+- **Systems Manager Parameter Store** = a cheaper filing cabinet for config values — some drawers are locked (SecureString/encrypted), some aren't (String).
+- **KMS (Key Management Service)** = the master locksmith — makes the encryption keys used everywhere else (S3, EBS, Secrets Manager), and never lets the raw key leave its vault.
+- **ACM (Certificate Manager)** = the passport office issuing/renewing HTTPS certificates for free, automatically.
+- **WAF (Web Application Firewall)** = a bouncer reading every visitor's ID at the door of your website, blocking known troublemakers (SQL injection attempts, bad IPs, rate-limit abusers).
+- **Shield** = riot police specifically for DDoS floods (traffic volume attacks), separate from WAF's "check each visitor" job.
+- **GuardDuty** = a security camera system with AI — watches account activity and network traffic for suspicious patterns (like a login from an unusual country) and raises alerts.
+- **Inspector** = a home inspector who checks your EC2 instances/containers for known vulnerabilities (like unpatched software).
+- **Security Hub** = the security control room — pulls together findings from GuardDuty, Inspector, and others into one dashboard.
+- **CloudTrail** = the building's permanent security log — records every single action anyone (or any service) took in your AWS account, who did it, and when.
+
+## Core concepts (memorize these first)
+
+| Service | One-line job |
+|---|---|
+| **Secrets Manager** | Store + auto-rotate sensitive secrets (DB passwords, API keys). Costs more, but rotation is built-in. |
+| **SSM Parameter Store** | Store config values (plain or encrypted). Cheaper than Secrets Manager, no built-in rotation. |
+| **KMS** | Create and manage encryption keys; encrypts/decrypts data; backs encryption for almost every other AWS service. |
+| **ACM** | Free SSL/TLS certificates for HTTPS, auto-renewed. |
+| **WAF** | Blocks malicious *web requests* (SQLi, XSS, rate limiting) at Layer 7, attached to CloudFront/ALB/API Gateway. |
+| **Shield** | Protects against DDoS (traffic flood) attacks. Standard = free & automatic. Advanced = paid, more protection + cost protection. |
+| **GuardDuty** | Continuous threat detection using ML — watches CloudTrail, VPC Flow Logs, DNS logs for suspicious behavior. |
+| **Inspector** | Scans EC2/containers/Lambda for known software vulnerabilities (CVEs). |
+| **Security Hub** | Aggregates findings from GuardDuty, Inspector, and compliance checks into one view. |
+| **CloudTrail** | Audit log of every API call made in your account — "who did what, when." |
+
+**Interview-favorite distinction:** Secrets Manager vs Parameter Store — both store key/value data, but Secrets Manager costs more and adds automatic rotation (great for DB passwords); Parameter Store is cheaper and simpler (great for config/feature flags, or secrets you rotate manually).
+
+**Another favorite:** WAF vs Shield — WAF inspects individual HTTP requests for malicious *content* (like a bouncer checking IDs); Shield defends against sheer traffic *volume* floods (like riot police against a stampede). They're complementary, not competing.
+
+## Memory hooks
+
+- **"KMS makes the keys. Secrets Manager and Parameter Store store the locked box."**
+- **CloudTrail = "what happened." GuardDuty = "was it bad." Security Hub = "show me everything in one screen."**
+- WAF = Layer 7 (content of the request). Shield = volume/network layer (DDoS).
+
+---
+
 ## AWS Secrets Manager
+
+Best for anything that needs automatic rotation, like database credentials — plug the ARN into your app instead of hardcoding a password anywhere.
 
 ```bash
 # Create secret
@@ -58,6 +102,8 @@ const connection = await connectDB({
 ```
 
 ## Systems Manager Parameter Store
+
+Cheaper alternative to Secrets Manager. Use `String` for non-sensitive config, `SecureString` for anything sensitive (encrypted with KMS but no auto-rotation).
 
 ```bash
 # Create parameter
@@ -133,6 +179,8 @@ const dbConfig = await getParametersByPath("/myapp/db");
 
 ## AWS KMS (Key Management Service)
 
+KMS creates and guards the master encryption keys. The raw key material never leaves KMS — you send data to KMS to encrypt/decrypt, you never download the key itself. Almost every other AWS service (S3, EBS, RDS, Secrets Manager) uses KMS under the hood for "encryption at rest."
+
 ```bash
 # Create KMS key
 aws kms create-key \
@@ -188,6 +236,8 @@ const decrypted = await decryptData(encrypted);
 
 ## AWS Certificate Manager (ACM)
 
+Free HTTPS certificates, automatically renewed — used with CloudFront, ALB, and API Gateway. You either prove domain ownership via DNS validation (add a CNAME record) or import your own existing certificate.
+
 ```bash
 # Request certificate
 aws acm request-certificate \
@@ -210,6 +260,8 @@ aws acm import-certificate \
 ```
 
 ## AWS WAF (Web Application Firewall)
+
+Sits in front of CloudFront/ALB/API Gateway and inspects each HTTP request against rules — block known bad IPs, rate-limit abusive callers, and use AWS Managed Rules to auto-block common attack patterns like SQL injection.
 
 ```bash
 # Create IP set
@@ -288,6 +340,8 @@ aws wafv2 create-web-acl \
 
 ## AWS Shield
 
+Standard tier is automatic and free for every AWS customer (basic DDoS protection). Advanced is a paid subscription with more protection, 24/7 support during attacks, and cost protection against scaling charges caused by the attack.
+
 ```bash
 # Shield Standard is automatic and free
 
@@ -306,6 +360,8 @@ aws shield associate-health-check \
 ```
 
 ## GuardDuty
+
+Turns on and immediately starts analyzing existing account activity, network logs, and DNS logs with machine learning to flag suspicious behavior (e.g. an API call from a Tor exit node, unusual credential usage) — no agents to install.
 
 ```bash
 # Enable GuardDuty
@@ -335,6 +391,8 @@ aws guardduty create-filter \
 
 ## AWS Inspector
 
+Automatically and continuously scans EC2 instances, container images, and Lambda functions for known vulnerabilities (CVEs) and unintended network exposure.
+
 ```bash
 # Create assessment target
 aws inspector create-assessment-target \
@@ -358,6 +416,8 @@ aws inspector list-findings \
 ```
 
 ## Security Hub
+
+One dashboard aggregating findings from GuardDuty, Inspector, and industry-standard compliance checks (like CIS AWS Foundations Benchmark) — so you're not checking five different consoles.
 
 ```bash
 # Enable Security Hub
@@ -384,6 +444,8 @@ aws securityhub batch-update-findings \
 ```
 
 ## CloudTrail
+
+Records every API call ever made in your account (console, CLI, SDK, or another AWS service) — who made it, when, from where, and what happened. The single most important service for "who deleted that bucket?" style investigations.
 
 ```bash
 # Create trail
@@ -432,3 +494,25 @@ aws cloudtrail put-event-selectors \
 ✓ Block public S3 bucket access
 ✓ Regular security audits and reviews
 ```
+
+---
+
+## Quick interview answers
+
+**Q: Secrets Manager vs Parameter Store — when to use which?**
+Secrets Manager for anything needing automatic rotation (DB credentials) — costs more per secret. Parameter Store for general config/feature flags/manually-rotated secrets — free or nearly free.
+
+**Q: What does KMS actually do, in one sentence?**
+Creates and safeguards encryption keys, and performs encrypt/decrypt operations on your behalf without ever exposing the raw key.
+
+**Q: WAF vs Shield — what's the difference?**
+WAF inspects the *content* of individual web requests (blocks SQL injection, bad IPs, rate abuse) — Layer 7. Shield protects against *volume-based* DDoS floods — network/transport layer. They work together, not instead of each other.
+
+**Q: What does GuardDuty analyze to detect threats?**
+CloudTrail logs, VPC Flow Logs, and DNS query logs — using machine learning to flag anomalies, no agent installation required.
+
+**Q: Why is CloudTrail critical for security audits?**
+It's the definitive record of "who did what, when, from where" for every API call in the account — without it, you can't reconstruct what happened during an incident.
+
+**Q: Security Hub vs GuardDuty?**
+GuardDuty is one specific detector (threat detection). Security Hub is a dashboard that aggregates findings from GuardDuty *and* other tools (Inspector, compliance checks) into a single view — they're complementary, not the same thing.

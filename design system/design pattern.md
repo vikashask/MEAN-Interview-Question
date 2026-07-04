@@ -49,9 +49,27 @@
 - **D**ependency Inversion: depend on abstractions, not concretions.
 - **DRY**, **KISS**, **YAGNI**, **Law of Demeter**.
 
+```mermaid
+graph LR
+    S["S - Single Responsibility"] --> O["O - Open/Closed"]
+    O --> L["L - Liskov Substitution"]
+    L --> I["I - Interface Segregation"]
+    I --> D["D - Dependency Inversion"]
+```
+
 ---
 
 ## Creational Patterns
+
+```mermaid
+graph TD
+    DP[Design Patterns] --> Cr[Creational: object creation]
+    DP --> St[Structural: object composition]
+    DP --> Be[Behavioral: object interaction]
+    Cr --> Cr1[Singleton, Factory, Abstract Factory, Builder, Prototype]
+    St --> St1[Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy]
+    Be --> Be1[Chain of Resp., Command, Iterator, Mediator, Memento, Observer, State, Strategy, Template, Visitor]
+```
 
 ### 1) Singleton
 
@@ -189,6 +207,11 @@ const user = Object.assign(Object.create(proto), { name: "Vikas" });
 ---
 
 ## Structural Patterns
+
+```mermaid
+graph LR
+    Client -->|expects TargetInterface| Adapter --> Adaptee[Legacy/Incompatible class]
+```
 
 ### 1) Adapter
 
@@ -356,6 +379,11 @@ class CachingProxy {
 ---
 
 ## Behavioral Patterns
+
+```mermaid
+graph LR
+    Req[Request] --> H1[Handler 1] -->|not handled| H2[Handler 2] -->|not handled| H3[Handler 3]
+```
 
 ### 1) Chain of Responsibility
 
@@ -625,6 +653,18 @@ const cart = (function () {
 ---
 
 ## Pattern Selection Cheatsheet
+
+```mermaid
+graph TD
+    Sym1[Too many constructors/flags] --> Fac[Factory / Builder]
+    Sym2[Many wrappers adding features] --> Dec[Decorator / Proxy]
+    Sym3[Need simplified API] --> Fac2[Facade]
+    Sym4[Incompatible APIs] --> Adp[Adapter]
+    Sym5[Variant algorithms] --> Strat[Strategy]
+    Sym6[Steps w/ hooks] --> Tmpl[Template Method]
+    Sym7[Pipeline w/ early exit] --> Chain[Chain of Responsibility]
+    Sym8[Reactive UI/events] --> Obs[Observer / Pub-Sub]
+```
 
 - Too many constructors/flags → **Factory/Builder**.
 - Many wrappers adding features → **Decorator/Proxy**.
