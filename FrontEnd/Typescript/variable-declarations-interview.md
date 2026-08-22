@@ -118,4 +118,44 @@ function shadowingExample() {
 3. Avoid using `var` due to its function-scoping and hoisting behavior
 4. Use destructuring to make code more readable when working with objects and arrays
 5. Use meaningful variable names that indicate their purpose
+
+## 8. What is the Temporal Dead Zone (TDZ)?
+**Answer:**
+The TDZ is the span between entering a scope and the point where a `let`/`const` variable is actually declared. Accessing the variable during this window throws a `ReferenceError` — this is different from `var`, which is hoisted and initialized to `undefined` automatically.
+
+```typescript
+console.log(a); // ReferenceError: Cannot access 'a' before initialization
+let a = 5;
+
+console.log(b); // undefined — no error, `var` is hoisted
+var b = 5;
+```
+The TDZ exists to catch bugs where code relies on a variable before it's meaningfully initialized.
+
+## 9. Classic interview trap: `var` vs `let` inside a loop with closures
+**Answer:**
+```typescript
+for (var i = 0; i < 3; i++) {
+    setTimeout(() => console.log(i), 0);
+}
+// Logs: 3, 3, 3
+
+for (let j = 0; j < 3; j++) {
+    setTimeout(() => console.log(j), 0);
+}
+// Logs: 0, 1, 2
+```
+`var` creates a **single binding** for `i` shared by the whole loop and all callbacks — by the time the callbacks run, the loop has already finished and `i` is `3`. `let` creates a **new binding per iteration**, so each closure captures its own snapshot of the loop variable. This is one of the most frequently asked TypeScript/JavaScript interview questions — always explain the *scoping* reason, not just the observed output.
+
+## 10. Does `const` make an object immutable?
+**Answer:**
+No. `const` only prevents **reassigning the variable binding** — it does not freeze the object's contents.
+
+```typescript
+const user = { name: "Alice" };
+user.name = "Bob";    // OK — mutating a property is allowed
+// user = { name: "Eve" }; // Error — reassigning the binding is not allowed
+```
+For true immutability, use `Object.freeze(user)` (shallow, runtime-enforced) or mark properties `readonly` in the type (compile-time only) — often combined with `as const` for literal object/array constants.
+
 6. Declare variables in the smallest scope possible

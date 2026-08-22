@@ -1,177 +1,257 @@
-## What are the best features of Mongodb?
-Document-oriented
-High performance
-High availability
-Easy scalability
-Rich-query language
+# MongoDB Interview Questions — Quick Revision Guide
 
-## What are NoSQL databases? What are the different types of NoSQL databases?
-A NoSQL database provides a mechanism for storage and retrieval of data that is modeled in means other than the tabular relations used in relational databases (like SQL, Oracle, etc.).
+> Organized by topic for fast revision. Each answer is interview-ready with extra context where it helps recall.
 
-## Types of NoSQL databases:
+---
 
-Document Oriented
-Key Value
-Graph
-Column Oriented
-What kind of NoSQL database MongoDB is?
-MongoDB is a document oriented database. It stores data in the form of BSON structure based documents. These documents are stored in a collection.
+## Table of Contents
+1. [Fundamentals & NoSQL Basics](#1-fundamentals--nosql-basics)
+2. [MongoDB vs SQL vs Other NoSQL DBs](#2-mongodb-vs-sql-vs-other-nosql-dbs)
+3. [Data Modeling & Relationships](#3-data-modeling--relationships)
+4. [ObjectID, Namespace & Documents](#4-objectid-namespace--documents)
+5. [Indexes](#5-indexes)
+6. [Aggregation Framework](#6-aggregation-framework)
+7. [Replication](#7-replication)
+8. [Sharding](#8-sharding)
+9. [Transactions & Locking](#9-transactions--locking)
+10. [Storage Engine & Disk Behavior](#10-storage-engine--disk-behavior)
+11. [Performance & Operational Notes](#11-performance--operational-notes)
+12. [One-Line Cheat Sheet](#12-one-line-cheat-sheet)
 
-## Which are the most important features of MongoDB?
-Flexible data model in form of documents
-Agile and highly scalable database
-Faster than traditional databases
-Expressive query language
-What is a Namespace in MongoDB?
-A Namespace is the concatenation of the database name and collection name. For e.g. school.students with school as the database and students as the collection
+---
 
-## Which all languages can be used with MongoDB?
-Currently, MonggoDB provides official driver support for C, C++, C#, Java, Node.js, Perl, PHP, Python, Ruby, Scala, Go and Erlang. MongoDB can easily be used with any of these languages. There are some other community supported drivers too but the above mentioned ones are officially provided by MongoDB.
+## 1. Fundamentals & NoSQL Basics
 
-## Compare SQL databases and MongoDB at a high level.
-SQL databases store data in form of tables, rows, columns and records. This data is stored in a pre-defined data model which is not very much flexible for today's real-world highly growing applications. MongoDB in contrast uses a flexible structure which can be easily modified and extended.
+**Q: What are the best features of MongoDB?**
+- Document-oriented (stores data as BSON documents, not rows/tables)
+- High performance (in-memory-friendly, efficient indexing)
+- High availability (via replica sets)
+- Easy horizontal scalability (via sharding)
+- Rich, expressive query language (supports joins-like `$lookup`, aggregation, geospatial, text search)
 
-## How is MongoDB better than other SQL databases?
-MongoDB allows a highly flexible and scalable document structure. For e.g. one data document in MongoDB can have five columns and the other one in the same collection can have ten columns. Also, MongoDB database are faster as compared to SQL databases due to efficient indexing and storage techniques.
+**Q: What are NoSQL databases? What types exist?**
+NoSQL databases store and retrieve data using models other than the tabular relations of RDBMS (SQL/Oracle). They're built for scale, flexible schemas, and specific access patterns.
 
-## Compare MongoDB and CouchDB at high level.
-Although both of these databases are document oriented, MongoDB is a better choice for applications which need dynamic queries and good performance on a very big database. On the other side, CouchDB is better used for applications with occasionally changing queries and pre-defined queries.
+Types of NoSQL databases:
+| Type | Example | Best For |
+|---|---|---|
+| Document Oriented | MongoDB, CouchDB | Semi-structured, nested data |
+| Key-Value | Redis, DynamoDB | Caching, simple lookups |
+| Column Oriented | Cassandra, HBase | Wide-column, analytics |
+| Graph | Neo4j | Relationship-heavy data (social graphs) |
 
-## Does MongoDB support foreign key constraints?
-No. MongoDB does not support such relationships.
+**Q: What kind of NoSQL database is MongoDB?**
+A **document-oriented** database. It stores data as **BSON** (Binary JSON) documents, grouped into **collections** (analogous to tables).
 
-## Does MongoDB support ACID transaction management and locking functionalities?
-No. MongoDB does not support default multi-document ACID transactions. However, MongoDB provides atomic operation on a single document.
+**Q: Most important features of MongoDB?**
+- Flexible schema (documents in the same collection can differ in structure)
+- Agile and highly scalable
+- Faster than traditional RDBMS for many workloads (denormalized reads)
+- Expressive query language + aggregation pipeline
 
-## How can you achieve primary key - foreign key relationships in MongoDB?
-By default MongoDB does not support such primary key - foreign key relationships. However, we can achieve this concept by embedding one document inside another. Foe e.g. an address document can be embedded inside customer document.
+---
 
-## Does MongoDB need a lot of RAM?
-No. MongoDB can be run even on a small amount of RAM. MongoDB dynamically allocates and de-allocates RAM based on the requirements of other processes.
+## 2. MongoDB vs SQL vs Other NoSQL DBs
 
-## Does MongoDB pushes the writes to disk immediately or lazily?
-MongoDB pushes the data to disk lazily. It updates the immediately written to the journal but writing the data from journal to disk happens lazily.
+**Q: Compare SQL databases and MongoDB at a high level.**
+| | SQL (RDBMS) | MongoDB |
+|---|---|---|
+| Structure | Tables, rows, columns | Collections, documents (BSON) |
+| Schema | Fixed/predefined | Flexible/dynamic |
+| Relationships | Foreign keys, JOINs | Embedding or manual references (`$lookup`) |
+| Scaling | Vertical (mostly) | Horizontal (sharding) |
+| Best for | Highly relational, transactional data | Rapidly evolving, hierarchical/nested data |
 
-## Explain the structure of ObjectID in MongoDB.
-ObjectID is a 12-byte BSON type with:
+**Q: How is MongoDB better than other SQL databases?**
+- Flexible document structure — one document can have 5 fields, another in the same collection can have 10, no migration needed.
+- Efficient indexing and storage layout often gives faster reads/writes for document-shaped data.
+- Horizontal scaling out of the box via sharding.
 
-4 bytes value representing seconds
-3 byte machine identifier
-2 byte process id
-3 byte counter
+**Q: Compare MongoDB and CouchDB at a high level.**
+Both are document-oriented, but:
+- **MongoDB** — better for **dynamic queries** and **high performance on very large datasets**.
+- **CouchDB** — better for **predefined/occasionally-changing queries** and offline-first/multi-master replication use cases.
 
-## What is a Namespace in MongoDB?
-A Namespace is the concatenation of the database name and collection name. For e.g. school.students with school as the database and students as the collection
+---
 
-## Which all languages can be used with MongoDB?
-Currently, MonggoDB provides official driver support for C, C++, C#, Java, Node.js, Perl, PHP, Python, Ruby, Scala, Go and Erlang. MongoDB can easily be used with any of these languages. There are some other community supported drivers too but the above mentioned ones are officially provided by MongoDB.
+## 3. Data Modeling & Relationships
 
-## Compare SQL databases and MongoDB at a high level.
-SQL databases store data in form of tables, rows, columns and records. This data is stored in a pre-defined data model which is not very much flexible for today's real-world highly growing applications. MongoDB in contrast uses a flexible structure which can be easily modified and extended.
+**Q: Does MongoDB support foreign key constraints?**
+No. There's no built-in referential integrity — relationships are handled at the application level or via embedding.
 
-## How is MongoDB better than other SQL databases?
-MongoDB allows a highly flexible and scalable document structure. For e.g. one data document in MongoDB can have five columns and the other one in the same collection can have ten columns. Also, MongoDB database are faster as compared to SQL databases due to efficient indexing and storage techniques.
+**Q: How can you achieve primary key–foreign key style relationships?**
+By **embedding** one document inside another (denormalization), e.g., embedding an `address` document inside a `customer` document. For many-to-many or large sub-documents, use **manual references** (store an `_id` and query separately, or use `$lookup` in aggregation).
 
-## Compare MongoDB and CouchDB at high level.
-Although both of these databases are document oriented, MongoDB is a better choice for applications which need dynamic queries and good performance on a very big database. On the other side, CouchDB is better used for applications with occasionally changing queries and pre-defined queries.
+**Q: When should you embed one document within another?**
+Embed when there is:
+- A **"contains"** relationship between entities (e.g., order contains line items)
+- A **one-to-many** relationship where the "many" side is small/bounded
+- A need for **performance** (single read fetches everything, no joins needed)
 
-## Does MongoDB support foreign key constraints?
-No. MongoDB does not support such relationships.
+> Rule of thumb: **Embed for data accessed together; reference for data that's large, frequently updated independently, or shared across many documents.**
 
-## Does MongoDB support ACID transaction management and locking functionalities?
-No. MongoDB does not support default multi-document ACID transactions. However, MongoDB provides atomic operation on a single document.
+**Q: Does MongoDB need a lot of RAM?**
+No. MongoDB can run on modest RAM — it dynamically allocates/deallocates memory based on system needs and working-set size. More RAM helps performance (indexes/working set fit in memory) but isn't a hard requirement.
 
-## How can you achieve primary key - foreign key relationships in MongoDB?
-By default MongoDB does not support such primary key - foreign key relationships. However, we can achieve this concept by embedding one document inside another. Foe e.g. an address document can be embedded inside customer document.
+---
 
-## Does MongoDB need a lot of RAM?
-No. MongoDB can be run even on a small amount of RAM. MongoDB dynamically allocates and de-allocates RAM based on the requirements of other processes.
+## 4. ObjectID, Namespace & Documents
 
-## Does MongoDB pushes the writes to disk immediately or lazily?
-MongoDB pushes the data to disk lazily. It updates the immediately written to the journal but writing the data from journal to disk happens lazily.
+**Q: What is a Namespace in MongoDB?**
+The concatenation of **database name + collection name**, e.g., `school.students` (database: `school`, collection: `students`).
 
-## Explain the structure of ObjectID in MongoDB.
-ObjectID is a 12-byte BSON type with:
+**Q: Which languages have official MongoDB driver support?**
+C, C++, C#, Java, Node.js, Perl, PHP, Python, Ruby, Scala, Go, Erlang — plus community-supported drivers for other languages.
 
-4 bytes value representing seconds
-3 byte machine identifier
-2 byte process id
-3 byte counter
+**Q: Explain the structure of ObjectID in MongoDB.**
+`ObjectID` is a **12-byte** BSON type composed of:
+| Bytes | Meaning |
+|---|---|
+| 4 bytes | Timestamp (seconds since epoch) |
+| 3 bytes | Machine identifier |
+| 2 bytes | Process ID |
+| 3 bytes | Incrementing counter |
 
-## MongoDB uses BSON to represent document structures. True or False?
-True
+This makes it unique across machines/processes without needing a central counter, and it's roughly sortable by creation time.
 
-## If you remove a document from database, does MongoDB remove it from disk?
-Yes. Removing a document from database removes it from disk too.
+**Q: MongoDB uses BSON to represent document structures. True or False?**
+**True.** BSON (Binary JSON) extends JSON with additional types (dates, binary data, ObjectId, etc.) and is more efficient to parse/traverse.
 
-## Mention the command to insert a document in a database called school and collection called persons.
-use school;
-db.persons.insert( { name: "kadhir", dept: "CSE" } )
-What are Indexes in MongoDB?
-Indexes support the efficient execution of queries in MongoDB. Without indexes, MongoDB must perform a collection scan, i.e. scan every document in a collection, to select those documents that match the query statement. If an appropriate index exists for a query, MongoDB can use the index to limit the number of documents it must inspect.
+**Q: If you remove a document from the database, is it removed from disk?**
+Yes — deleting a document removes it from disk (space may be reused/reclaimed depending on storage engine, but the document itself is gone).
 
-## How many indexes does MongoDB create by default for a new collection?
-By default, MongoDB created the _id collection for every collection.
+**Q: Command to insert a document into `school.persons`.**
+```js
+use school
+db.persons.insert({ name: "kadhir", dept: "CSE" })
+// Modern syntax:
+db.persons.insertOne({ name: "kadhir", dept: "CSE" })
+```
 
-## WCan you create an index on an array field in MongoDB? If yes, what happens in this case?
-Yes. An array field can be indexed in MongoDB. In this case, MongoDB would index each value of the array.
+---
 
-## WWhat is a covered query in MongoDB?
-A covered query is the one in which:
+## 5. Indexes
 
-## Wfields used in the query are part of an index used in the query, and
-the fields returned in the results are in the same index
-Why is a covered query important?
-Since all the fields are covered in the index itself, MongoDB can match the query condition as well as return the result fields using the same index without looking inside the documents. Since indexes are stored in RAM or sequentially located on disk, such access is a lot faster.
+**Q: What are Indexes in MongoDB?**
+Indexes support efficient query execution. Without an index, MongoDB performs a **collection scan** — checking every document. With an appropriate index, MongoDB can limit the documents it must inspect, drastically improving query speed.
 
-## WDoes MongoDB provide a facility to do text searches? How?
-Yes. MongoDB supports creating text indexes to support text search inside string content. This was a new feature which can introduced in version 2.6.
+**Q: How many indexes does MongoDB create by default for a new collection?**
+**One** — the default index on `_id` for every collection.
 
-## WWhat happens if an index does not fit into RAM?
-If the indexes do not fit into RAM, MongoDB reads data from disk which is relatively very much slower than reading from RAM.
+**Q: Can you create an index on an array field? What happens?**
+Yes. MongoDB creates a **multikey index**, indexing **each element of the array** individually.
 
-## WMention the command to list all the indexes on a particular collection.
+**Q: What is a covered query?**
+A query where:
+1. All fields used in the query are part of an index, **and**
+2. All fields returned in the results are also in that same index.
+
+Because everything needed is in the index, MongoDB never has to load the full document — it answers entirely from the index (which lives in RAM or is stored sequentially on disk), making it **significantly faster**.
+
+**Q: Does MongoDB support text search?**
+Yes — via **text indexes**, which support search inside string content. Introduced in v2.6.
+
+**Q: What happens if an index doesn't fit into RAM?**
+MongoDB has to read index pages from disk, which is much slower than RAM access — query performance degrades.
+
+**Q: Command to list all indexes on a collection.**
+```js
 db.collection.getIndexes()
-At what interval does MongoDB write updates to the disk?
-By default configuration, MongoDB writes updates to the disk every 60 seconds. However, this is configurable with the commitIntervalMs and syncPeriodSecs options.
+```
 
-## WHow can you achieve transaction and locking in MongoDB?
-To achieve concepts of transaction and locking in MongoDB, we can use the nesting of documents, also called embedded documents. MongoDB supports atomic operations within a single document.
+---
 
-## WWhat is Aggregation in MongoDB?
-Aggregations operations process data records and return computed results. Aggregation operations group values from multiple documents together, and can perform a variety of operations on the grouped data to return a single result. MongoDB provides three ways to perform aggregation: the aggregation pipeline, the map-reduce function, and single purpose aggregation methods and commands.
+## 6. Aggregation Framework
 
-## WWhat is Sharding in MongoDB? Explain.
-Sharding is a method for storing data across multiple machines. MongoDB uses sharding to support deployments with very large data sets and high throughput operations.
+**Q: What is Aggregation in MongoDB?**
+A framework for processing data records and returning **computed results** — grouping values across documents and applying operations (sum, avg, group, filter, reshape, join) to produce a single/summarized result.
 
-## WWhat is Replication in MongoDB? Explain.
-Replication is the process of synchronizing data across multiple servers. Replication provides redundancy and increases data availability. With multiple copies of data on different database servers, replication protects a database from the loss of a single server. Replication also allows you to recover from hardware failure and service interruptions.
+Three ways to aggregate in MongoDB:
+1. **Aggregation pipeline** (`db.collection.aggregate([...])`) — most common, stage-based (`$match`, `$group`, `$project`, `$lookup`, etc.)
+2. **Map-reduce** — legacy, JavaScript-based, largely superseded by the pipeline
+3. **Single-purpose aggregation methods** — e.g., `count()`, `distinct()`
 
-## WWhat are Primary and Secondary Replica sets?
-Primary and master nodes are the nodes that can accept writes. MongoDB's replication is 'single-master:' only one node can accept write operations at a time.
+---
 
-## WSecondary and slave nodes are read-only nodes that replicate from the primary.
+## 7. Replication
 
-## WBy default, MongoDB writes and reads data from both primary and secondary replica sets. True or False.
-False. MongoDB writes data only to the primary replica set.
+**Q: What is Replication in MongoDB?**
+The process of **synchronizing data across multiple servers** (a **replica set**). It provides:
+- Redundancy and increased data availability
+- Protection against loss of a single server
+- Automatic failover / recovery from hardware failure
 
-## WWhy are MongoDB data files large in size?
-MongoDB preallocates data files to reserve space and avoid file system fragmentation when you setup the server.
+**Q: What are Primary and Secondary replica sets?**
+- **Primary** — the only node that accepts **writes**. MongoDB replication is **single-master**.
+- **Secondary** — read-only nodes that replicate data from the primary (can serve reads if configured, e.g., with read preferences).
 
-## When should we embed one document within another in MongoDB?
-You should consider embedding documents for:
+**Q: By default, does MongoDB write/read from both primary and secondary?**
+**False.** By default, all writes and reads go to the **primary** only. Reading from secondaries requires explicit read preference configuration (e.g., `secondaryPreferred`), and returns eventually-consistent data.
 
-'contains' relationships between entities
-One-to-many relationships
-Performance reasons
+---
 
-## Why MongoDB is not preferred over a 32-bit system?
-When running a 32-bit build of MongoDB, the total storage size for the server, including data and indexes, is 2 gigabytes. For this reason, do not deploy MongoDB to production on 32-bit machines.
+## 8. Sharding
 
-If you're running a 64-bit build of MongoDB, there's virtually no limit to storage size.
+**Q: What is Sharding in MongoDB?**
+A method of **horizontally distributing data across multiple machines (shards)**. Used to support very large datasets and high-throughput operations that a single server can't handle.
 
-## What is a Storage Engine in MongoDB
-A storage engine is the part of a database that is responsible for managing how data is stored on disk. For example, one storage engine might offer better performance for read-heavy workloads, and another might support a higher-throughput for write operations.
+Key components:
+- **Shard** — holds a subset of the data
+- **mongos** — query router that directs operations to the right shard(s)
+- **Config servers** — store cluster metadata and chunk distribution
+- **Shard key** — determines how data is distributed across shards (choosing a good shard key is critical for even distribution)
 
-## Which are the two storage engines used by MongoDB?
-MongoDB uses MMAPv1 and WiredTiger.
+---
+
+## 9. Transactions & Locking
+
+**Q: Does MongoDB support ACID transactions and locking?**
+Historically: No multi-document ACID transactions, only **atomic operations on a single document**.
+> Note: Since MongoDB 4.0+, **multi-document ACID transactions** are supported (especially within replica sets, and across shards since 4.2). Still, for performance, favor schema designs that minimize the need for multi-document transactions.
+
+**Q: How can you achieve transaction-like behavior/locking without multi-doc transactions?**
+Use **nesting/embedded documents** so related data updates happen within a **single document**, which is always atomic in MongoDB.
+
+---
+
+## 10. Storage Engine & Disk Behavior
+
+**Q: What is a Storage Engine in MongoDB?**
+The component responsible for **how data is managed/stored on disk**. Different engines trade off differently for read-heavy vs. write-heavy workloads.
+
+**Q: Which storage engines does MongoDB use?**
+- **MMAPv1** — legacy, memory-mapped files (deprecated in newer versions)
+- **WiredTiger** — default since MongoDB 3.2; supports document-level concurrency control and compression
+
+**Q: Does MongoDB write to disk immediately or lazily?**
+**Lazily.** Writes are first recorded in the **journal** (write-ahead log) immediately for durability, but the actual data files on disk are updated lazily/periodically.
+
+**Q: At what interval does MongoDB write updates to disk?**
+By default, roughly every **60 seconds** (configurable via `commitIntervalMs` / `syncPeriodSecs`, exact defaults vary by version — WiredTiger checkpoints default to 60s).
+
+**Q: Why are MongoDB data files large in size?**
+MongoDB (particularly with MMAPv1) **preallocates** data files in advance to reserve disk space and avoid filesystem fragmentation.
+
+---
+
+## 11. Performance & Operational Notes
+
+**Q: Why is MongoDB not preferred on a 32-bit system?**
+A 32-bit build limits total storage (data + indexes) to about **2 GB**. This is a hard address-space limitation — never deploy MongoDB in production on 32-bit machines. On **64-bit** builds, there's effectively no such storage ceiling.
+
+---
+
+## 12. One-Line Cheat Sheet
+
+| Topic | One-liner |
+|---|---|
+| Data model | Document (BSON) inside collections, no fixed schema |
+| Default index | `_id` on every collection |
+| Relationship style | Embed for "contains"/1-to-many/perf; reference otherwise |
+| Transactions | Atomic per document; multi-doc ACID since v4.0+ |
+| Write durability | Journal immediately, data files lazily (~60s) |
+| Scale up | Sharding (horizontal) |
+| Scale availability | Replication (replica sets, primary + secondaries) |
+| Default storage engine | WiredTiger |
+| Text search | Text indexes (since v2.6) |
+| Covered query | Query fully answered by index, no document fetch |
