@@ -52,7 +52,7 @@ console.log("🚀 ~ kthLargest:", kthLargest);
 //5. find the kth smallest element in the array
 let array6 = [3, 2, 1, 5, 6, 4];
 let l = 2; // Find the 2nd smallest element
-for (let i = 0; i < k; i++) {
+for (let i = 0; i < l; i++) {
   let minIndex = i;
   for (let j = i + 1; j < array6.length; j++) {
     if (array6[j] < array6[minIndex]) {
@@ -99,8 +99,9 @@ let shiftedElement = array11[0]; // Get the first element
 for (let i = 0; i < array11.length - 1; i++) {
   array11[i] = array11[i + 1]; // Shift elements to the left
 }
-// array11.length = array11.length - 1; // Remove the last element
-console.log("🚀 ~ shiftedElement:", array11);
+array11.length = array11.length - 1; // Remove the last element
+console.log("🚀 ~ shiftedElement:", shiftedElement);
+console.log("🚀 ~ array11 after shifting:", array11);
 
 // 9. shift element from the start of the array using core data structure
 let array12 = [1, 2, 3, 4];

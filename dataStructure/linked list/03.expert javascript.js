@@ -364,14 +364,16 @@ function isPalindrome(head) {
   // Compare both halves
   let left = head;
   let right = prev;
+  let matches = true;
 
   while (right) {
-    if (left.data !== right.data) return false;
+    if (left.data !== right.data) matches = false;
     left = left.next;
     right = right.next;
   }
 
-  return true;
+  reverseList(prev);
+  return matches;
 }
 
 /**
@@ -597,7 +599,7 @@ function performanceComparison() {
 
   // Linked List operations
   console.log("\nLinked List Operations:");
-  const list = new SinglyLinkedList();
+  const list = new DoublyLinkedList();
 
   console.time("LL: Insert at beginning");
   for (let i = 0; i < size; i++) {
@@ -613,7 +615,7 @@ function performanceComparison() {
 
   console.time("LL: Traverse");
   sum = 0;
-  list.forEach((data) => (sum += data)); // O(n)
+  for (let node = list.head; node; node = node.next) sum += node.data; // O(n)
   console.timeEnd("LL: Traverse");
 }
 
@@ -683,6 +685,7 @@ class LRUCache {
       this.moveToHead(node);
     } else {
       const newNode = new DoublyNode(value);
+      newNode.key = key;
       this.cache.set(key, newNode);
       this.addToHead(newNode);
 

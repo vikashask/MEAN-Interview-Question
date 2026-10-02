@@ -31,7 +31,7 @@ function mergeSort(arr) {
   const mergedArr = [];
 
   while (i < sortedLeft.length && j < sortedRight.length) {
-    if (sortedLeft[i] < sortedRight[j]) {
+    if (sortedLeft[i] <= sortedRight[j]) {
       mergedArr[k++] = sortedLeft[i++];
     } else {
       mergedArr[k++] = sortedRight[j++];
